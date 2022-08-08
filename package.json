@@ -1,0 +1,22 @@
+{
+  "name": "ucfr_organizer_front",
+  "version": "1.0.0",
+  "description": "an organizer for use cases and functional requiments translated from the business model schema to the development schema",
+  "author": "Mikhael Dantas",
+  "license": "MIT",
+  "dependencies": {
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-scripts": "latest"
+  }
+}

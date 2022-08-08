@@ -1,0 +1,141 @@
+:root {
+   --background-gradient: linear-gradient(30deg, #f39c12 30%, #f1c40f);
+   --gray: #fff;
+   --darkgray: #fff;
+}
+
+* {
+   font-weight:  550;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+body {
+   background-color: springgreen;
+}
+
+.change-tab {
+   display: grid;
+   grid-template-columns: 1.5fr 4fr 2fr;
+   padding: .5rem;
+   background: #a0ffb0;
+   border-radius: 5px;
+}
+
+.change-tab select {
+   width: 100%;
+   font-size: .9rem;
+}
+
+.change-tab h1 {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.drag-item {
+   background: #e0ffe0;
+   border-radius: 10px; 
+   box-shadow: 0 0 10px 2px #d0d0d0;
+   padding: 10px;
+   cursor: pointer;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+.item-ucfr {
+   height: 3rem;
+   display: grid;
+   grid-template-columns: 1fr 10fr 2fr 2fr;
+   align-items: center;
+}
+
+button {
+   background-color: #4CAF50; /* Green */
+   border: none;
+   color: white;
+   padding: .5rem;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   font-size: 16px;
+   cursor: pointer;
+}
+
+button:hover {
+   background-color: #3e8e41;
+}
+
+select {
+   /* Reset Select */
+   appearance: none;
+   outline: 0;
+   border: 0;
+   box-shadow: none;
+   /* Personalize */
+   flex: 1;
+   padding: 0 1em;
+   color: black;
+   background-color: var(--darkgray);
+   background-image: none;
+   cursor: pointer;
+   max-width: 18rem;
+   width: 6rem;
+}
+/* Remove IE arrow */
+select::-ms-expand {
+   display: none;
+}
+/* Custom Select wrapper */
+.select {
+   position: relative;
+   display: flex;
+   width: 20em;
+   height: 3em;
+   border-radius: .25em;
+   overflow: hidden;
+}
+/* Arrow */
+.select::after {
+   content: '\25BC';
+   position: absolute;
+   top: 0;
+   right: 0;
+   padding: 1em;
+   background-color: #34495e;
+   transition: .25s all ease;
+   pointer-events: none;
+}
+/* Transition */
+.select:hover::after {
+   color: #f39c12;
+}
+
+.dependencies-list {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   margin-top: .5rem;
+}
+
+.dependency {
+   padding: .2rem;
+   font-size: .85rem;
+   margin: .1rem;
+   background-color: aquamarine;
+   display: inline-block;
+}
+
+.adddelete {
+   margin-top: 1rem;
+   display: flex;
+   justify-content: space-around;
+}
+
+.item-insertion {
+   width: 90%;
+   display: grid;
+   grid-template-columns: 4fr 1fr;
+   margin: 0 auto;
+   background-color: #34495e;
+   justify-content: space-between;
+}
