@@ -75,7 +75,7 @@ select {
    /* Personalize */
    flex: 1;
    padding: 0 1em;
-   color: black;
+   color: #black;
    background-color: var(--darkgray);
    background-image: none;
    cursor: pointer;
