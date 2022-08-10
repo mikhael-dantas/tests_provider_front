@@ -9,7 +9,7 @@
    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-body {
+.App {
    background-color: springgreen;
 }
 
@@ -50,7 +50,7 @@ body {
    align-items: center;
 }
 
-button {
+.button {
    background-color: #4CAF50; /* Green */
    border: none;
    color: white;
@@ -62,11 +62,11 @@ button {
    cursor: pointer;
 }
 
-button:hover {
+.button:hover {
    background-color: #3e8e41;
 }
 
-select {
+.select {
    /* Reset Select */
    appearance: none;
    outline: 0;
@@ -75,7 +75,7 @@ select {
    /* Personalize */
    flex: 1;
    padding: 0 1em;
-   color: #black;
+   color: black;
    background-color: var(--darkgray);
    background-image: none;
    cursor: pointer;
@@ -83,7 +83,7 @@ select {
    width: 6rem;
 }
 /* Remove IE arrow */
-select::-ms-expand {
+.select::-ms-expand {
    display: none;
 }
 /* Custom Select wrapper */

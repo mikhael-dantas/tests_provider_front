@@ -453,9 +453,9 @@ return (
         style={{
         
     }}>
-        <select onChange={currentUcfrsHandlerSelect}>
+        <select className={'select'} onChange={currentUcfrsHandlerSelect}>
         {ucfrs.ucfrs.map((model, i) => (
-        <option key={i} value={`${model.type}-${model.category}`}>{model.type}-{model.category}</option>
+        <option className={'option'} key={i} value={`${model.type}-${model.category}`}>{model.type}-{model.category}</option>
         ))}
         </select>
         <h1>{currentUcfrs.current.category}</h1>
@@ -464,9 +464,9 @@ return (
           display: "flex",
           flexDirection: "column"
         }}>
-          <input type="text" value={ucfrs.newUcfr} onChange={handleChangeUCFRInput} />
-          <button onClick={addUcfr}>Add Item</button>
-          <button onClick={delUcfr}>Remove</button>
+          <input className={'input'} type="text" value={ucfrs.newUcfr} onChange={handleChangeUCFRInput} />
+          <button className={'button'} onClick={addUcfr}>Add Item</button>
+          <button className={'button'} onClick={delUcfr}>Remove</button>
         </div>
     </div>
 
@@ -484,8 +484,8 @@ return (
         <h3>Drag and Drop UCFRs</h3>
 
         <div className="item-insertion">
-          <input type="text" value={ucfrs.newItem} onChange={handleChange} />
-          <button onClick={addItem}>Add Item</button>
+          <input className={'input'} type="text" value={ucfrs.newItem} onChange={handleChange} />
+          <button className={'button'} onClick={addItem}>Add Item</button>
         </div>
 
         <div className="card-body"
@@ -513,10 +513,10 @@ return (
                 <div className='item-ucfr'
                 style={{
                 }}>
-                <input type="checkbox" checked={item.done} onChange={() => toggleItem(item.id)} />
+                <input className={'input'} type="checkbox" checked={item.done} onChange={() => toggleItem(item.id)} />
                 {item.name}
-                <button onClick={() => removeItem(item.id)}>Remove</button>
-                <button onClick={() => editItemViaAlertInput(item.id)}>Edit</button>
+                <button className={'button'} onClick={() => removeItem(item.id)}>Remove</button>
+                <button className={'button'} onClick={() => editItemViaAlertInput(item.id)}>Edit</button>
                 </div>
                 <div className='dependencies-tab'>
                 {/* select to add dependency using other items name as option and adding by their id */}
@@ -531,23 +531,23 @@ return (
                 <div className='adddelete'>
                     <div>
                       ADD
-                      <select onChange={(e) => addDependency(item.id, e.target.value)}>
+                      <select className={'select'} onChange={(e) => addDependency(item.id, e.target.value)}>
                           {/* list every single item in the list every ucfr */}
-                          <option value="null">Select</option>
+                          <option className={'option'} value="null">Select</option>
                           {ucfrs.ucfrs.map((model, i) => (
                           model.list.map(item => (
-                          <option key={item.id} value={item.id}>{model.type +'-'+ model.category +'| '+item.name}</option>
+                          <option className={'option'} key={item.id} value={item.id}>{model.type +'-'+ model.category +'| '+item.name}</option>
                           ))
                           ))}
                       </select>
                       </div>
                       <div>
                           DELETE
-                          <select onChange={(e) => removeDependency(item.id, e.target.value)}>
+                          <select className={'select'} onChange={(e) => removeDependency(item.id, e.target.value)}>
                             {/* list every single dependency of this item as option */}
-                            <option value="null">Select</option>
+                            <option className={'option'} value="null">Select</option>
                             {item.dependencies.map(dependency => (
-                            <option key={dependency} value={dependency}>{findDependencyName(dependency)}</option>
+                            <option className={'option'} key={dependency} value={dependency}>{findDependencyName(dependency)}</option>
                             ))}
                           </select>
                       </div>
@@ -560,12 +560,12 @@ return (
     </div>
     </div>
     <div>
-    <button onClick={saveUcfrsInLocalStorage}>Save</button>
-    <button onClick={loadUcfrsFromLocalStorage}>Load</button>
-    <button onClick={downloadUcfrsAsJson}>Download</button>
+    <button className={'button'} onClick={saveUcfrsInLocalStorage}>Save</button>
+    <button className={'button'} onClick={loadUcfrsFromLocalStorage}>Load</button>
+    <button className={'button'} onClick={downloadUcfrsAsJson}>Download</button>
     </div>
-    <input type="text" onChange={(e) => {setJsonInsert(e.target.value)}}/>
-    <button onClick={insertucfrsFromJson}>Insert</button>
+    <input className={'input'} type="text" onChange={(e) => {setJsonInsert(e.target.value)}}/>
+    <button className={'button'} onClick={insertucfrsFromJson}>Insert</button>
   </div>
 );
 }
