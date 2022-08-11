@@ -9,29 +9,6 @@
    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.App {
-   background-color: springgreen;
-}
-
-.change-tab {
-   display: grid;
-   grid-template-columns: 1.5fr 4fr 2fr;
-   padding: .5rem;
-   background: #a0ffb0;
-   border-radius: 5px;
-}
-
-.change-tab select {
-   width: 100%;
-   font-size: .9rem;
-}
-
-.change-tab h1 {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-}
-
 .drag-item {
    background: #e0ffe0;
    border-radius: 10px; 
