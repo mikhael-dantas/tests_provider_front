@@ -11,7 +11,7 @@ const updatePopupComponentDisplayContext = React.createContext<React.Dispatch<Re
 export function PopupProvider({children}) {
    const [popupComponent, setPopupComponent] = React.useState<JSX.Element>(<></>)
 
-   const [popupComponentDisplay, setPopupComponentDisplay] = React.useState<boolean>(true)
+   const [popupComponentDisplay, setPopupComponentDisplay] = React.useState<boolean>(false)
 
    return (
       <popupComponentContext.Provider value={popupComponent}>
