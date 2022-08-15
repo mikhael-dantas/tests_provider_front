@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react"
 import React from "react"
-import { IModule, useUcfrListsContext, useUpdateUcfrListsContext } from "../UcfrsContext"
-import { GenerateUUID } from "../utils/UUIDGenerator"
+import { IModule, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
+import { GenerateUUID } from "../../utils/UUIDGenerator"
 
 
 export default function AddModule() {

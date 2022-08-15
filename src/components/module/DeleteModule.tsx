@@ -1,10 +1,9 @@
 import { Flex, Grid } from "@chakra-ui/react"
 import React from "react"
-import { useCurrentModuleContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateUcfrListsContext } from "../UcfrsContext"
+import { useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
 
 export default function DeleteModuleComponent() {
    const currentModuleFromContext = useCurrentModuleContext()
-   const updateCurrentModuleFromContext = useUpdateCurrentModuleContext()
 
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()

@@ -1,10 +1,10 @@
 import { Flex, Grid } from "@chakra-ui/react";
 import React from "react";
-import AddModule from "../../components/AddModule";
-import DeleteModuleComponent from "../../components/DeleteModule";
-import EditModuleName from "../../components/EditModuleName";
+import AddModule from "../../components/module/AddModule";
+import DeleteModuleComponent from "../../components/module/DeleteModule";
+import EditModuleName from "../../components/module/EditModuleName";
 import FullPopup from "../../components/FullPopup";
-import { EUcfrListsTypes, IModule, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
+import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 
 
 export default function Index() {
