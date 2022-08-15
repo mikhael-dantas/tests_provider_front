@@ -1,26 +1,22 @@
 import { Flex, Grid } from "@chakra-ui/react";
 import React from "react";
-import { usePopupComponentContext, usePopupComponentDisplayContext, useUpdatePopupComponentContext, useUpdatePopupComponentDisplayContext } from "../../PopupContext";
-import { useCurrentModuleContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
-import { GenerateUUID } from "../../utils/UUIDGenerator";
+import AddModule from "../../components/AddModule";
+import DeleteModuleComponent from "../../components/DeleteModule";
+import EditModuleName from "../../components/EditModuleName";
+import FullPopup from "../../components/FullPopup";
+import { EUcfrListsTypes, IModule, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 
 
 export default function Index() {
    const currentModuleFromContext = useCurrentModuleContext()
    const updateCurrentModuleFromContext = useUpdateCurrentModuleContext()
 
+   const selectedTabToDisplay = useSelectedTabToDisplayContext()
+   const setSelectedTabToDisplay = useUpdateSelectedTabToDisplayContext()
+   
    const ucfrListsFromContext = useUcfrListsContext()
-   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   // const updateUcfrListsFromContext = useUpdateUcfrListsContext()
 
-   const popupComponentFromContext = usePopupComponentContext()
-   const setPopupComponentFromContext = useUpdatePopupComponentContext()
-
-   const popupComponentDisplayFromContext = usePopupComponentDisplayContext()
-   const setPopupComponentDisplayFromContext = useUpdatePopupComponentDisplayContext()
-
-
-
-   const [moduleAddInput, setModuleAddInput] = React.useState<string>("")
 
 
    const currentModuleSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,52 +27,16 @@ export default function Index() {
       updateCurrentModuleFromContext(selectedModule)
    }
 
-   const moduleAddInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setModuleAddInput(e.target.value)
-   }
-   const addModuleHandler = () => {
-      const alreadyExists = ucfrListsFromContext.modules.find(m => m.name === moduleAddInput)
-      if (alreadyExists) {
-         return
-      }
 
-      const newModule = {
-         id: GenerateUUID(),
-         name: moduleAddInput,
-      }
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules, newModule]
-      })
-      setModuleAddInput("")
-   }
+   const [moduleEditNameDisplay, setModuleEditNameDisplay] = React.useState<boolean>(false)
+   const [moduleDeleteDisplay, setModuleDeleteDisplay] = React.useState<boolean>(false)
+   const [moduleAddDisplay, setModuleAddDisplay] = React.useState<boolean>(false)
 
 
-   const togglePopuptest = () => {
-      setPopupComponentFromContext(<div style={{
-         width: '100px',
-         height: '100px',
-         backgroundColor: '#000',
-      }}>oie</div>)
-      setPopupComponentDisplayFromContext(true)
-   }
-
-   const testComponent = () => {
-      const component = (
-         <Flex 
-         justifyContent="center" 
-         alignItems="center" 
-         width={"50%"}
-         height="50vh"
-         backgroundColor={'white'}
-         >oie</Flex>
-      )
-      return component
-   }
 
    return (
-      <Flex width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
-         <Grid className={'ucfrsManagementContainer'} 
+      <Flex className={'container'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
+         <Grid className={'moduleManagementContainer'} 
             templateColumns={'1fr 2fr 1fr'}
             width={'100%'}
             backgroundColor={'#a0ffb0'}
@@ -99,13 +59,59 @@ export default function Index() {
             </Flex>
 
             <Flex className='ManageModulesContainer' direction={'column'}>
-               <input className={'input'} type="text" value={moduleAddInput} onChange={moduleAddInputHandler} />
-               <button className={'button'} onClick={addModuleHandler}>Add Item</button>
-               {/* <button className={'button'} onClick={delModuleHandler}>Remove</button> */}
+               <button className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}>Add</button>
+               <button className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}>Edit Item</button>
+               <button className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}>Delete</button>
             </Flex>
 
 
          </Grid>
+
+
+         <Grid className={'ucfrListsTabsContainer'}
+            templateColumns={'1fr 1fr 1fr'}
+            width={'100%'}
+         >
+            {/* make a selection to select which type of ucfrListType to show */}
+            {UcfrListsTypes.map((type, i) => (
+               <Flex key={i} className={'ucfrListsTab'} direction={'column'} alignItems={'center'}
+                  onClick={() => setSelectedTabToDisplay(type)}
+               >
+                  <h1
+                     style={ selectedTabToDisplay === type ? {backgroundColor: '#fff'} : {backgroundColor: '#a0ff'} }
+                  >{type}</h1>
+               </Flex>
+            ))}
+         </Grid>
+
+
+         <Flex className={'ucfrListsContainer'}
+            direction={'column'}
+            width={'100%'}
+            alignItems={'center'}
+         >
+            {selectedTabToDisplay === EUcfrListsTypes.useCases ? (
+               <div>ucoie</div>
+            ) :
+            selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
+               <div>frbye</div>
+            ) :
+            selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
+               <div>nucfr</div>
+            ) : null}
+         </Flex>
+
+
+
+         <FullPopup display={moduleEditNameDisplay} setDisplay={setModuleEditNameDisplay}>
+            <EditModuleName/>
+         </FullPopup>
+         <FullPopup display={moduleDeleteDisplay} setDisplay={setModuleDeleteDisplay}>
+            <DeleteModuleComponent/>
+         </FullPopup>
+         <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
+            <AddModule/>
+         </FullPopup>
       </Flex>
    )
 }
