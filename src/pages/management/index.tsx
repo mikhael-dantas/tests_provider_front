@@ -7,6 +7,9 @@ import FullPopup from "../../components/FullPopup";
 import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
 import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
+import AddTag from "../../components/tags/AddTag";
+import DeleteTagComponent from "../../components/tags/DeleteTag";
+import EditTagName from "../../components/tags/EditTagName";
 
 
 export default function Index() {
@@ -34,10 +37,40 @@ export default function Index() {
    const [moduleDeleteDisplay, setModuleDeleteDisplay] = React.useState<boolean>(false)
    const [moduleAddDisplay, setModuleAddDisplay] = React.useState<boolean>(false)
 
+   const [tagEditNameDisplay, setTagEditNameDisplay] = React.useState<boolean>(false)
+   const [tagDeleteDisplay, setTagDeleteDisplay] = React.useState<boolean>(false)
+   const [tagAddDisplay, setTagAddDisplay] = React.useState<boolean>(false)
+
 
 
    return (
       <Flex className={'container'} position={'relative'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
+         <Grid className={'tagManagementContainer'} 
+            templateColumns={'2fr 1fr'}
+            width={'100%'}
+            backgroundColor={'#a0ffb0'}
+            padding={'.5rem'}
+            borderRadius={'5px'}
+         >
+
+            <Flex className='ManageTagsContainer' direction={'row'}>
+               <button className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}>Ad</button>
+               <button className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}>Ed</button>
+               <button className={'button'} onClick={() => setTagDeleteDisplay(!tagDeleteDisplay)}>De</button>
+
+
+               <FullPopup display={tagEditNameDisplay} setDisplay={setTagEditNameDisplay}>
+                  <EditTagName/>
+               </FullPopup>
+               <FullPopup display={tagDeleteDisplay} setDisplay={setTagDeleteDisplay}>
+                  <DeleteTagComponent/>
+               </FullPopup>
+               <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
+                  <AddTag/>
+               </FullPopup>
+            </Flex>
+
+         </Grid>
          <Grid className={'moduleManagementContainer'} 
             templateColumns={'2fr 1fr'}
             width={'100%'}
@@ -60,8 +93,18 @@ export default function Index() {
                <button className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}>Ad</button>
                <button className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}>Ed</button>
                <button className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}>De</button>
-            </Flex>
 
+
+               <FullPopup display={moduleEditNameDisplay} setDisplay={setModuleEditNameDisplay}>
+                  <EditModuleName/>
+               </FullPopup>
+               <FullPopup display={moduleDeleteDisplay} setDisplay={setModuleDeleteDisplay}>
+                  <DeleteModuleComponent/>
+               </FullPopup>
+               <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
+                  <AddModule/>
+               </FullPopup>
+            </Flex>
 
          </Grid>
 
@@ -117,15 +160,7 @@ export default function Index() {
 
 
 
-         <FullPopup display={moduleEditNameDisplay} setDisplay={setModuleEditNameDisplay}>
-            <EditModuleName/>
-         </FullPopup>
-         <FullPopup display={moduleDeleteDisplay} setDisplay={setModuleDeleteDisplay}>
-            <DeleteModuleComponent/>
-         </FullPopup>
-         <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
-            <AddModule/>
-         </FullPopup>
+         
       </Flex>
    )
 }
