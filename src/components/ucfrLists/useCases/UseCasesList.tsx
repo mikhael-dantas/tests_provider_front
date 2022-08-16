@@ -26,7 +26,9 @@ export default function UseCasesList() {
    const dragDrop = (e: React.DragEvent, id: string) => {
     // the drag use case should exit the list, then on drop it should be added to the list moving the forward elements to the right
       if (dragItem) {
-         const newUsecases = [...ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.useCases]
+         const module = ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)
+         if (!module) { throw new Error("Module not found")}
+         const newUsecases = [...module.useCases]
          const dragIndex = newUsecases.indexOf(dragItem)
          const dropIndex = newUsecases.findIndex(u => u.id === id)
          newUsecases.splice(dragIndex, 1)
