@@ -1,6 +1,7 @@
 :root {
    --background-gradient: linear-gradient(30deg, #f39c12 30%, #f1c40f);
-   --gray: #fff;
+   --button-color: #4CAF50;
+   --button-color-hover: #3e8e41;
    --darkgray: #fff;
 }
 
@@ -10,7 +11,7 @@
    z-index: 0;
 }
 
-.drag-item {
+/* .drag-item {
    background: #e0ffe0;
    border-radius: 10px; 
    box-shadow: 0 0 10px 2px #d0d0d0;
@@ -26,22 +27,22 @@
    display: grid;
    grid-template-columns: 1fr 10fr 2fr 2fr;
    align-items: center;
-}
+} */
 
 .button {
-   background-color: #4CAF50; /* Green */
+   background-color: var(--button-color);
    border: none;
-   color: white;
    padding: .5rem;
    text-align: center;
    text-decoration: none;
    display: inline-block;
    font-size: 16px;
    cursor: pointer;
+   color: white;
 }
 
 .button:hover {
-   background-color: #3e8e41;
+   background-color: var(--button-color-hover);
 }
 
 .select {
@@ -58,44 +59,20 @@
    background-image: none;
    cursor: pointer;
    max-width: 18rem;
-   width: 6rem;
-}
-/* Remove IE arrow */
-.select::-ms-expand {
-   display: none;
-}
-/* Custom Select wrapper */
-.select {
    position: relative;
    display: flex;
-   width: 20em;
    height: 3em;
    border-radius: .25em;
    overflow: hidden;
 }
-/* Arrow */
-.select::after {
-   content: '\25BC';
-   position: absolute;
-   top: 0;
-   right: 0;
-   padding: 1em;
-   background-color: #34495e;
-   transition: .25s all ease;
-   pointer-events: none;
-}
-/* Transition */
-.select:hover::after {
-   color: #f39c12;
-}
 
-.dependencies-list {
+/* .dependencies-list {
    display: grid;
    grid-template-columns: 1fr 1fr;
    margin-top: .5rem;
-}
+} */
 
-.dependency {
+/* .dependency {
    padding: .2rem;
    font-size: .85rem;
    margin: .1rem;
@@ -116,4 +93,4 @@
    margin: 0 auto;
    background-color: #34495e;
    justify-content: space-between;
-}
+} */
