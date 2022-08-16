@@ -1,4 +1,4 @@
-import { Flex, Grid } from "@chakra-ui/react";
+import { Flex, Grid, Tab, Tabs } from "@chakra-ui/react";
 import React from "react";
 import AddModule from "../../components/module/AddModule";
 import DeleteModuleComponent from "../../components/module/DeleteModule";
@@ -39,7 +39,7 @@ export default function Index() {
    return (
       <Flex className={'container'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
          <Grid className={'moduleManagementContainer'} 
-            templateColumns={'1fr 2fr 1fr'}
+            templateColumns={'2fr 1fr'}
             width={'100%'}
             backgroundColor={'#a0ffb0'}
             padding={'.5rem'}
@@ -56,35 +56,40 @@ export default function Index() {
                </select>
             </Flex>
 
-            <Flex className='CurrentModuleNameContainer'>
-               <h1>{currentModuleFromContext ? currentModuleFromContext.name : 'Create and select a module'}</h1>
-            </Flex>
-
-            <Flex className='ManageModulesContainer' direction={'column'}>
-               <button className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}>Add</button>
-               <button className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}>Edit Item</button>
-               <button className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}>Delete</button>
+            <Flex className='ManageModulesContainer' direction={'row'}>
+               <button className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}>Ad</button>
+               <button className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}>Ed</button>
+               <button className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}>De</button>
             </Flex>
 
 
          </Grid>
 
+         <Flex className='CurrentModuleNameContainer'>
+            <h1>{currentModuleFromContext ? currentModuleFromContext.name : 'Create and select a module'}</h1>
+         </Flex>
 
-         <Grid className={'ucfrListsTabsContainer'}
-            templateColumns={'1fr 1fr 1fr'}
-            width={'100%'}
-         >
-            {/* make a selection to select which type of ucfrListType to show */}
-            {UcfrListsTypes.map((type, i) => (
-               <Flex key={i} className={'ucfrListsTab'} direction={'column'} alignItems={'center'}
-                  onClick={() => setSelectedTabToDisplay(type)}
-               >
-                  <h1
-                     style={ selectedTabToDisplay === type ? {backgroundColor: '#aded'} : {backgroundColor: '#a0ff'} }
-                  >{type}</h1>
-               </Flex>
-            ))}
-         </Grid>
+
+         <Flex display={'flex'} justifyContent={'space-evenly'} width={'100%'}>
+         {UcfrListsTypes.map((type, i) => (
+            <Flex key={i} className={'ucfrListsTab'} 
+               onClick={() => setSelectedTabToDisplay(type)}
+               display={'flex'}
+               flexDirection={'column'} alignItems={'center'}
+               justifyContent={'center'}
+               textAlign={'center'}
+               fontSize={'.9rem'}
+               fontWeight={'bold'}
+               style={ selectedTabToDisplay === type ? {backgroundColor: '#aded'} : {backgroundColor: '#a0ff'} }
+               width={'33%'}
+               maxWidth={'33%'}
+               cursor={'pointer'}
+               textOverflow={'clip'}
+            >
+               {type}
+            </Flex>
+         ))}
+         </Flex>
 
 
          <Flex className={'ucfrListsContainer'}

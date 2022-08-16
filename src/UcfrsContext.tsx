@@ -45,9 +45,9 @@ export interface IUcfrLists {
 }
 
 export enum EUcfrListsTypes {
-   useCases = "useCases",
-   nestedUseCases = "nestedUseCases",
-   functionalRequirements = "functionalRequirements"
+   useCases = "Use Cases",
+   nestedUseCases = "Nested Use Cases",
+   functionalRequirements = "Functional Requirements"
 }
 
 export const UcfrListsTypes: EUcfrListsTypes[] = [
