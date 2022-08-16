@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
+import UseCaseItem from "./UseCaseItem";
 
 
 export default function UseCasesList() {
@@ -57,8 +58,17 @@ export default function UseCasesList() {
          width={'100%'}
       >
          {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.useCases.map((usecase, i) => (
-            <Flex draggable={true} key={usecase.id} onDragStart={(e) => dragStart(e, usecase)} onDragEnd={(e) => dragEnd(e)} onDragOver={(e) => dragOver(e)} onDrop={(e) => dragDrop(e, usecase.id)} direction={'row'} alignItems={'center'} width={'100%'}>
-               <h1>{usecase.name}</h1>
+            <Flex
+               key={usecase.id}
+               draggable={true} 
+               onDragStart={(e) => dragStart(e, usecase)} 
+               onDragEnd={(e) => dragEnd(e)} 
+               onDragOver={(e) => dragOver(e)} 
+               onDrop={(e) => dragDrop(e, usecase.id)} 
+               direction={'row'} alignItems={'center'} 
+               width={'100%'}
+            >
+               <UseCaseItem usecase={usecase}/>
             </Flex>
          ))}
       </Flex>
