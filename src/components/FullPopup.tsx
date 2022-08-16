@@ -11,6 +11,7 @@ export default function FullPopup({display, setDisplay, children}) {
          width={'100%'} minHeight={'100vh'} 
          alignItems={'center'} justifyContent={'center'}
          position={'absolute'}
+         bottom={'0'}
          zIndex={1}
          >
             <Flex className='popupBackground'
