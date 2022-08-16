@@ -67,6 +67,7 @@ export default function UseCasesList() {
                onDrop={(e) => dragDrop(e, usecase.id)} 
                direction={'row'} alignItems={'center'} 
                width={'100%'}
+               marginTop={'.5rem'}
             >
                <UseCaseItem usecase={usecase}/>
             </Flex>
