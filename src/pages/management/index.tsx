@@ -37,7 +37,7 @@ export default function Index() {
 
 
    return (
-      <Flex className={'container'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
+      <Flex className={'container'} position={'relative'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
          <Grid className={'moduleManagementContainer'} 
             templateColumns={'2fr 1fr'}
             width={'100%'}
