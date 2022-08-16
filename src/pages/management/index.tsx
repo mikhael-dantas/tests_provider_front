@@ -5,6 +5,8 @@ import DeleteModuleComponent from "../../components/module/DeleteModule";
 import EditModuleName from "../../components/module/EditModuleName";
 import FullPopup from "../../components/FullPopup";
 import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
+import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
+import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
 
 
 export default function Index() {
@@ -78,7 +80,7 @@ export default function Index() {
                   onClick={() => setSelectedTabToDisplay(type)}
                >
                   <h1
-                     style={ selectedTabToDisplay === type ? {backgroundColor: '#fff'} : {backgroundColor: '#a0ff'} }
+                     style={ selectedTabToDisplay === type ? {backgroundColor: '#aded'} : {backgroundColor: '#a0ff'} }
                   >{type}</h1>
                </Flex>
             ))}
@@ -90,15 +92,22 @@ export default function Index() {
             width={'100%'}
             alignItems={'center'}
          >
-            {selectedTabToDisplay === EUcfrListsTypes.useCases ? (
-               <div>ucoie</div>
-            ) :
-            selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
-               <div>frbye</div>
-            ) :
-            selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
-               <div>nucfr</div>
-            ) : null}
+            {currentModuleFromContext ? (
+               selectedTabToDisplay === EUcfrListsTypes.useCases ? (
+                  <>
+                     <AddUseCase/>
+                     <UseCasesList/>
+                  </>
+               ) :
+               selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
+                  <div>frbye</div>
+                  ) :
+               selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
+                  <div>nucfr</div>
+               ) : null
+            ) : (
+               <h1>Select a module</h1>
+            )}
          </Flex>
 
 
