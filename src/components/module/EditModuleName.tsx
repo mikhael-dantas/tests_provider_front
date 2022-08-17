@@ -24,6 +24,8 @@ export default function EditModuleName() {
       const moduleToEdit = ucfrListsFromContext.modules.find(m => m.name === moduleEditNameSelect)
       if (!moduleToEdit) {
          console.log("moduleToEdit not found")
+         console.log(moduleEditNameSelect)
+         console.log("moduleToEdit not found")
          return
       }
 
@@ -47,6 +49,7 @@ export default function EditModuleName() {
       <Grid templateColumns={'1fr 1fr'}>
          <Flex>
             <select onChange={moduleEditNameSelectHandler}>
+               <option value={''}>Select a module to edit</option>
                {ucfrListsFromContext.modules.map(m => (
                   <option key={m.id} value={m.id}>{m.name}</option>
                ))}
