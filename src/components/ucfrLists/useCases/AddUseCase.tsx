@@ -33,7 +33,7 @@ export default function AddUseCase() {
                         completed: false,
                         neededFrsToWorkIds: [],
                         tagIds: [],
-                        usecasesPipelineIds: [],
+                        useCasesPipelineIds: [],
                      }
                   ]
                }

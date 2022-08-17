@@ -13,7 +13,7 @@ export interface IUseCase {
    name: string
    completed: boolean
    neededFrsToWorkIds: string[]
-   usecasesPipelineIds: string[]
+   useCasesPipelineIds: string[]
 }
 export interface INestedUseCase {
    id: string
