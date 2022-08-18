@@ -10,6 +10,7 @@ import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
 import AddTag from "../../components/tags/AddTag";
 import DeleteTagComponent from "../../components/tags/DeleteTag";
 import EditTagName from "../../components/tags/EditTagName";
+import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
 
 
 export default function Index() {
@@ -151,7 +152,7 @@ export default function Index() {
                   <div>frbye</div>
                   ) :
                selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
-                  <div>nucfr</div>
+                  <NestedUseCaseList/>
                ) : null
             ) : (
                <h1>Select a module</h1>
