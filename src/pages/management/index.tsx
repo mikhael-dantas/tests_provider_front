@@ -113,7 +113,7 @@ export default function Index() {
          </Flex>
 
 
-         <Flex display={'flex'} justifyContent={'space-evenly'} width={'100%'}>
+         <Flex className={'ucfrListsTabsContainer'} display={'flex'} justifyContent={'space-evenly'} width={'100%'}>
          {UcfrListsTypes.map((type, i) => (
             <Flex key={i} className={'ucfrListsTab'} 
                onClick={() => setSelectedTabToDisplay(type)}
