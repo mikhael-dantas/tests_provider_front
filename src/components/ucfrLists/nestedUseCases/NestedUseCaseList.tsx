@@ -12,6 +12,9 @@ export default function NestedUseCaseList() {
 
    const [nestedUseCaseAncorSelectValue, setNestedUseCaseAncorSelectValue] = React.useState<string>("")
    const nestedUseCaseAncorSelectValueHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      if (!e.target.value || e.target.value === "") {
+         return
+      }
       setNestedUseCaseAncorSelectValue(e.target.value)
    }
 
