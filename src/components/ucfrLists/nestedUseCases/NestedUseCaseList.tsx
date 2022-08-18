@@ -24,6 +24,9 @@ export default function NestedUseCaseList() {
       if ("" === nestedUseCaseAddInput) {
          return
       }
+      if ("" === nestedUseCaseAncorSelectValue || !nestedUseCaseAncorSelectValue) {
+         return
+      }
       const newNestedUseCase: INestedUseCase = {
          id: GenerateUUID(),
          name: nestedUseCaseAddInput,
