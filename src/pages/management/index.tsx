@@ -11,6 +11,7 @@ import AddTag from "../../components/tags/AddTag";
 import DeleteTagComponent from "../../components/tags/DeleteTag";
 import EditTagName from "../../components/tags/EditTagName";
 import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
+import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
 
 
 export default function Index() {
@@ -149,7 +150,7 @@ export default function Index() {
                   </>
                ) :
                selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
-                  <div>frbye</div>
+                  <FRequirementList/>
                   ) :
                selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
                   <NestedUseCaseList/>
