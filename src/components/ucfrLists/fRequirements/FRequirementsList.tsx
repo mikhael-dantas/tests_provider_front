@@ -87,7 +87,7 @@ export default function FRequirementList() {
                }
                return {
                   ...m,
-                  FRequirements: newFRequirements
+                  functionalRequirements: newFRequirements
                }
             }
             )
