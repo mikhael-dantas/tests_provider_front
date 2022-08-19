@@ -47,7 +47,7 @@ export default function FRequirementList() {
             }
             return {
                ...m,
-               FRequirements: [...m.functionalRequirements, newFRequirement]
+               functionalRequirements: [...m.functionalRequirements, newFRequirement]
             }
          }
          )
