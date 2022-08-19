@@ -2,6 +2,7 @@ import { Flex, Grid } from "@chakra-ui/react";
 import React from "react";
 import { INestedUseCase, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import { GenerateUUID } from "../../../utils/UUIDGenerator";
+import NestedUseCaseItem from "./NestedUseCaseItem";
 
 
 export default function NestedUseCaseList() {
@@ -130,9 +131,7 @@ export default function NestedUseCaseList() {
                   width={'100%'}
                   marginTop={'.5rem'}
                >
-                  <div>
-                     {nestedU.name}
-                  </div>
+                  <NestedUseCaseItem nestedUseCaseReceived={nestedU}/>
                </Flex>
             ))}
          </Flex>
