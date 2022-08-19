@@ -14,7 +14,7 @@ import React from "react";
 import { IFunctionalRequirement, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import FullPopup from "../../FullPopup";
 
-export default function FrequirementItem(
+export default function FRequirementItem(
    {FRequirementReceived}:
    {FRequirementReceived: IFunctionalRequirement}
 ) {
@@ -38,7 +38,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.map(Frequirement => {
+                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
                      if (Frequirement.id === FRequirementReceived.id) {
                         return {
                            ...Frequirement,
@@ -63,7 +63,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.filter(Frequirement => Frequirement.id !== FRequirementReceived.id)]
+                  functionalRequirements: [...module.functionalRequirements.filter(Frequirement => Frequirement.id !== FRequirementReceived.id)]
                }
             } else {
                return module
@@ -79,7 +79,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.map(Frequirement => {
+                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
                      if (Frequirement.id === FRequirementReceived.id) {
                         return {
                            ...Frequirement,
@@ -112,7 +112,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.map(Frequirement => {
+                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
                      if (Frequirement.id === FRequirementReceived.id) {
                         return {
                            ...Frequirement,
@@ -137,7 +137,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.map(Frequirement => {
+                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
                      if (Frequirement.id === FRequirementReceived.id) {
                         return {
                            ...Frequirement,
@@ -170,7 +170,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.map(Frequirement => {
+                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
                      if (Frequirement.id === FRequirementReceived.id) {
                         return {
                            ...Frequirement,
@@ -194,7 +194,7 @@ export default function FrequirementItem(
             if (module.id === currentModuleFromContext.id) {
                return {
                   ...module,
-                  Frequirements: [...module.functionalRequirements.map(Frequirement => {
+                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
                      if (Frequirement.id === Frequirement.id) {
                         return {
                            ...Frequirement,

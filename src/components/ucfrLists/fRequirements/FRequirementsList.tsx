@@ -2,7 +2,7 @@ import { Flex, Grid } from "@chakra-ui/react";
 import React from "react";
 import { IFunctionalRequirement, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import { GenerateUUID } from "../../../utils/UUIDGenerator";
-import FrequirementItem from "./FRequirementItem";
+import FRequirementItem from "./FRequirementItem";
 
 
 export default function FRequirementList() {
@@ -132,7 +132,7 @@ export default function FRequirementList() {
                   width={'100%'}
                   marginTop={'.5rem'}
                >
-                  <FrequirementItem FRequirementReceived={FR}/>
+                  <FRequirementItem FRequirementReceived={FR}/>
                </Flex>
             ))}
          </Flex>
