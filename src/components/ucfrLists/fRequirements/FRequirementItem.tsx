@@ -163,7 +163,7 @@ export default function FRequirementItem(
       if (alreadyAdded) {
          return
       }
-
+      
       updateUcfrListsFromContext({
          ...ucfrListsFromContext,
          modules: [...ucfrListsFromContext.modules.map(module => {
@@ -174,7 +174,7 @@ export default function FRequirementItem(
                      if (Frequirement.id === FRequirementReceived.id) {
                         return {
                            ...Frequirement,
-                           neededFrsToWorkIds: [...Frequirement.frDependencies, neededFrsToWorkId]
+                           frDependencies: [...Frequirement.frDependencies, neededFrsToWorkId]
                         }
                      } else {
                         return Frequirement
@@ -198,7 +198,7 @@ export default function FRequirementItem(
                      if (Frequirement.id === Frequirement.id) {
                         return {
                            ...Frequirement,
-                           neededFrsToWorkIds: [...Frequirement.frDependencies.filter(neededFrsToWorkId => neededFrsToWorkId !== neededFrsToWorkIdReceived)]
+                           frDependencies: [...Frequirement.frDependencies.filter(neededFrsToWorkId => neededFrsToWorkId !== neededFrsToWorkIdReceived)]
                         }
                      } else {
                         return Frequirement
