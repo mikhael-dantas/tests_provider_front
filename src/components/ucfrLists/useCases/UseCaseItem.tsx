@@ -317,10 +317,10 @@ export default function UseCaseItem(
          <Flex className={'useCasePipelines'}>
             {usecase.useCasesPipelineIds.map(useCasePipelineId => {
                return (
-               <>
+               <Flex key={usecase.id + useCasePipelineId}>
                   <Flex className={'useCasePipelineName'} key={useCasePipelineId}>{getUseCasePipelineNameById(useCasePipelineId)}</Flex>
                   <Flex className={'removeUseCasePipeline'} onClick={() => removeUseCasePipelineHandler(useCasePipelineId)}>x</Flex>
-               </>
+               </Flex>
                )
             } )}
          </Flex>
