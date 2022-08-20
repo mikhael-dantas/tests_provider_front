@@ -1,4 +1,4 @@
-import { Flex, Grid, Tab, Tabs } from "@chakra-ui/react";
+import { Flex, Grid, Tab, Tabs, theme } from "@chakra-ui/react";
 import React from "react";
 import AddModule from "../../components/module/AddModule";
 import DeleteModuleComponent from "../../components/module/DeleteModule";
@@ -12,6 +12,8 @@ import DeleteTagComponent from "../../components/tags/DeleteTag";
 import EditTagName from "../../components/tags/EditTagName";
 import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
 import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
+import { AddIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { customTheme } from "../../theme";
 
 
 export default function Index() {
@@ -47,42 +49,30 @@ export default function Index() {
 
    return (
       <Flex className={'container'} position={'relative'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
-         <Grid className={'tagManagementContainer'} 
-            templateColumns={'2fr 1fr'}
-            width={'100%'}
-            backgroundColor={'#a0ffb0'}
-            padding={'.5rem'}
-            borderRadius={'5px'}
+         
+         <Flex className='CurrentModuleNameContainer'
+         width={'100%'}
+         height={'3rem'}
+         alignItems={'center'}
+         justifyContent={'center'}
+         fontWeight={'bold'}
          >
+            {currentModuleFromContext ? currentModuleFromContext.name : 'Create and select a module'}
+         </Flex>
 
-            <Flex className='ManageTagsContainer' direction={'row'}>
-               <button className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}>Ad</button>
-               <button className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}>Ed</button>
-               <button className={'button'} onClick={() => setTagDeleteDisplay(!tagDeleteDisplay)}>De</button>
-
-
-               <FullPopup display={tagEditNameDisplay} setDisplay={setTagEditNameDisplay}>
-                  <EditTagName/>
-               </FullPopup>
-               <FullPopup display={tagDeleteDisplay} setDisplay={setTagDeleteDisplay}>
-                  <DeleteTagComponent/>
-               </FullPopup>
-               <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
-                  <AddTag/>
-               </FullPopup>
-            </Flex>
-
-         </Grid>
+         
          <Grid className={'moduleManagementContainer'} 
             templateColumns={'2fr 1fr'}
             width={'100%'}
-            backgroundColor={'#a0ffb0'}
-            padding={'.5rem'}
-            borderRadius={'5px'}
+            backgroundColor={customTheme.colors.lightGreen5}
+            padding={'.2rem'}
          >
 
 
-            <Flex className='moduleSelectContainer'>
+            <Flex className='moduleSelectContainer'
+            width={'100%'}
+            height={'100%'}
+            >
                <select className={'select moduleSelect'} onChange={currentModuleSelectHandler}>
                   <option value={''}>Select a module</option>
                   {ucfrListsFromContext.modules.map((module, i) => (
@@ -91,10 +81,10 @@ export default function Index() {
                </select>
             </Flex>
 
-            <Flex className='ManageModulesContainer' direction={'row'}>
-               <button className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}>Ad</button>
-               <button className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}>Ed</button>
-               <button className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}>De</button>
+            <Grid className='ManageModulesContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
+               <AddIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}/>
+               <EditIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}/>
+               <CloseIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}/>
 
 
                <FullPopup display={moduleEditNameDisplay} setDisplay={setModuleEditNameDisplay}>
@@ -106,18 +96,46 @@ export default function Index() {
                <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
                   <AddModule/>
                </FullPopup>
-            </Flex>
+            </Grid>
 
          </Grid>
 
-         <Flex className='CurrentModuleNameContainer'>
-            <h1>{currentModuleFromContext ? currentModuleFromContext.name : 'Create and select a module'}</h1>
-         </Flex>
+
+         <Grid className={'tagManagementContainer'} 
+            templateColumns={'2fr 1fr'}
+            width={'100%'}
+            backgroundColor={customTheme.colors.lightGreen5}
+            padding={'.2rem'}
+         >
+            tags
+            <Grid className='ManageTagsContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
+               <AddIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}/>
+               <EditIcon width='100%'height='100%'color={'white'}className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}/>
+               <CloseIcon width='100%'height='100%'color={'white'}className={'button'} onClick={() => setTagDeleteDisplay(!tagDeleteDisplay)}/>
 
 
-         <Flex className={'ucfrListsTabsContainer'} display={'flex'} justifyContent={'space-evenly'} width={'100%'}>
+               <FullPopup display={tagEditNameDisplay} setDisplay={setTagEditNameDisplay}>
+                  <EditTagName/>
+               </FullPopup>
+               <FullPopup display={tagDeleteDisplay} setDisplay={setTagDeleteDisplay}>
+                  <DeleteTagComponent/>
+               </FullPopup>
+               <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
+                  <AddTag/>
+               </FullPopup>
+            </Grid>
+
+         </Grid>
+
+
+         <Flex className={'ucfrListsTabsContainer'} 
+         display={'flex'} 
+         justifyContent={'space-evenly'} 
+         width={'100%'}
+         marginTop={'.5rem'}
+         >
          {UcfrListsTypes.map((type, i) => (
-            <Flex key={i} className={'ucfrListsTab'} 
+            <Flex className={'ucfrListsTab'} key={i} 
                onClick={() => setSelectedTabToDisplay(type)}
                display={'flex'}
                flexDirection={'column'} alignItems={'center'}
@@ -125,7 +143,7 @@ export default function Index() {
                textAlign={'center'}
                fontSize={'.9rem'}
                fontWeight={'bold'}
-               style={ selectedTabToDisplay === type ? {backgroundColor: '#aded'} : {backgroundColor: '#a0ff'} }
+               style={ {backgroundColor: selectedTabToDisplay === type ?  customTheme.colors.lightGreen6 : customTheme.colors.lightGreen5} }
                width={'33%'}
                maxWidth={'33%'}
                cursor={'pointer'}
@@ -161,8 +179,6 @@ export default function Index() {
          </Flex>
 
 
-
-         
       </Flex>
    )
 }

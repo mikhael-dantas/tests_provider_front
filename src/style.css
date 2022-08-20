@@ -10,24 +10,6 @@
    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-/* .drag-item {
-   background: #e0ffe0;
-   border-radius: 10px; 
-   box-shadow: 0 0 10px 2px #d0d0d0;
-   padding: 10px;
-   cursor: pointer;
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-}
-
-.item-ucfr {
-   height: 3rem;
-   display: grid;
-   grid-template-columns: 1fr 10fr 2fr 2fr;
-   align-items: center;
-} */
-
 .button {
    background-color: var(--button-color);
    border: none;
@@ -38,6 +20,8 @@
    font-size: 16px;
    cursor: pointer;
    color: white;
+   min-width: 2rem;
+   min-height: 2rem;
 }
 
 .button:hover {
@@ -65,31 +49,3 @@
    overflow: hidden;
 }
 
-/* .dependencies-list {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   margin-top: .5rem;
-} */
-
-/* .dependency {
-   padding: .2rem;
-   font-size: .85rem;
-   margin: .1rem;
-   background-color: aquamarine;
-   display: inline-block;
-}
-
-.adddelete {
-   margin-top: 1rem;
-   display: flex;
-   justify-content: space-around;
-}
-
-.item-insertion {
-   width: 90%;
-   display: grid;
-   grid-template-columns: 4fr 1fr;
-   margin: 0 auto;
-   background-color: #34495e;
-   justify-content: space-between;
-} */
