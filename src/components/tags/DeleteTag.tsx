@@ -34,7 +34,7 @@ export default function DeleteTagComponent() {
 
 
    return (
-      <Grid templateColumns={'1fr 1fr'}>
+      <Flex direction={'column'}>
          <Flex>
             <select onChange={TagDeleteNameSelectHandler}>
                <option value={''}>Select a Tag to delete</option>
@@ -46,7 +46,7 @@ export default function DeleteTagComponent() {
          <Flex>
             <button onClick={TagDeleteNameHandler}>Delete</button>
          </Flex>
-      </Grid>
+      </Flex>
    )
    
 }

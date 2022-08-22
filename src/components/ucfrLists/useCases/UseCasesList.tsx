@@ -68,6 +68,7 @@ export default function UseCasesList() {
                direction={'row'} alignItems={'center'} 
                width={'100%'}
                marginTop={'.5rem'}
+               padding={'.5rem'}
             >
                <UseCaseItem usecase={usecase}/>
             </Flex>

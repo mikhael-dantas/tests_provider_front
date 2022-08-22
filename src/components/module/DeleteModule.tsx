@@ -1,4 +1,4 @@
-import { Flex, Grid } from "@chakra-ui/react"
+import { Flex, Grid, Select } from "@chakra-ui/react"
 import React from "react"
 import { useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
 
@@ -40,19 +40,19 @@ export default function DeleteModuleComponent() {
 
 
    return (
-      <Grid templateColumns={'1fr 1fr'}>
+      <Flex className="popupContainer">
          <Flex>
-            <select onChange={moduleDeleteNameSelectHandler}>
+            <Select className='select'onChange={moduleDeleteNameSelectHandler}>
                <option value={''}>Select a module to delete</option>
                {ucfrListsFromContext.modules.map(m => (
                   <option key={m.id} value={m.id}>{m.name}</option>
                ))}
-            </select>
+            </Select>
          </Flex>
          <Flex>
             <button onClick={moduleDeleteNameHandler}>Delete</button>
          </Flex>
-      </Grid>
+      </Flex>
    )
    
 }

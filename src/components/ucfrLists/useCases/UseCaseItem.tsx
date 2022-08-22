@@ -1,5 +1,6 @@
 import { Flex, Grid } from "@chakra-ui/react"
 import React from "react"
+import { customTheme } from "../../../theme"
 import { IUseCase, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext"
 import FullPopup from "../../FullPopup"
 
@@ -281,11 +282,16 @@ export default function UseCaseItem(
 
    return (
       <Flex
-      backgroundColor={'lightblue'}
+      backgroundColor={'blue'}
       marginTop={'.5rem'}
       direction={'column'}
+      padding={'.4rem'}
+      borderRadius={'.3rem'}
+      boxShadow={'0px 0px 5px rgba(0,0,0,0.5)'}
       >
-         <Flex className={'useCaseItemId'}>{usecase.id}</Flex>
+         <Flex className={'useCaseItemId'}
+         fontSize={'.6rem'}
+         >{usecase.id}</Flex>
          <Grid className={'useCaseInfo'} templateColumns='1fr 10fr 1fr' alignItems={'center'}>
             {/* make a checkbox with completeded boolean */}
             <input type='checkbox' checked={completed} onChange={() => setCompleted(!completed)} />

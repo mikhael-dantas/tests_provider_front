@@ -1,4 +1,4 @@
-import { Flex, Grid } from "@chakra-ui/react";
+import { Flex, Grid, Select } from "@chakra-ui/react";
 import React from "react";
 import { useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 
@@ -48,12 +48,12 @@ export default function EditModuleName() {
    return (
       <Grid templateColumns={'1fr 1fr'}>
          <Flex>
-            <select onChange={moduleEditNameSelectHandler}>
+            <Select className='select'onChange={moduleEditNameSelectHandler}>
                <option value={''}>Select a module to edit</option>
                {ucfrListsFromContext.modules.map(m => (
                   <option key={m.id} value={m.id}>{m.name}</option>
                ))}
-            </select>
+            </Select>
          </Flex>
          <Flex>
             <input value={moduleEditNameInput} onChange={moduleEditNameInputHandler} />

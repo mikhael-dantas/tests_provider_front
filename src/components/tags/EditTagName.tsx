@@ -48,7 +48,7 @@ export default function EditTagName() {
       })
    }
    return (
-      <Grid templateRows={'1fr 1fr'}>
+      <Flex direction="column">
          <Flex>
             <select onChange={tagEditNameSelectHandler}>
                {ucfrListsFromContext.tags.map(m => (
@@ -61,6 +61,6 @@ export default function EditTagName() {
             <input value={tagEditDescriptionInput} onChange={tagEditDescriptionInputHandler} />
             <button onClick={tagEditNameHandler}>Edit</button>
          </Flex>
-      </Grid>
+      </Flex>
    )
 }

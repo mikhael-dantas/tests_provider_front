@@ -32,16 +32,22 @@ export default cTheme
 
 export const customTheme = {
   colors: {
-    lightGreen5: '#a0ffb0',
-    lightGreen6: '#00e676',
-    darkGreen5: '#4CAF50',
-    darkGreen5hover: '#3e8e41',
+    10: '#ececec',
+    20: '#d1d1d1',
+    30: '#b0b0b0',
+    45: '#858585',
+    60: '#5f5f5f',
+    80: '#2d2d2d',
+    95: '#101010',
   }
 } as {
   colors: {
-    lightGreen5: string;
-    lightGreen6: string;
-    darkGreen5: string;
-    darkGreen5hover: string;
+    10: string,
+    20: string,
+    30: string,
+    45: string,
+    60: string,
+    80: string,
+    95: string,
   }
 }

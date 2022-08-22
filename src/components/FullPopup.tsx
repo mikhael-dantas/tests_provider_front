@@ -25,7 +25,7 @@ export default function FullPopup({display, setDisplay, children}) {
             />
             
             <Flex 
-            zIndex={99} width={'100%'}>
+            zIndex={99} width={'90%'}>
                {children}
             </Flex>
          </Flex>

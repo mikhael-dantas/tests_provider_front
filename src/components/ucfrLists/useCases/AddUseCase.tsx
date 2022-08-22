@@ -51,7 +51,7 @@ export default function AddUseCase() {
          width={'100%'}
          height={'2rem'}
       >
-         <input className={'input'} type={'text'} value={usecaseAddInput} onChange={usecaseAddInputHandler} placeholder={'Add a usecase'} />
+         <input style={{}}className={'input'} type={'text'} value={usecaseAddInput} onChange={usecaseAddInputHandler} placeholder={'Add a usecase'} />
          <button className={'button'} onClick={usecaseAddHandler}>Add</button>
       </Grid>
    )

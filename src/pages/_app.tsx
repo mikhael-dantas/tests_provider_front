@@ -2,7 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 import theme from '../theme'
 import { AppProps } from 'next/app'
-import '../style.css';
+import './style.css';
 import { UcfrsProvider } from '../UcfrsContext';
 import { PopupProvider } from '../PopupContext';
 

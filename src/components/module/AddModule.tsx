@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, Input } from "@chakra-ui/react"
 import React from "react"
 import { IModule, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
 import { GenerateUUID } from "../../utils/UUIDGenerator"
@@ -35,8 +35,10 @@ export default function AddModule() {
    }
 
    return (
-      <Flex>
-         <input className={'input'} type="text" value={moduleAddInput} onChange={moduleAddInputHandler} />
+      <Flex className='popupContainer'
+      
+      >
+         <Input className={'input'} type="text" value={moduleAddInput} onChange={moduleAddInputHandler} />
          <button className={'button'} onClick={moduleAddHandler}>Add Item</button>
       </Flex>
    )

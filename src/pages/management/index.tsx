@@ -1,4 +1,4 @@
-import { Flex, Grid, Tab, Tabs, theme } from "@chakra-ui/react";
+import { Flex, Grid, Select, Tab, Tabs, theme } from "@chakra-ui/react";
 import React from "react";
 import AddModule from "../../components/module/AddModule";
 import DeleteModuleComponent from "../../components/module/DeleteModule";
@@ -48,7 +48,14 @@ export default function Index() {
 
 
    return (
-      <Flex className={'container'} position={'relative'} direction={'column'} width={'100%'} minHeight={'100vh'} backgroundColor={'#93f78c'} alignItems={'center'}>
+      <Flex className={'container'} 
+      position={'relative'} 
+      direction={'column'} 
+      alignItems={'center'}
+      width={'100%'} minHeight={'100vh'} 
+      backgroundColor={customTheme.colors[10]} 
+      color={customTheme.colors[10]}
+      >
          
          <Flex className='CurrentModuleNameContainer'
          width={'100%'}
@@ -56,35 +63,41 @@ export default function Index() {
          alignItems={'center'}
          justifyContent={'center'}
          fontWeight={'bold'}
+         backgroundColor={customTheme.colors[80]}
          >
             {currentModuleFromContext ? currentModuleFromContext.name : 'Create and select a module'}
          </Flex>
 
          
          <Grid className={'moduleManagementContainer'} 
-            templateColumns={'2fr 1fr'}
+            templateColumns={'3fr 2fr'}
             width={'100%'}
-            backgroundColor={customTheme.colors.lightGreen5}
+            backgroundColor={customTheme.colors[30]}
             padding={'.2rem'}
+            height={'3rem'}
          >
 
 
             <Flex className='moduleSelectContainer'
             width={'100%'}
             height={'100%'}
+            color={customTheme.colors[95]}
             >
-               <select className={'select moduleSelect'} onChange={currentModuleSelectHandler}>
+               <Select className={'select'} onChange={currentModuleSelectHandler}>
                   <option value={''}>Select a module</option>
                   {ucfrListsFromContext.modules.map((module, i) => (
                      <option className={'option'} key={i} value={module.id}>{module.name}</option>
                   ))}
-               </select>
+               </Select>
             </Flex>
 
-            <Grid className='ManageModulesContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
-               <AddIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}/>
-               <EditIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}/>
-               <CloseIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}/>
+            <Grid className='ManageModulesContainer' 
+            gridTemplateColumns={'1fr 1fr 1fr'}
+            height={'100%'}
+            >
+               <AddIcon height='100%' className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}/>
+               <EditIcon height='100%' className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}/>
+               <CloseIcon height='100%' className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}/>
 
 
                <FullPopup display={moduleEditNameDisplay} setDisplay={setModuleEditNameDisplay}>
@@ -102,16 +115,17 @@ export default function Index() {
 
 
          <Grid className={'tagManagementContainer'} 
-            templateColumns={'2fr 1fr'}
+            templateColumns={'3fr 2fr'}
             width={'100%'}
-            backgroundColor={customTheme.colors.lightGreen5}
+            backgroundColor={customTheme.colors[30]}
             padding={'.2rem'}
+            height={'3rem'}
          >
             tags
             <Grid className='ManageTagsContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
-               <AddIcon width='100%'height='100%'color={'white'} className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}/>
-               <EditIcon width='100%'height='100%'color={'white'}className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}/>
-               <CloseIcon width='100%'height='100%'color={'white'}className={'button'} onClick={() => setTagDeleteDisplay(!tagDeleteDisplay)}/>
+               <AddIcon height='100%' className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}/>
+               <EditIcon height='100%'className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}/>
+               <CloseIcon height='100%'className={'button'} onClick={() => setTagDeleteDisplay(!tagDeleteDisplay)}/>
 
 
                <FullPopup display={tagEditNameDisplay} setDisplay={setTagEditNameDisplay}>
@@ -133,6 +147,7 @@ export default function Index() {
          justifyContent={'space-evenly'} 
          width={'100%'}
          marginTop={'.5rem'}
+         height={'3rem'}
          >
          {UcfrListsTypes.map((type, i) => (
             <Flex className={'ucfrListsTab'} key={i} 
@@ -143,7 +158,8 @@ export default function Index() {
                textAlign={'center'}
                fontSize={'.9rem'}
                fontWeight={'bold'}
-               style={ {backgroundColor: selectedTabToDisplay === type ?  customTheme.colors.lightGreen6 : customTheme.colors.lightGreen5} }
+               backgroundColor={selectedTabToDisplay === type ?  customTheme.colors[60] : customTheme.colors[80]}
+               _hover={{backgroundColor: customTheme.colors[95]}}
                width={'33%'}
                maxWidth={'33%'}
                cursor={'pointer'}
@@ -174,9 +190,16 @@ export default function Index() {
                   <NestedUseCaseList/>
                ) : null
             ) : (
-               <h1>Select a module</h1>
+               <Flex
+               backgroundColor={"#ffdddd"}
+               color={"#ff0000"}
+               padding={".5rem"}
+               >Select a module</Flex>
             )}
          </Flex>
+
+         <Flex className="blank space at the end"
+         height='5rem'/>
 
 
       </Flex>
