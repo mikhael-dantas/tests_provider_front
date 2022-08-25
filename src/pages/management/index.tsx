@@ -14,6 +14,8 @@ import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedU
 import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
 import { AddIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { customTheme } from "../../theme";
+import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
+import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
 
 
 export default function Index() {
@@ -196,6 +198,11 @@ export default function Index() {
                padding={".5rem"}
                >Select a module</Flex>
             )}
+         </Flex>
+
+         <Flex className={'jsonManegementContainer'}>
+            <SaveInLS/>
+            <LoadFromLs/>
          </Flex>
 
          <Flex className="blank space at the end"
