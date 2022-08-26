@@ -16,6 +16,7 @@ import { AddIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { customTheme } from "../../theme";
 import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
 import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
+import ExportJson from "../../components/ucfrListsJson/ExportJson";
 
 
 export default function Index() {
@@ -67,7 +68,7 @@ export default function Index() {
          fontWeight={'bold'}
          backgroundColor={customTheme.colors[80]}
          >
-            {currentModuleFromContext ? currentModuleFromContext.name : 'Create and select a module'}
+            {currentModuleFromContext ? currentModuleFromContext.name : 'Create or select a module'}
          </Flex>
 
          
@@ -203,6 +204,7 @@ export default function Index() {
          <Flex className={'jsonManegementContainer'}>
             <SaveInLS/>
             <LoadFromLs/>
+            <ExportJson/>
          </Flex>
 
          <Flex className="blank space at the end"
