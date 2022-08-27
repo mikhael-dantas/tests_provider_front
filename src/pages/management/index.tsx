@@ -17,6 +17,7 @@ import { customTheme } from "../../theme";
 import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
 import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
 import ExportJson from "../../components/ucfrListsJson/ExportJson";
+import ImportJson from "../../components/ucfrListsJson/ImportJson";
 
 
 export default function Index() {
@@ -201,10 +202,17 @@ export default function Index() {
             )}
          </Flex>
 
-         <Flex className={'jsonManegementContainer'}>
-            <SaveInLS/>
-            <LoadFromLs/>
-            <ExportJson/>
+         <Flex className={'jsonManegementContainer'}
+         direction={'column'}
+         >
+            <Flex className={'jsonManegementSaveAndLoad'}>
+               <SaveInLS/>
+               <LoadFromLs/>
+            </Flex>
+            <Flex className={'jsonManegementImportAndExport'}>
+               <ExportJson/>
+               <ImportJson/>
+            </Flex>
          </Flex>
 
          <Flex className="blank space at the end"
