@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/react'
 import React from 'react'
 import { useUcfrListsContext } from '../../UcfrsContext'
 
@@ -18,7 +17,7 @@ function ExportJson() {
     }
 
     return (
-        <Button className='button' onClick={exportJson}>Export</Button>
+        <button className='button' onClick={exportJson}>Export</button>
     )
 }
 

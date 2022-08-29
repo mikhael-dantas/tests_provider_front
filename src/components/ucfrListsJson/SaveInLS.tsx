@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/react'
 import React from 'react'
 import { useUcfrListsContext } from '../../UcfrsContext'
 
@@ -8,7 +7,7 @@ function SaveInLS() {
         localStorage.setItem('ucfrLists', JSON.stringify(ucfrListsFromContext))
     }
     return (
-        <Button className='button' onClick={saveInLS}>Save</Button>
+        <button className='button' onClick={saveInLS}>Save</button>
     )
 }
 

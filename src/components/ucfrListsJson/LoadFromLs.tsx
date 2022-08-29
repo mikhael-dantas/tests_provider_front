@@ -1,4 +1,3 @@
-import { Button } from '@chakra-ui/react'
 import React from 'react'
 import { IUcfrLists, useUpdateUcfrListsContext } from '../../UcfrsContext'
 
@@ -18,7 +17,7 @@ function LoadFromLs() {
     }
 
     return (
-        <Button className='button' onClick={loadFromLS}>Load</Button>
+        <button className='button' onClick={loadFromLS}>Load</button>
     )
 }
 

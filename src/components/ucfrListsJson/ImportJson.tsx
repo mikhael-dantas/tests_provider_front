@@ -1,4 +1,4 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import React from 'react'
 import { useUpdateUcfrListsContext } from '../../UcfrsContext'
 
@@ -38,7 +38,7 @@ function ImportJson() {
             style={{border: importJsonError ? '0.2rem solid red' : '0.2rem solid green'}}
             value={importJsonInput} onChange={handleImportJsonInput} 
             />
-            <Button className='button' onClick={importJson}>Import</Button>
+            <button className='button' onClick={importJson}>Import</button>
         </Flex>
     )
 }
