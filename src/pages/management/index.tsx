@@ -18,6 +18,7 @@ import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
 import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
 import ExportJson from "../../components/ucfrListsJson/ExportJson";
 import ImportJson from "../../components/ucfrListsJson/ImportJson";
+import ListModules from "../../components/modules/ListModules";
 
 
 export default function Index() {
@@ -44,6 +45,7 @@ export default function Index() {
    const [moduleEditNameDisplay, setModuleEditNameDisplay] = React.useState<boolean>(false)
    const [moduleDeleteDisplay, setModuleDeleteDisplay] = React.useState<boolean>(false)
    const [moduleAddDisplay, setModuleAddDisplay] = React.useState<boolean>(false)
+   const [modulesShowDisplay, setModulesShowDisplay] = React.useState<boolean>(false)
 
    const [tagEditNameDisplay, setTagEditNameDisplay] = React.useState<boolean>(false)
    const [tagDeleteDisplay, setTagDeleteDisplay] = React.useState<boolean>(false)
@@ -72,7 +74,17 @@ export default function Index() {
             {currentModuleFromContext ? currentModuleFromContext.name : 'Create or select a module'}
          </Flex>
 
-         
+         <Flex>
+            <button className="showModulesListButton button"
+            onClick={() => setModulesShowDisplay(true)}
+            >
+               show modules
+            </button>
+
+            <FullPopup display={modulesShowDisplay} setDisplay={setModulesShowDisplay}>
+               <ListModules />
+            </FullPopup>
+         </Flex>
          <Grid className={'moduleManagementContainer'} 
             templateColumns={'3fr 2fr'}
             width={'100%'}
