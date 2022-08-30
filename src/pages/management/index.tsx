@@ -1,8 +1,8 @@
 import { Flex, Grid, Select, Tab, Tabs, theme } from "@chakra-ui/react";
 import React from "react";
-import AddModule from "../../components/module/AddModule";
-import DeleteModuleComponent from "../../components/module/DeleteModule";
-import EditModuleName from "../../components/module/EditModuleName";
+import AddModule from "../../components/modules/AddModule";
+import DeleteModuleComponent from "../../components/modules/DeleteModule";
+import EditModuleName from "../../components/modules/EditModuleName";
 import FullPopup from "../../components/FullPopup";
 import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
