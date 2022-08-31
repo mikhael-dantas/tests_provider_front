@@ -72,17 +72,6 @@ export default function Index() {
             {currentModuleFromContext ? currentModuleFromContext.name : 'Create or select a module'}
          </Flex>
 
-         <Flex>
-            <button className="showModulesListButton button"
-            onClick={() => setModulesShowDisplay(true)}
-            >
-               show modules
-            </button>
-
-            <FullPopup display={modulesShowDisplay} setDisplay={setModulesShowDisplay}>
-               <ListModules />
-            </FullPopup>
-         </Flex>
          <Grid className={'moduleManagementContainer'} 
             templateColumns={'3fr 2fr'}
             width={'100%'}
@@ -106,11 +95,19 @@ export default function Index() {
             </Flex>
 
             <Grid className='ManageModulesContainer' 
-            gridTemplateColumns={'1fr 1fr 1fr'}
+            gridTemplateColumns={'1fr 2fr'}
             height={'100%'}
             >
                <AddIcon height='100%' className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}/>
+               <button className="showModulesListButton button"
+               onClick={() => setModulesShowDisplay(true)}
+               >
+                  show all
+               </button>
 
+               <FullPopup display={modulesShowDisplay} setDisplay={setModulesShowDisplay}>
+                  <ListModules />
+               </FullPopup>
 
                <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
                   <AddModule/>
