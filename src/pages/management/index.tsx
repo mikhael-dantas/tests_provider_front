@@ -1,8 +1,6 @@
 import { Flex, Grid, Select, Tab, Tabs, theme } from "@chakra-ui/react";
 import React from "react";
 import AddModule from "../../components/modules/AddModule";
-import DeleteModuleComponent from "../../components/modules/DeleteModule";
-import EditModuleName from "../../components/modules/EditModuleName";
 import FullPopup from "../../components/FullPopup";
 import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
@@ -112,16 +110,8 @@ export default function Index() {
             height={'100%'}
             >
                <AddIcon height='100%' className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}/>
-               <EditIcon height='100%' className={'button'} onClick={() => setModuleEditNameDisplay(!moduleEditNameDisplay)}/>
-               <CloseIcon height='100%' className={'button'} onClick={() => setModuleDeleteDisplay(!moduleDeleteDisplay)}/>
 
 
-               <FullPopup display={moduleEditNameDisplay} setDisplay={setModuleEditNameDisplay}>
-                  <EditModuleName/>
-               </FullPopup>
-               <FullPopup display={moduleDeleteDisplay} setDisplay={setModuleDeleteDisplay}>
-                  <DeleteModuleComponent/>
-               </FullPopup>
                <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
                   <AddModule/>
                </FullPopup>

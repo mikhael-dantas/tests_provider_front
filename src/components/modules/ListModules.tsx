@@ -8,7 +8,9 @@ function ListModules() {
 
 
     return (
-        <Flex>
+        <Flex
+        direction='column'
+        width={"100%"}>
             {ucfrListsFromContext.modules.map(m => (
                 <ListModulesItem key={m.id} module={m}/>
             ))}
