@@ -6,8 +6,6 @@ import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTa
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
 import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
 import AddTag from "../../components/tags/AddTag";
-import DeleteTagComponent from "../../components/tags/DeleteTag";
-import EditTagName from "../../components/tags/EditTagName";
 import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
 import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
 import { AddIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
@@ -134,16 +132,8 @@ export default function Index() {
 
             <Grid className='ManageTagsContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
                <AddIcon height='100%' className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}/>
-               <EditIcon height='100%'className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}/>
-               <CloseIcon height='100%'className={'button'} onClick={() => setTagDeleteDisplay(!tagDeleteDisplay)}/>
 
 
-               <FullPopup display={tagEditNameDisplay} setDisplay={setTagEditNameDisplay}>
-                  <EditTagName/>
-               </FullPopup>
-               <FullPopup display={tagDeleteDisplay} setDisplay={setTagDeleteDisplay}>
-                  <DeleteTagComponent/>
-               </FullPopup>
                <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
                   <AddTag/>
                </FullPopup>
