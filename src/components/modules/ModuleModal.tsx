@@ -72,13 +72,16 @@ function ModuleModal({isOpen, onClose, module: receivedModule}:
                     <input 
                     style={{backgroundColor: 'white', color: 'black'}}
                     value={moduleEditNameInput} onChange={moduleEditNameInputHandler} />
-                    <button onClick={moduleEditNameHandler}>Save name</button>
-                    <button onClick={secondOnOpen}>Delete module</button>
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                    Close
+                    <Button colorScheme='green' mr={3} onClick={moduleEditNameHandler}>
+                        Save
+                    </Button>
+                    <Button colorScheme='red' mr={3} 
+                    onClick={secondOnOpen}
+                    >
+                        Delete Module
                     </Button>
                 </ModalFooter>
             </ModalContent>

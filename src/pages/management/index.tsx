@@ -17,6 +17,7 @@ import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
 import ExportJson from "../../components/ucfrListsJson/ExportJson";
 import ImportJson from "../../components/ucfrListsJson/ImportJson";
 import ListModules from "../../components/modules/ListModules";
+import ListTags from "../../components/tags/ListTags";
 
 
 export default function Index() {
@@ -40,14 +41,13 @@ export default function Index() {
    }
 
 
-   const [moduleEditNameDisplay, setModuleEditNameDisplay] = React.useState<boolean>(false)
-   const [moduleDeleteDisplay, setModuleDeleteDisplay] = React.useState<boolean>(false)
    const [moduleAddDisplay, setModuleAddDisplay] = React.useState<boolean>(false)
    const [modulesShowDisplay, setModulesShowDisplay] = React.useState<boolean>(false)
 
    const [tagEditNameDisplay, setTagEditNameDisplay] = React.useState<boolean>(false)
    const [tagDeleteDisplay, setTagDeleteDisplay] = React.useState<boolean>(false)
    const [tagAddDisplay, setTagAddDisplay] = React.useState<boolean>(false)
+   const [tagsShowDisplay, setTagsShowDisplay] = React.useState<boolean>(false)
 
 
 
@@ -124,7 +124,14 @@ export default function Index() {
             padding={'.2rem'}
             height={'3rem'}
          >
-            tags
+            <button className="showTagsListButton button" onClick={() => setTagsShowDisplay(true)}>
+               show all tags
+            </button>
+
+            <FullPopup display={tagsShowDisplay} setDisplay={setTagsShowDisplay}>
+               <ListTags />
+            </FullPopup>
+
             <Grid className='ManageTagsContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
                <AddIcon height='100%' className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}/>
                <EditIcon height='100%'className={'button'} onClick={() => setTagEditNameDisplay(!tagEditNameDisplay)}/>
