@@ -17,7 +17,7 @@ function ExportJson() {
     }
 
     return (
-        <button className='button' onClick={exportJson}>Export</button>
+        <button className='button' onClick={exportJson}>JSON Export/Download</button>
     )
 }
 

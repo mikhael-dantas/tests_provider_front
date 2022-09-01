@@ -7,7 +7,7 @@ function SaveInLS() {
         localStorage.setItem('ucfrLists', JSON.stringify(ucfrListsFromContext))
     }
     return (
-        <button className='button' onClick={saveInLS}>Save</button>
+        <button className='button' onClick={saveInLS}>Save JSON locally</button>
     )
 }
 

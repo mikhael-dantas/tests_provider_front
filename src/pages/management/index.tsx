@@ -123,7 +123,7 @@ export default function Index() {
             height={'3rem'}
          >
             <button className="showTagsListButton button" onClick={() => setTagsShowDisplay(true)}>
-               show all tags
+               Show all Tags
             </button>
 
             <FullPopup display={tagsShowDisplay} setDisplay={setTagsShowDisplay}>
@@ -200,14 +200,28 @@ export default function Index() {
 
          <Flex className={'jsonManegementContainer'}
          direction={'column'}
+         marginTop={'3rem'}
+         borderTop={'1px solid black'}
+         padding={'.5rem'}
+         borderBottom={'1px solid black'}
          >
-            <Flex className={'jsonManegementSaveAndLoad'}>
+            <Flex className={'jsonManegementSaveAndLoad'}
+            justifyContent={'space-around'}
+            width={'100%'}
+            >
                <SaveInLS/>
                <LoadFromLs/>
             </Flex>
-            <Flex className={'jsonManegementImportAndExport'}>
-               <ExportJson/>
+            <Flex
+            marginTop={'1rem'}
+            >
                <ImportJson/>
+
+            </Flex>
+            <Flex className={'jsonManegementImportAndExport'}
+            marginTop={'.5rem'}
+            >
+               <ExportJson/>
             </Flex>
          </Flex>
 

@@ -38,7 +38,7 @@ function ImportJson() {
             style={{border: importJsonError ? '0.2rem solid red' : '0.2rem solid green'}}
             value={importJsonInput} onChange={handleImportJsonInput} 
             />
-            <button className='button' onClick={importJson}>Import</button>
+            <button className='button' onClick={importJson}>Import JSON</button>
         </Flex>
     )
 }

@@ -17,7 +17,7 @@ function LoadFromLs() {
     }
 
     return (
-        <button className='button' onClick={loadFromLS}>Load</button>
+        <button className='button' onClick={loadFromLS}>Load JSON locally</button>
     )
 }
 
