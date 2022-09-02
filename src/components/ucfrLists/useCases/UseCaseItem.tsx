@@ -1,17 +1,9 @@
-import { Flex, Grid } from "@chakra-ui/react"
+import { EditIcon } from "@chakra-ui/icons"
+import { Flex, Grid, useDisclosure } from "@chakra-ui/react"
 import React from "react"
 import { customTheme } from "../../../theme"
-import { IUseCase, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext"
-import FullPopup from "../../FullPopup"
-
-// export interface IUseCase {
-//    id: string
-//    tagIds: string[]
-//    name: string
-//    completed: boolean
-//    neededFrsToWorkIds: string[]
-//    usecasesPipelineIds: string[]
-// }
+import { IUseCase, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext"
+import UseCaseModal from "./UseCaseModal"
 
 export default function UseCaseItem(
 {usecase}: {
@@ -19,87 +11,25 @@ export default function UseCaseItem(
 }) {
    const [completed, setCompleted] = React.useState(usecase.completed)
 
-   const currentModuleFromContext = useCurrentModuleContext()
-
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()
 
-
-   const [editNameDisplay, setEditNameDisplay] = React.useState(false)
-
-   const [useCaseNewNameInput, setUseCaseNewNameInput] = React.useState(usecase.name)
-
-   const handleChangeUseCaseNewNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setUseCaseNewNameInput(e.target.value)
-   }
-   const editUseCaseNameHandler = () => {
+   const completedHandler = () => {
+      setCompleted(!completed)
       updateUcfrListsFromContext({
          ...ucfrListsFromContext,
          modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
+            if (module.id === usecase.moduleId) {
                return {
                   ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
+                  useCases: module.useCases.map(uc => {
+                     if (uc.id === usecase.id) {
                         return {
-                           ...scopeUsecase,
-                           name: useCaseNewNameInput
+                           ...uc,
+                           completed: !completed,
                         }
                      }
-                     return scopeUsecase
-                  })
-               }
-            }
-            return module
-         })
-      })
-
-      setUseCaseNewNameInput(useCaseNewNameInput)
-   }
-
-
-   const deleteUseCaseHandler = () => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.filter(scopedUsecase => scopedUsecase.id !== usecase.id)
-               }
-            }
-            return module
-         })
-      })
-   }
-
-
-   const addTagHandler = (e) => {
-      const id = e.target.value
-      if (id === "") {
-         return
-      }
-
-      const alreadyAdded = usecase.tagIds.includes(id)
-
-      if (alreadyAdded) {
-         return
-      }
-
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
-                        return {
-                           ...scopeUsecase,
-                           tagIds: [...scopeUsecase.tagIds, id]
-                        }
-                     }
-                     return scopeUsecase
+                     return uc
                   })
                }
             }
@@ -107,28 +37,7 @@ export default function UseCaseItem(
          })
       })
    }
-   const removeTagHandler = (id: string) => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
-                        return {
-                           ...scopeUsecase,
-                           tagIds: scopeUsecase.tagIds.filter(tagId => tagId !== id)
-                        }
-                     }
-                     return scopeUsecase
-                  })
-               }
-            }
-            return module
-         })
-      })
-   }
+
 
    const getTagNameById = (tagId: string) => {
       const tag = ucfrListsFromContext.tags.find(t => t.id === tagId)
@@ -137,64 +46,6 @@ export default function UseCaseItem(
       }
       return tag.name
    }
-
-
-   const addUseCasePipelinesHandler = (e) => {
-      const id = e.target.value
-      if (id === "") {
-         return
-      }
-
-      const alreadyAdded = usecase.useCasesPipelineIds.includes(id)
-
-      if (alreadyAdded) {
-         return
-      }
-
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
-                        return {
-                           ...scopeUsecase,
-                           useCasesPipelineIds: [...scopeUsecase.useCasesPipelineIds, id]
-                        }
-                     }
-                     return scopeUsecase
-                  })
-               }
-            }
-            return module
-         })
-      })
-   }
-   const removeUseCasePipelineHandler = (id: string) => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
-                        return {
-                           ...scopeUsecase,
-                           useCasesPipelineIds: scopeUsecase.useCasesPipelineIds.filter(useCasePipelineId => useCasePipelineId !== id)
-                        }
-                     }
-                     return scopeUsecase
-                  })
-               }
-            }
-            return module
-         })
-      })
-   }
-
    const getUseCasePipelineNameById = (useCasePipelineId: string) => {
       const allUseCasesFromAllModules = ucfrListsFromContext.modules.reduce((acc, module) => {
          return [...acc, ...module.useCases]
@@ -205,67 +56,9 @@ export default function UseCaseItem(
       if (!useCasePipeline) {
          return "not found"
       }
-      return useCasePipeline.name
+      // return only 20 characters if bigger than 20
+      return useCasePipeline.name.length > 20 ? useCasePipeline.name.slice(0, 20) + "..." : useCasePipeline.name
    }
-
-
-   const addNeededFrsToWorkIdsHandler = (e) => {
-      const id = e.target.value
-      if (id === "") {
-         return
-      }
-      
-      const alreadyAdded = usecase.neededFrsToWorkIds.includes(id)
-
-      if (alreadyAdded) {
-         return
-      }
-
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
-                        return {
-                           ...scopeUsecase,
-                           neededFrsToWorkIds: [...scopeUsecase.neededFrsToWorkIds, id]
-                        }
-                     }
-                     return scopeUsecase
-                  })
-               }
-            }
-            return module
-         })
-      })
-   }
-
-   const removeNeededFrsToWorkIdsHandler = (id: string) => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  useCases: module.useCases.map(scopeUsecase => {
-                     if (usecase.id === scopeUsecase.id) {
-                        return {
-                           ...scopeUsecase,
-                           neededFrsToWorkIds: scopeUsecase.neededFrsToWorkIds.filter(neededFrsToWorkId => neededFrsToWorkId !== id)
-                        }
-                     }
-                     return scopeUsecase
-                  })
-               }
-            }
-            return module
-         })
-      })
-   }
-
    const getNeededFrsToWorkNameById = (neededFrsToWorkId: string) => {
       const allNeededFrsToWorkFromAllModules = ucfrListsFromContext.modules.reduce((acc, module) => {
          return [...acc, ...module.functionalRequirements]
@@ -276,91 +69,106 @@ export default function UseCaseItem(
       if (!neededFrsToWork) {
          return "not found"
       }
-      return neededFrsToWork.name
+      // return only 20 characters if bigger than 20
+      return neededFrsToWork.name.length > 20 ? neededFrsToWork.name.slice(0, 20) + "..." : neededFrsToWork.name
    }
 
+   const { isOpen, onOpen, onClose } = useDisclosure()
 
    return (
-      <Flex
-      backgroundColor={'blue'}
+      <Grid
+      backgroundColor={customTheme.colors[60]}
       marginTop={'.5rem'}
-      direction={'column'}
+      templateColumns={'7fr 1fr'}
       padding={'.4rem'}
       borderRadius={'.3rem'}
       boxShadow={'0px 0px 5px rgba(0,0,0,0.5)'}
+      alignItems={'center'}
+      margin={'0 auto'}
+      width={'90%'}
       >
-         <Flex className={'useCaseItemId'}
-         fontSize={'.6rem'}
-         >{usecase.id}</Flex>
-         <Grid className={'useCaseInfo'} templateColumns='1fr 10fr 1fr' alignItems={'center'}>
-            {/* make a checkbox with completeded boolean */}
-            <input type='checkbox' checked={completed} onChange={() => setCompleted(!completed)} />
-            <Flex>{usecase.name}</Flex>
-            <Flex direction={'column'}>
-               <Flex onClick={() => {setUseCaseNewNameInput(usecase.name);setEditNameDisplay(!editNameDisplay)}}>
-                  edit
-               </Flex>
-               <Flex onClick={deleteUseCaseHandler}>delete</Flex>
+         <Flex className="content"
+         direction={'column'}
+         >
+            <Flex className={'useCaseItemId'}
+            fontSize={'.6rem'}
+            >
+               {usecase.id}
             </Flex>
-         </Grid>
+            <Grid className={'useCaseInfo'} 
+            templateColumns='1fr 10fr 1fr' 
+            alignItems={'center'}
+            marginTop={'.4rem'}
+            >
+               <input width={'10%'}type='checkbox' checked={completed} onChange={completedHandler} />
+               <Flex maxWidth={'90%'}>{usecase.name}</Flex>
+            </Grid>
 
-         <Flex className={'useCaseTags'}>
-            {usecase.tagIds.map(tagId => {
-               return (
-               <Flex key={`${usecase.id} ${tagId}`}className={'tagItem'}>
-                  <Flex className={'tagName'} key={tagId}>{getTagNameById(tagId)}</Flex>
-                  <Flex className={'removeTag'} onClick={() => removeTagHandler(tagId)}>x</Flex>
-               </Flex>
-               )
-            })}
-         </Flex>
-         <Flex className={'addTags'}>
-            <select onChange={addTagHandler}>
-               <option value="">Select a tag to add</option>
-               {ucfrListsFromContext.tags.map(tag => <option key={tag.id} value={tag.id}>{tag.name}</option>)}
-            </select>
-         </Flex>
-         <Flex className={'useCasePipelines'}>
-            {usecase.useCasesPipelineIds.map(useCasePipelineId => {
-               return (
-               <Flex key={usecase.id + useCasePipelineId}>
-                  <Flex className={'useCasePipelineName'} key={useCasePipelineId}>{getUseCasePipelineNameById(useCasePipelineId)}</Flex>
-                  <Flex className={'removeUseCasePipeline'} onClick={() => removeUseCasePipelineHandler(useCasePipelineId)}>x</Flex>
-               </Flex>
-               )
-            } )}
-         </Flex>
-         <Flex className={'addUseCasePipelines'}>
-            <select onChange={addUseCasePipelinesHandler}>
-               <option value="">Select a use case pipeline to add</option>
-               {ucfrListsFromContext.modules.reduce((acc, module) => {
-                  return [...acc, ...module.useCases]
-               } ,[]).map(uc => <option key={uc.id} value={uc.id}>{uc.name}</option>)}
-            </select>
-         </Flex>
-         <Flex className={'neededFrsToWork'}>
-            {usecase.neededFrsToWorkIds.map(neededFr => {
-               return (
-               <Flex key={`${usecase.id} ${neededFr}`}className={'neededFrItem'}>
-                  <Flex className={'neededFrName'} key={neededFr}>{getNeededFrsToWorkNameById(neededFr)}</Flex>
-                  <Flex className={'removeNeededFr'} onClick={() => removeNeededFrsToWorkIdsHandler(neededFr)}>x</Flex>
-               </Flex>
-               )
-            } )}
-         </Flex>
-         <Flex className={'addNeededFrsToWork'}>
-            <select onChange={addNeededFrsToWorkIdsHandler}>
-               <option value="">Select a needed fr to work to add</option>
-               {ucfrListsFromContext.modules.reduce((acc, module) => {
-                  return [...acc, ...module.functionalRequirements]
-               } ,[]).map(fr => <option key={fr.id} value={fr.id}>{fr.name}</option>)}
-            </select>
+            <Flex className={'useCaseItemTagsTitle'}
+            marginTop={'1rem'}
+            >Tags</Flex>
+            <Grid className={'useCaseTags'} templateColumns={'1fr 1fr'}>
+               {usecase.tagIds.map(tagId => {
+                  return (
+                  <Flex key={`${usecase.id} ${tagId}`}className={'tagItem'}
+                  backgroundColor={customTheme.colors[45]}
+                  borderRadius={'.3rem'}
+                  padding={'.2rem'}
+                  margin={'.2rem'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  width={'95%'}
+                  >
+                     <Flex className={'tagName'} key={tagId}>{getTagNameById(tagId)}</Flex>
+                  </Flex>
+                  )
+               })}
+            </Grid>
+
+            <Flex>UseCase Pipelines</Flex>
+            <Grid className={'useCasePipelines'} templateColumns={'1fr'} 
+            >
+               {usecase.useCasesPipelineIds.map(useCasePipelineId => {
+                  return (
+                  <Flex key={usecase.id + useCasePipelineId}
+                  backgroundColor={customTheme.colors[45]}
+                  borderRadius={'.3rem'}
+                  padding={'.2rem'}
+                  margin={'.2rem'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  >
+                     <Flex className={'useCasePipelineName'} key={useCasePipelineId}>{getUseCasePipelineNameById(useCasePipelineId)}</Flex>
+                  </Flex>
+                  )
+               } )}
+            </Grid>
+
+            <Flex>Needed FRs to work</Flex>
+            <Grid className={'neededFrsToWork'}templateColumns={'1fr'}>
+               {usecase.neededFrsToWorkIds.map(neededFr => {
+                  return (
+                  <Flex key={`${usecase.id} ${neededFr}`}className={'neededFrItem'}>
+                     <Flex className={'neededFrName'} key={neededFr}>{getNeededFrsToWorkNameById(neededFr)}</Flex>
+                  </Flex>
+                  )
+               } )}
+            </Grid>
          </Flex>
 
-         <FullPopup key={usecase.id} display={editNameDisplay} setDisplay={setEditNameDisplay}>
-            <input className={'editUseCase'} value={useCaseNewNameInput} onChange={handleChangeUseCaseNewNameInput} />
-            <Flex onClick={editUseCaseNameHandler}>save</Flex>
-         </FullPopup>
-      </Flex>
+         <Flex className="actions"
+         direction={'column'}
+         alignItems={'center'}
+         justifyContent={'center'}
+         >
+            <EditIcon
+            width={'60%'}
+            height={'60%'}
+            onClick={onOpen}/>
+
+            <UseCaseModal isOpen={isOpen} onClose={onClose} useCase={usecase} />
+         </Flex>
+
+      </Grid>
    )
 }

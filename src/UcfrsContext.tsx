@@ -119,3 +119,40 @@ export function useUpdateSelectedTabToDisplayContext() {
    const updateSelectedTabToDisplay = React.useContext(updateSelectedTabToDisplayContext)
    return updateSelectedTabToDisplay
 }
+
+// make a class to serve as interfaces for updating context
+
+export class UcfrListsContextInterfaces {
+   constructor(
+      private ucfrLists: IUcfrLists,
+      private setUcfrLists: React.Dispatch<React.SetStateAction<IUcfrLists>>,
+   ) {}
+   addTagToUseCase({useCaseId: receivedUseCaseId, tagId: receivedTagId}: {useCaseId: string, tagId: string}) {
+      const allUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromallModules.find(useCase => useCase.id === receivedUseCaseId)
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCaseId) {
+                        return {
+                           ...scopedUseCase,
+                           tagIds: [...scopedUseCase.tagIds, receivedTagId]
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+}
