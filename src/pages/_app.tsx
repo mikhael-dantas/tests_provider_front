@@ -4,16 +4,16 @@ import theme from '../theme'
 import { AppProps } from 'next/app'
 import './style.css';
 import { UcfrsProvider } from '../UcfrsContext';
-import { PopupProvider } from '../PopupContext';
+import { AlertStackProvider } from '../AlertStackContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
-      <PopupProvider>
+      <AlertStackProvider>
         <UcfrsProvider>
           <Component {...pageProps} />
         </UcfrsProvider>
-      </PopupProvider>
+      </AlertStackProvider>
     </ChakraProvider>
   )
 }

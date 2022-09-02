@@ -8,7 +8,7 @@ import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
 import AddTag from "../../components/tags/AddTag";
 import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
 import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
-import { AddIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import { customTheme } from "../../theme";
 import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
 import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";

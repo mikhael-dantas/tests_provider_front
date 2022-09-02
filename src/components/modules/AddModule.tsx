@@ -1,5 +1,6 @@
 import { Flex, Input } from "@chakra-ui/react"
 import React from "react"
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../AlertStackContext"
 import { IModule, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
 import { GenerateUUID } from "../../utils/UUIDGenerator"
 
@@ -7,6 +8,9 @@ import { GenerateUUID } from "../../utils/UUIDGenerator"
 export default function AddModule() {
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+
+   const alertStackComponentFromContext = useAlertStackComponentContext()
+   const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
    const [moduleAddInput, setModuleAddInput] = React.useState<string>("")
@@ -17,6 +21,8 @@ export default function AddModule() {
    const moduleAddHandler = () => {
       const alreadyExists = ucfrListsFromContext.modules.find(m => m.name === moduleAddInput)
       if (alreadyExists) {
+         const component = GenerateAlertComponent({ status: 'error', text: 'Module already exists' })
+         updateAlertStackComponentFromContext([...alertStackComponentFromContext, { component }])
          return
       }
 
