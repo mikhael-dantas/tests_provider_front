@@ -32,7 +32,7 @@ export function AlertStackProvider({children}) {
          position='fixed'
          bottom='0'
          left='0'
-         zIndex={10}
+         zIndex={99}
          >
             {alertStackComponent.map((fAlertStackComponentItem) => {
                return (
