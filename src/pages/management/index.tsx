@@ -2,7 +2,7 @@ import { Flex, Grid, Select, Tab, Tabs, theme } from "@chakra-ui/react";
 import React from "react";
 import AddModule from "../../components/modules/AddModule";
 import FullPopup from "../../components/FullPopup";
-import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
+import { EUcfrListsTypes, UcfrListsContextInterfaces, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
 import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
 import AddTag from "../../components/tags/AddTag";
@@ -26,8 +26,11 @@ export default function Index() {
    const setSelectedTabToDisplay = useUpdateSelectedTabToDisplayContext()
    
    const ucfrListsFromContext = useUcfrListsContext()
-   // const updateUcfrListsFromContext = useUpdateUcfrListsContext()
-
+   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
 
 
    const currentModuleSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,7 +61,6 @@ export default function Index() {
       backgroundColor={customTheme.colors[10]} 
       color={customTheme.colors[10]}
       >
-         
          <Flex className='CurrentModuleNameContainer'
          width={'100%'}
          height={'3rem'}
@@ -198,14 +200,14 @@ export default function Index() {
             )}
          </Flex>
 
-         <Flex className={'jsonManegementContainer'}
+         <Flex className={'jsonManagementContainer'}
          direction={'column'}
          marginTop={'3rem'}
          borderTop={'1px solid black'}
          padding={'.5rem'}
          borderBottom={'1px solid black'}
          >
-            <Flex className={'jsonManegementSaveAndLoad'}
+            <Flex className={'jsonManagementSaveAndLoad'}
             justifyContent={'space-around'}
             width={'100%'}
             >
@@ -218,7 +220,7 @@ export default function Index() {
                <ImportJson/>
 
             </Flex>
-            <Flex className={'jsonManegementImportAndExport'}
+            <Flex className={'jsonManagementImportAndExport'}
             marginTop={'.5rem'}
             >
                <ExportJson/>
