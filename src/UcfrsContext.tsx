@@ -1,6 +1,8 @@
 import React from "react";
+import { GenerateUUID } from "./utils/UUIDGenerator";
 
 
+// Interfaces
 export interface ITag {
    id: string;
    name: string;
@@ -23,6 +25,7 @@ export interface INestedUseCase {
    completed: boolean
    neededFrsToWorkIds: string[]
    parentUseCaseId: string
+   useCasesPipelineIds: string[]
 }
 export interface IFunctionalRequirement {
    id: string
@@ -44,6 +47,8 @@ export interface IUcfrLists {
    modules: IModule[]
 }
 
+
+// RFN Provider
 export enum EUcfrListsTypes {
    useCases = "Use Cases",
    nestedUseCases = "Nested Use Cases",
@@ -93,6 +98,8 @@ export function UcfrsProvider({children}) {
    )
 }
 
+
+// Context Hooks
 export function useUcfrListsContext() {
    const ucfrLists = React.useContext(ucfrListsContext)
    return ucfrLists
@@ -120,19 +127,237 @@ export function useUpdateSelectedTabToDisplayContext() {
    return updateSelectedTabToDisplay
 }
 
-// make a class to serve as interfaces for updating context
 
+
+// class to serve as interfaces for updating context
 export class UcfrListsContextInterfaces {
    constructor(
       private ucfrLists: IUcfrLists,
       private setUcfrLists: React.Dispatch<React.SetStateAction<IUcfrLists>>,
    ) {}
-   addTagToUseCase({useCaseId: receivedUseCaseId, tagId: receivedTagId}: {useCaseId: string, tagId: string}) {
-      const allUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+
+   // MODULES
+   createModule({moduleName: receivedModuleName}: {moduleName: string}) {
+      if (this.ucfrLists.modules.find(module => module.name === receivedModuleName)) {
+         throw new Error("Module already exists")
+      }
+      // cannot be blank spaces
+      if (receivedModuleName.trim() === "") {
+         throw new Error("Module name cannot be blank")
+      }
+      // cannot be bigger than 20 characters
+      if (receivedModuleName.length > 20) {
+         throw new Error("Module name cannot be bigger than 20 characters")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedModuleName.length < 2) {
+         throw new Error("Module name cannot be smaller than 2 characters")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: [...this.ucfrLists.modules, {
+            id: GenerateUUID(),
+            name: receivedModuleName,
+            useCases: [],
+            nestedUseCases: [],
+            functionalRequirements: []
+         }]
+      })
+   }
+   readModuleById({moduleId: receivedModuleId}: {moduleId: string}) {
+      const {modules} = this.ucfrLists
+      const foundModule = modules.find(({id: moduleId}) => moduleId === receivedModuleId)
+      if (!foundModule) {
+         throw new Error("Module not found")
+      }
+      return foundModule
+   }
+   readModuleByName({moduleName: receivedModuleName}: {moduleName: string}) {
+      const {modules} = this.ucfrLists
+      const foundModule = modules.find(({name: moduleName}) => moduleName === receivedModuleName)
+      if (!foundModule) {
+         throw new Error("Module not found")
+      }
+      return foundModule
+   }
+   updateModuleById({moduleId: receivedModuleId, newModuleName: receivedNewModuleName}: {moduleId: string, newModuleName: string}) {
+      const {modules} = this.ucfrLists
+      const foundModule = modules.find(({id: moduleId}) => moduleId === receivedModuleId)
+      if (!foundModule) {
+         throw new Error("Module not found")
+      }
+      if (receivedNewModuleName === "") {
+         throw new Error("Module name cannot be empty")
+      }
+      // cannot be bigger than 20 characters
+      if (receivedNewModuleName.length > 20) {
+         throw new Error("Module name cannot be bigger than 20 characters")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedNewModuleName.length < 2) {
+         throw new Error("Module name cannot be smaller than 2 characters")
+      }
+
+      const newModules = modules.map(module => {
+         if (module.id === receivedModuleId) {
+            return {
+               ...module,
+               name: receivedNewModuleName
+            }
+         }
+         return module
+      })
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: newModules
+      })
+   }
+   removeModule({moduleId: receivedModuleId}: {moduleId: string}) {
+      if (!this.ucfrLists.modules.find(module => module.id === receivedModuleId)) {
+         throw new Error("Module does not exist")
+      }
+      // cannot remove module if it has use cases, nested use cases or functional requirements
+      if (this.ucfrLists.modules.find(module => module.id === receivedModuleId).useCases.length > 0) {
+         throw new Error("Cannot remove module with use cases")
+      }
+      if (this.ucfrLists.modules.find(module => module.id === receivedModuleId).nestedUseCases.length > 0) {
+         throw new Error("Cannot remove module with nested use cases")
+      }
+      if (this.ucfrLists.modules.find(module => module.id === receivedModuleId).functionalRequirements.length > 0) {
+         throw new Error("Cannot remove module with functional requirements")
+      }
+
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.filter(module => module.id !== receivedModuleId)
+      })
+   }
+
+
+
+   // TAGS
+   createTag({tagName: receivedTagName, tagDescription: receivedTagDescription}: {tagName: string, tagDescription: string}) {
+      // cannot be blank spaces
+      if (receivedTagName.trim() === "") {
+         throw new Error("Tag name cannot be blank")
+      }
+      // cannot be bigger than 20 characters
+      if (receivedTagName.length > 20) {
+         throw new Error("Tag name cannot be bigger than 20 characters")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedTagName.length < 2) {
+         throw new Error("Tag name cannot be smaller than 2 characters")
+      }
+      // cannot exist already
+      if (this.ucfrLists.tags.find(tag => tag.name === receivedTagName)) {
+         throw new Error("Tag already exists")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         tags: [...this.ucfrLists.tags, {
+            id: GenerateUUID(),
+            name: receivedTagName,
+            description: receivedTagDescription ? receivedTagDescription : ""
+         }]
+      })
+   }
+   readTagById({tagId: receivedTagId}: {tagId: string}) {
+      const {tags} = this.ucfrLists
+      const foundTag = tags.find(({id: tagId}) => tagId === receivedTagId)
+      if (!foundTag) {
+         throw new Error("Tag not found")
+      }
+      return foundTag
+   }
+   readTagByName({tagName: receivedTagName}: {tagName: string}) {
+      const {tags} = this.ucfrLists
+      const foundTag = tags.find(({name: tagName}) => tagName === receivedTagName)
+      if (!foundTag) {
+         throw new Error("Tag not found")
+      }
+      return foundTag
+   }
+   updateTagById({tagId: receivedTagId, newTagName: receivedNewTagName, newTagDescription: receivedNewTagDescription}: {tagId: string, newTagName: string, newTagDescription: string}) {
+      const {tags} = this.ucfrLists
+      const foundTag = tags.find(({id: tagId}) => tagId === receivedTagId)
+      if (!foundTag) {
+         throw new Error("Tag not found")
+      }
+      if (receivedNewTagName.trim() === "") {
+         throw new Error("Tag name cannot be blank")
+      }
+      // cannot be bigger than 20 characters
+      if (receivedNewTagName.length > 20) {
+         throw new Error("Tag name cannot be bigger than 20 characters")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedNewTagName.length < 2) {
+         throw new Error("Tag name cannot be smaller than 2 characters")
+      }
+      // cannot exist already
+      if (this.ucfrLists.tags.find(tag => tag.name === receivedNewTagName)) {
+         throw new Error("Tag already exists")
+      }
+
+      const newTags = tags.map(tag => {
+         if (tag.id === receivedTagId) {
+            return {
+               ...tag,
+               name: receivedNewTagName,
+               description: receivedNewTagDescription ? receivedNewTagDescription : ""
+            }
+         }
+         return tag
+      })
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         tags: newTags
+      })
+   }
+   removeTag({tagId: receivedTagId}: {tagId: string}) {
+      if (!this.ucfrLists.tags.find(tag => tag.id === receivedTagId)) {
+         throw new Error("Tag does not exist")
+      }
+      // cannot remove tag if it is used in use cases, nested use cases or functional requirements
+      const allUseCases = this.ucfrLists.modules.reduce((acc, module) => [...acc, ...module.useCases], [])
+      const allNestedUseCases = this.ucfrLists.modules.reduce((acc, module) => [...acc, ...module.nestedUseCases], [])
+      const allFunctionalRequirements = this.ucfrLists.modules.reduce((acc, module) => [...acc, ...module.functionalRequirements], [])
+      if (allUseCases.find(useCase => useCase.tags.find(tag => tag.id === receivedTagId))) {
+         throw new Error("Cannot remove tag that is used in use cases")
+      }
+      if (allNestedUseCases.find(nestedUseCase => nestedUseCase.tags.find(tag => tag.id === receivedTagId))) {
+         throw new Error("Cannot remove tag that is used in nested use cases")
+      }
+      if (allFunctionalRequirements.find(functionalRequirement => functionalRequirement.tags.find(tag => tag.id === receivedTagId))) {
+         throw new Error("Cannot remove tag that is used in functional requirements")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         tags: this.ucfrLists.tags.filter(tag => tag.id !== receivedTagId)
+      })
+   }
+   // TAG ACTIONS
+   addTagToUseCaseById({useCaseId: receivedUseCaseId, tagId: receivedTagId}: {useCaseId: string, tagId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
          return [...acc, ...module.useCases]
       }, [])
 
-      const useCase = allUseCasesFromallModules.find(useCase => useCase.id === receivedUseCaseId)
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      if (useCase.tagIds.find(scopedTag => scopedTag === receivedTagId)) {
+         throw new Error("Tag already added to use case")
+      }
 
       this.setUcfrLists({
          ...this.ucfrLists,
@@ -152,6 +377,1167 @@ export class UcfrListsContextInterfaces {
                }
             }
             return scopedModule
+         })
+      })
+   }
+   removeTagFromUseCaseById({useCaseId: receivedUseCaseId, tagId: receivedTagId}: {useCaseId: string, tagId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      if (!useCase.tagIds.find(scopedTag => scopedTag === receivedTagId)) {
+         throw new Error("Tag not added to use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCaseId) {
+                        return {
+                           ...scopedUseCase,
+                           tagIds: scopedUseCase.tagIds.filter(tagId => tagId !== receivedTagId)
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+   addTagToNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId, tagId: receivedTagId}: {nestedUseCaseId: string, tagId: string}) {
+      const allNestedUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromallModules.find(nestedUseCase => nestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      if (nestedUseCase.tagIds.find(scopedTag => scopedTag === receivedTagId)) {
+         throw new Error("Tag already added to nested use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           tagIds: [...scopedNestedUseCase.tagIds, receivedTagId]
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   removeTagFromNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId, tagId: receivedTagId}: {nestedUseCaseId: string, tagId: string}) {
+      const allNestedUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromallModules.find(nestedUseCase => nestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      if (!nestedUseCase.tagIds.find(scopedTag => scopedTag === receivedTagId)) {
+         throw new Error("Tag not added to nested use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           tagIds: scopedNestedUseCase.tagIds.filter(tagId => tagId !== receivedTagId)
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+   addTagToFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId, tagId: receivedTagId}: {functionalRequirementId: string, tagId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      if (functionalRequirement.tagIds.find(scopedTag => scopedTag === receivedTagId)) {
+         throw new Error("Tag already added to functional requirement")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === functionalRequirement.moduleId) {
+               return {
+                  ...scopedModule,
+                  functionalRequirements: scopedModule.functionalRequirements.map(scopedFunctionalRequirement => {
+                     if (scopedFunctionalRequirement.id === receivedFunctionalRequirementId) {
+                        return {
+                           ...scopedFunctionalRequirement,
+                           tagIds: [...scopedFunctionalRequirement.tagIds, receivedTagId]
+                        }
+                     }
+                     return scopedFunctionalRequirement
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   removeTagFromFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId, tagId: receivedTagId}: {functionalRequirementId: string, tagId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      if (!functionalRequirement.tagIds.find(scopedTag => scopedTag === receivedTagId)) {
+         throw new Error("Tag not added to functional requirement")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === functionalRequirement.moduleId) {
+               return {
+                  ...scopedModule,
+                  functionalRequirements: scopedModule.functionalRequirements.map(scopedFunctionalRequirement => {
+                     if (scopedFunctionalRequirement.id === receivedFunctionalRequirementId) {
+                        return {
+                           ...scopedFunctionalRequirement,
+                           tagIds: scopedFunctionalRequirement.tagIds.filter(tagId => tagId !== receivedTagId)
+                        }
+                     }
+                     return scopedFunctionalRequirement
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+   readListOfUseCaseDependentsOfTagId({tagId: receivedTagId}: {tagId: string}) {
+      const allUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCases = allUseCasesFromallModules.filter(useCase => useCase.tagIds.find(tagId => tagId === receivedTagId))
+
+      return useCases
+   }
+   readListOfNestedUseCaseDependentsOfTagId({tagId: receivedTagId}: {tagId: string}) {
+      const allNestedUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCases = allNestedUseCasesFromallModules.filter(nestedUseCase => nestedUseCase.tagIds.find(tagId => tagId === receivedTagId))
+
+      return nestedUseCases
+   }
+   readListOfFunctionalRequirementDependentsOfTagId({tagId: receivedTagId}: {tagId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirements = allFunctionalRequirementsFromallModules.filter(functionalRequirement => functionalRequirement.tagIds.find(tagId => tagId === receivedTagId))
+
+      return functionalRequirements
+   }
+
+
+
+   // USE CASES
+   createUseCase({name: receivedName, moduleId: receivedModuleId}: {name: string, moduleId: string}): IUseCase {
+      if (receivedName.trim() === "") {
+         throw new Error("Use case name cannot be empty")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedName.trim().length < 2) {
+         throw new Error("Use case name must be at least 2 characters long")
+      }
+      // cannot be larger than 250 characters
+      if (receivedName.trim().length > 250) {
+         throw new Error("Use case name cannot be larger than 250 characters")
+      }
+
+      const module = this.ucfrLists.modules.find(scopedModule => scopedModule.id === receivedModuleId) as IModule
+
+      if (!module) {
+         throw new Error("Module not found")
+      }
+
+      const useCase: IUseCase = {
+         id: GenerateUUID(),
+         name: receivedName,
+         moduleId: receivedModuleId,
+         completed: false,
+         tagIds: [],
+         neededFrsToWorkIds: [],
+         useCasesPipelineIds: [],
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === receivedModuleId) {
+               return {
+                  ...scopedModule,
+                  useCases: [...scopedModule.useCases, useCase]
+               }
+            }
+            return scopedModule
+         })
+      })
+
+      return useCase
+   }
+   readUseCaseById({useCaseId: receivedUseCaseId}: {useCaseId: string}): IUseCase {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      return useCase
+   }
+   updateUseCaseById({useCaseId: receivedUseCaseId, name: receivedName, completed: receivedCompleted}: {useCaseId: string, name: string, completed: boolean}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      if (receivedName.trim() === "") {
+         throw new Error("Use case name cannot be empty")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedName.trim().length < 2) {
+         throw new Error("Use case name must be at least 2 characters long")
+      }
+      // cannot be larger than 250 characters
+      if (receivedName.trim().length > 250) {
+         throw new Error("Use case name cannot be larger than 250 characters")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCaseId) {
+                        return {
+                           ...scopedUseCase,
+                           name: receivedName,
+                           completed: receivedCompleted
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   deleteUseCaseById({useCaseId: receivedUseCaseId}: {useCaseId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      // cannot delete use case if it is in pipeline of another use case
+      const dependents = this.readListOfUseCasePipelineDependentsByUseCaseId({useCaseId: receivedUseCaseId})
+      if (dependents.length > 0) {
+         throw new Error("Cannot delete use case that is in pipeline of another use case")
+      }
+
+      // cannot delete use case if it is in pipeline of another nested use case
+      const nestedDependents = this.readListOfNestedUseCasePipelineDependentsByUseCaseId({useCaseId: receivedUseCaseId})
+      if (nestedDependents.length > 0) {
+         throw new Error("Cannot delete use case that is in pipeline of another nested use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.filter(scopedUseCase => scopedUseCase.id !== receivedUseCaseId)
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   // USE CASES ACTIONS
+   addUseCaseToUseCasePipeline({useCaseIdToAdd: receivedUseCaseId, useCasePipelineId: receivedUseCasePipelineId}: {useCaseIdToAdd: string, useCasePipelineId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {throw new Error("Use case not found")}
+
+      const useCasePipeline = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCasePipelineId) as IUseCase
+
+      if (!useCasePipeline) {throw new Error("Use case pipeline not found")}
+
+      if (useCasePipeline.useCasesPipelineIds.includes(receivedUseCaseId)) {
+         throw new Error("Use case is already in pipeline")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCasePipeline.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCasePipelineId) {
+                        return {
+                           ...scopedUseCase,
+                           useCasesPipelineIds: [...scopedUseCase.useCasesPipelineIds, receivedUseCaseId]
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   removeUseCaseFromUseCasePipeline({useCaseIdToRemove: receivedUseCaseId, useCasePipelineId: receivedUseCasePipelineId}: {useCaseIdToRemove: string, useCasePipelineId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {throw new Error("Use case not found")}
+
+      const useCasePipeline = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCasePipelineId) as IUseCase
+
+      if (!useCasePipeline) {throw new Error("Use case pipeline not found")}
+
+      if (!useCasePipeline.useCasesPipelineIds.includes(receivedUseCaseId)) {
+         throw new Error("Use case is not in pipeline")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCasePipeline.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCasePipelineId) {
+                        return {
+                           ...scopedUseCase,
+                           useCasesPipelineIds: scopedUseCase.useCasesPipelineIds.filter(scopedUseCaseId => scopedUseCaseId !== receivedUseCaseId)
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+   addUseCaseToNestedUseCasePipeline({useCaseIdToAdd: receivedUseCaseId, nestedUseCasePipelineId: receivedNestedUseCasePipelineId}: {useCaseIdToAdd: string, nestedUseCasePipelineId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {throw new Error("Use case not found")}
+
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCasePipeline = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedNestedUseCasePipelineId) as INestedUseCase
+
+      if (!nestedUseCasePipeline) {throw new Error("Nested use case pipeline not found")}
+
+      if (nestedUseCasePipeline.useCasesPipelineIds.includes(receivedUseCaseId)) {
+         throw new Error("Use case is already in pipeline")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCasePipeline.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCasePipelineId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           useCasesPipelineIds: [...scopedNestedUseCase.useCasesPipelineIds, receivedUseCaseId]
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   removeUseCaseFromNestedUseCasePipeline({useCaseIdToRemove: receivedUseCaseId, nestedUseCasePipelineId: receivedNestedUseCasePipelineId}: {useCaseIdToRemove: string, nestedUseCasePipelineId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {throw new Error("Use case not found")}
+
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCasePipeline = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedNestedUseCasePipelineId) as INestedUseCase
+
+      if (!nestedUseCasePipeline) {throw new Error("Nested use case pipeline not found")}
+      if (!nestedUseCasePipeline.useCasesPipelineIds.includes(receivedUseCaseId)) {
+         throw new Error("Use case is not in pipeline")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCasePipeline.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCasePipelineId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           useCasesPipelineIds: scopedNestedUseCase.useCasesPipelineIds.filter(scopedUseCaseId => scopedUseCaseId !== receivedUseCaseId)
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+
+   readListOfNestedUseCasesByUseCaseId({useCaseId: receivedUseCaseId}: {useCaseId: string}): INestedUseCase[] {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCases = allNestedUseCasesFromAllModules.filter((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.parentUseCaseId === receivedUseCaseId)
+
+      return nestedUseCases
+   }
+   readListOfUseCasePipelineDependentsByUseCaseId({useCaseId: receivedUseCaseId}: {useCaseId: string}): IUseCase[] {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      const ListOfDependents = allUseCasesFromAllModules.filter(scopedUseCase => scopedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
+
+      return ListOfDependents
+   }
+   readListOfNestedUseCasePipelineDependentsByUseCaseId({useCaseId: receivedUseCaseId}: {useCaseId: string}): INestedUseCase[] {
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      const ListOfDependents = allNestedUseCasesFromAllModules.filter(scopedNestedUseCase => scopedNestedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
+
+      return ListOfDependents
+   }
+
+
+
+   // NESTED USE CASES
+   createNestedUseCase({name: receivedName, parentId: receivedParentId, moduleId: receivedModuleId}: {name: string, parentId: string, moduleId: string}): INestedUseCase {
+      if (receivedName.trim() === "") {
+         throw new Error("Nested use case name cannot be empty")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedName.trim().length < 2) {
+         throw new Error("Nested use case name must be at least 2 characters long")
+      }
+      // cannot be larger than 250 characters
+      if (receivedName.trim().length > 250) {
+         throw new Error("Nested use case name cannot be larger than 250 characters")
+      }
+
+      // check if parent use case exists
+      const parentUseCase = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, []).find(useCase => useCase.id === receivedParentId) as IUseCase
+
+      if (!parentUseCase) {
+         throw new Error("Parent use case not found")
+      }
+
+      const module = this.ucfrLists.modules.find(scopedModule => scopedModule.id === receivedModuleId) as IModule
+
+      if (!module) {
+         throw new Error("Module not found")
+      }
+
+      const nestedUseCase: INestedUseCase = {
+         id: GenerateUUID(),
+         name: receivedName,
+         parentUseCaseId: receivedParentId,
+         moduleId: receivedModuleId,
+         completed: false,
+         tagIds: [],
+         neededFrsToWorkIds: [],
+         useCasesPipelineIds: [],
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === receivedModuleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: [...scopedModule.nestedUseCases, nestedUseCase]
+               }
+            }
+            return scopedModule
+         })
+      })
+
+      return nestedUseCase
+   }
+   readNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId}: {nestedUseCaseId: string}): INestedUseCase {
+      const allNestedUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromallModules.find(nestedUseCase => nestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      return nestedUseCase
+   }
+   updateNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId, name: receivedName, completed: receivedCompleted}: {nestedUseCaseId: string, name: string, completed: boolean}) {
+      const allNestedUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromallModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      if (receivedName.trim() === "") {
+         throw new Error("Nested use case name cannot be empty")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedName.trim().length < 2) {
+         throw new Error("Nested use case name must be at least 2 characters long")
+      }
+      // cannot be larger than 250 characters
+      if (receivedName.trim().length > 250) {
+         throw new Error("Nested use case name cannot be larger than 250 characters")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           name: receivedName,
+                           completed: receivedCompleted
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   deleteNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId}: {nestedUseCaseId: string}) {
+      const allNestedUseCasesFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromallModules.find(nestedUseCase => nestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.filter(scopedNestedUseCase => scopedNestedUseCase.id !== receivedNestedUseCaseId)
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+
+
+   // FUNCTIONAL REQUIREMENTS
+   createFunctionalRequirement({name: receivedName, moduleId: receivedModuleId}: {name: string, moduleId: string}): IFunctionalRequirement {
+      if (receivedName.trim() === "") {
+         throw new Error("Functional requirement name cannot be empty")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedName.trim().length < 2) {
+         throw new Error("Functional requirement name must be at least 2 characters long")
+      }
+      // cannot be larger than 250 characters
+      if (receivedName.trim().length > 250) {
+         throw new Error("Functional requirement name cannot be larger than 250 characters")
+      }
+
+      const module = this.ucfrLists.modules.find(scopedModule => scopedModule.id === receivedModuleId) as IModule
+
+      if (!module) {
+         throw new Error("Module not found")
+      }
+
+      const functionalRequirement: IFunctionalRequirement = {
+         id: GenerateUUID(),
+         name: receivedName,
+         moduleId: receivedModuleId,
+         done: false,
+         tagIds: [],
+         frDependencies: [],
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === receivedModuleId) {
+               return {
+                  ...scopedModule,
+                  functionalRequirements: [...scopedModule.functionalRequirements, functionalRequirement]
+               }
+            }
+            return scopedModule
+         })
+      })
+
+      return functionalRequirement
+   }
+   readFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}): IFunctionalRequirement {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      return functionalRequirement
+   }
+   updateFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId, name: receivedName, done: receivedDone}: {functionalRequirementId: string, name: string, done: boolean}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(scopedFunctionalRequirement => scopedFunctionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      if (receivedName.trim() === "") {
+         throw new Error("Functional requirement name cannot be empty")
+      }
+      // cannot be smaller than 2 characters
+      if (receivedName.trim().length < 2) {
+         throw new Error("Functional requirement name must be at least 2 characters long")
+      }
+      // cannot be larger than 250 characters
+      if (receivedName.trim().length > 250) {
+         throw new Error("Functional requirement name cannot be larger than 250 characters")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === functionalRequirement.moduleId) {
+               return {
+                  ...scopedModule,
+                  functionalRequirements: scopedModule.functionalRequirements.map(scopedFunctionalRequirement => {
+                     if (scopedFunctionalRequirement.id === receivedFunctionalRequirementId) {
+                        return {
+                           ...scopedFunctionalRequirement,
+                           name: receivedName,
+                           done: receivedDone
+                        }
+                     }
+                     return scopedFunctionalRequirement
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   deleteFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      // cannot delete a functional requirement if it is a dependency of another functional requirement
+      const isDependency = this.readListOfFunctionalRequirementDependentsById({functionalRequirementId: receivedFunctionalRequirementId}).length > 0
+      if (isDependency) {
+         throw new Error("Cannot delete a functional requirement that is a dependency of another functional requirement")
+      }
+      // cannot delete a functional requirement if it is a dependency of a use case
+      const isDependencyOfUseCase = this.readListOfUseCaseDependentsById({functionalRequirementId: receivedFunctionalRequirementId}).length > 0
+      if (isDependencyOfUseCase) {
+         throw new Error("Cannot delete a functional requirement that is a dependency of a use case")
+      }
+      // cannot delete a functional requirement if it is a dependency of a nested use case
+      const isDependencyOfNestedUseCase = this.readListOfNestedUseCaseDependentsById({functionalRequirementId: receivedFunctionalRequirementId}).length > 0
+      if (isDependencyOfNestedUseCase) {
+         throw new Error("Cannot delete a functional requirement that is a dependency of a nested use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === functionalRequirement.moduleId) {
+               return {
+                  ...scopedModule,
+                  functionalRequirements: scopedModule.functionalRequirements.filter(scopedFunctionalRequirement => scopedFunctionalRequirement.id !== receivedFunctionalRequirementId)
+               }
+            }
+            return scopedModule
+         }
+         )
+      })
+   }
+   // FUNCTIONAL REQUIREMENT ACTIONS
+   readListOfFunctionalRequirementDependentsById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}): IFunctionalRequirement[] {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const listOfFunctionalRequirementDependents = allFunctionalRequirementsFromallModules.filter(scopedFunctionalRequirement => scopedFunctionalRequirement.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
+
+      return listOfFunctionalRequirementDependents
+   }
+   readListOfUseCaseDependentsById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}): IUseCase[] {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const listOfUseCaseDependents = allUseCasesFromAllModules.filter(scopedUseCase => scopedUseCase.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
+
+      return listOfUseCaseDependents
+   }
+   readListOfNestedUseCaseDependentsById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}): IUseCase[] {
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const listOfNestedUseCaseDependents = allNestedUseCasesFromAllModules.filter(scopedNestedUseCase => scopedNestedUseCase.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
+
+      return listOfNestedUseCaseDependents
+   }
+
+   addFunctionalRequirementToUseCase({functionalRequirementId: receivedFunctionalRequirementId, useCaseId: receivedUseCaseId}: {functionalRequirementId: string, useCaseId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      // cannot add a functional requirement that is already a dependency of the use case
+      const isDependency = useCase.neededFrsToWorkIds.some(frDependency => frDependency === receivedFunctionalRequirementId)
+      if (isDependency) {
+         throw new Error("Cannot add a functional requirement that is already a dependency of the use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCaseId) {
+                        return {
+                           ...scopedUseCase,
+                           frDependencies: [...scopedUseCase.neededFrsToWorkIds, receivedFunctionalRequirementId]
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   removeFunctionalRequirementFromUseCase({functionalRequirementId: receivedFunctionalRequirementId, useCaseId: receivedUseCaseId}: {functionalRequirementId: string, useCaseId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
+
+      const useCase = allUseCasesFromAllModules.find(useCase => useCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
+      }
+
+      // cannot remove a functional requirement that is not a dependency of the use case
+      const isDependency = useCase.neededFrsToWorkIds.some(frDependency => frDependency === receivedFunctionalRequirementId)
+      if (!isDependency) {
+         throw new Error("Cannot remove a functional requirement that is not a dependency of the use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === useCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                     if (scopedUseCase.id === receivedUseCaseId) {
+                        return {
+                           ...scopedUseCase,
+                           frDependencies: scopedUseCase.neededFrsToWorkIds.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
+                        }
+                     }
+                     return scopedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+   addFunctionalRequirementToNestedUseCase({functionalRequirementId: receivedFunctionalRequirementId, nestedUseCaseId: receivedNestedUseCaseId}: {functionalRequirementId: string, nestedUseCaseId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromAllModules.find(nestedUseCase => nestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      // cannot add a functional requirement that is already a dependency of the nested use case
+      const isDependency = nestedUseCase.neededFrsToWorkIds.some(frDependency => frDependency === receivedFunctionalRequirementId)
+      if (isDependency) {
+         throw new Error("Cannot add a functional requirement that is already a dependency of the nested use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           frDependencies: [...scopedNestedUseCase.neededFrsToWorkIds, receivedFunctionalRequirementId]
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+   removeFunctionalRequirementFromNestedUseCase({functionalRequirementId: receivedFunctionalRequirementId, nestedUseCaseId: receivedNestedUseCaseId}: {functionalRequirementId: string, nestedUseCaseId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const nestedUseCase = allNestedUseCasesFromAllModules.find(nestedUseCase => nestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+
+      if (!nestedUseCase) {
+         throw new Error("Nested use case not found")
+      }
+
+      // cannot remove a functional requirement that is not a dependency of the nested use case
+      const isDependency = nestedUseCase.neededFrsToWorkIds.some(frDependency => frDependency === receivedFunctionalRequirementId)
+      if (!isDependency) {
+         throw new Error("Cannot remove a functional requirement that is not a dependency of the nested use case")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === nestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                     if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
+                        return {
+                           ...scopedNestedUseCase,
+                           frDependencies: scopedNestedUseCase.neededFrsToWorkIds.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
+                        }
+                     }
+                     return scopedNestedUseCase
+                  })
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
+
+   addFunctionalRequirementToFunctionalRequirement({functionalRequirementId: receivedFunctionalRequirementId, functionalRequirementReceiverId: receivedFunctionalRequirementReceiverId}: {functionalRequirementId: string, functionalRequirementReceiverId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const functionalRequirementReceiver = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementReceiverId) as IFunctionalRequirement
+
+      if (!functionalRequirementReceiver) {
+         throw new Error("Functional requirement receiver not found")
+      }
+
+      // cannot add a functional requirement that is already a dependency of the functional requirement receiver
+      const isDependency = functionalRequirementReceiver.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId)
+      if (isDependency) {
+         throw new Error("Cannot add a functional requirement that is already a dependency of the functional requirement receiver")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            return {
+               ...scopedModule,
+               functionalRequirements: scopedModule.functionalRequirements.map(scopedFunctionalRequirement => {
+                  if (scopedFunctionalRequirement.id === receivedFunctionalRequirementReceiverId) {
+                     return {
+                        ...scopedFunctionalRequirement,
+                        frDependencies: [...scopedFunctionalRequirement.frDependencies, receivedFunctionalRequirementId]
+                     }
+                  }
+                  return scopedFunctionalRequirement
+               })
+            }
+         })
+      })
+   }
+   removeFunctionalRequirementFromFunctionalRequirement({functionalRequirementId: receivedFunctionalRequirementId, functionalRequirementReceiverId: receivedFunctionalRequirementReceiverId}: {functionalRequirementId: string, functionalRequirementReceiverId: string}) {
+      const allFunctionalRequirementsFromallModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const functionalRequirement = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!functionalRequirement) {
+         throw new Error("Functional requirement not found")
+      }
+
+      const functionalRequirementReceiver = allFunctionalRequirementsFromallModules.find(functionalRequirement => functionalRequirement.id === receivedFunctionalRequirementReceiverId) as IFunctionalRequirement
+
+      if (!functionalRequirementReceiver) {
+         throw new Error("Functional requirement receiver not found")
+      }
+
+      // cannot remove a functional requirement that is not a dependency of the functional requirement receiver
+      const isDependency = functionalRequirementReceiver.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId)
+      if (!isDependency) {
+         throw new Error("Cannot remove a functional requirement that is not a dependency of the functional requirement receiver")
+      }
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            return {
+               ...scopedModule,
+               functionalRequirements: scopedModule.functionalRequirements.map(scopedFunctionalRequirement => {
+                  if (scopedFunctionalRequirement.id === receivedFunctionalRequirementReceiverId) {
+                     return {
+                        ...scopedFunctionalRequirement,
+                        frDependencies: scopedFunctionalRequirement.frDependencies.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
+                     }
+                  }
+                  return scopedFunctionalRequirement
+               })
+            }
          })
       })
    }
