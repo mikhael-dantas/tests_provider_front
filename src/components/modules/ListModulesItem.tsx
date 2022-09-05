@@ -1,23 +1,14 @@
 import { EditIcon } from '@chakra-ui/icons'
-import { Button, Flex, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
+import { Flex, useDisclosure } from '@chakra-ui/react'
 import { customTheme } from '../../theme'
-import { IModule, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from '../../UcfrsContext'
+import { IModule, useCurrentModuleContext } from '../../UcfrsContext'
 import ModuleModal from './ModuleModal'
 
 function ListModulesItem({ key, module: receivedModule }: {key: string, module: IModule}) {
-    const ucfrListsFromContext = useUcfrListsContext()
-    const updateUcfrListsFromContext = useUpdateUcfrListsContext()
-
     const currentModuleFromContext = useCurrentModuleContext()
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
-    const editModuleNameHandler = () => {
-        
-
-
-    }
     return (
         <Flex
         width={'100%'}

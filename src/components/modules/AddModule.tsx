@@ -1,14 +1,17 @@
 import { Flex, Input } from "@chakra-ui/react"
 import React from "react"
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../AlertStackContext"
-import { IModule, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
-import { GenerateUUID } from "../../utils/UUIDGenerator"
+import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
 
 
 export default function AddModule() {
+   // contextManagement SDK
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()
-
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
    const alertStackComponentFromContext = useAlertStackComponentContext()
    const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
@@ -19,25 +22,20 @@ export default function AddModule() {
       setModuleAddInput(e.target.value)
    }
    const moduleAddHandler = () => {
-      const alreadyExists = ucfrListsFromContext.modules.find(m => m.name === moduleAddInput)
-      if (alreadyExists) {
-         const component = GenerateAlertComponent({ status: 'error', text: 'Module already exists' })
-         updateAlertStackComponentFromContext([...alertStackComponentFromContext, { component }])
-         return
-      }
-
-      const newModule: IModule = {
-         id: GenerateUUID(),
-         name: moduleAddInput,
-         useCases: [],
-         nestedUseCases: [],
-         functionalRequirements: [],
-      }
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules, newModule]
+      ucfrListsInterfaces.createModule({moduleName: moduleAddInput})
+      .then(() => {
+         setModuleAddInput("")
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {component: GenerateAlertComponent({status: "success", text: "Module added successfully"})}
+         ])
       })
-      setModuleAddInput("")
+      .catch(err => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext, 
+            { component:  GenerateAlertComponent({ status: 'error', text: err.message })}
+         ])
+      })
    }
 
    return (
