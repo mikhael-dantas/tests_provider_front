@@ -696,7 +696,7 @@ export class UcfrListsContextInterfaces {
          })
       })
    }
-   async deleteUseCaseById({useCaseId: receivedUseCaseId}: {useCaseId: string}) {
+   async removeUseCaseById({useCaseId: receivedUseCaseId}: {useCaseId: string}) {
       const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
          return [...acc, ...module.useCases]
       }, [])
@@ -1060,7 +1060,7 @@ export class UcfrListsContextInterfaces {
          })
       })
    }
-   async deleteNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId}: {nestedUseCaseId: string}) {
+   async removeNestedUseCaseById({nestedUseCaseId: receivedNestedUseCaseId}: {nestedUseCaseId: string}) {
       const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
          return [...acc, ...module.nestedUseCases]
       }, [])
@@ -1189,7 +1189,7 @@ export class UcfrListsContextInterfaces {
          })
       })
    }
-   async deleteFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}) {
+   async removeFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId}: {functionalRequirementId: string}) {
       const allFunctionalRequirementsFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
          return [...acc, ...module.functionalRequirements]
       }, [])
