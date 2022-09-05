@@ -1,12 +1,19 @@
 import { Flex } from "@chakra-ui/react"
 import React from "react"
-import { ITag, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
-import { GenerateUUID } from "../../utils/UUIDGenerator"
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../AlertStackContext"
+import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
 
 
 export default function AddTag() {
+   // contextManagement SDK
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
+   const alertStackComponentFromContext = useAlertStackComponentContext()
+   const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
    const [TagAddInput, setTagAddInput] = React.useState<string>("")
@@ -18,23 +25,27 @@ export default function AddTag() {
    const TagAddDescriptionInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       setTagAddDescriptionInput(e.target.value)
    }
-   const TagAddHandler = () => {
-      const alreadyExists = ucfrListsFromContext.tags.find(m => m.name === TagAddInput)
-      if (alreadyExists) {
-         return
-      }
 
-      const newTag: ITag = {
-         id: GenerateUUID(),
-         name: TagAddInput,
-         description: TagAddDescriptionInput,
-      }
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         tags: [...ucfrListsFromContext.tags, newTag]
+   const TagAddHandler = () => {
+      ucfrListsInterfaces.createTag({tagName: TagAddInput, tagDescription: TagAddDescriptionInput})
+      .then(() => {
+         setTagAddInput("")
+         setTagAddDescriptionInput("")
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({status: "success", text: "Tag added successfully"}),
+            }
+         ])
       })
-      setTagAddInput("")
-      setTagAddDescriptionInput("")
+      .catch((err) => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({status: "error", text: err.message}),
+            }
+         ])
+      })
    }
 
    return (

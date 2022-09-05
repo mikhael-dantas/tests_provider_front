@@ -1,12 +1,20 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure } from '@chakra-ui/react'
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { ITag, useUcfrListsContext, useUpdateUcfrListsContext } from '../../UcfrsContext'
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../AlertStackContext'
+import { ITag, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../UcfrsContext'
 import ConfirmationModal from '../ConfirmationModal'
 
 function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose: () => void, tag: ITag}) {
 
+    // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+    const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+        ucfrListsFromContext,
+        updateUcfrListsFromContext
+    )
+    const alertStackComponentFromContext = useAlertStackComponentContext()
+    const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
     const [tagEditNameInput, setTagEditNameInput] = React.useState<string>(receivedTag.name)
@@ -21,34 +29,46 @@ function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose
     }
 
     const tagEditHandler = () => {
-        if (tagEditNameInput === '') {
-            return
-        }
-
-        const tagToEdit = receivedTag
-
-        const newTag = {
-            ...tagToEdit,
-            name: tagEditNameInput,
-            description: tagEditDescriptionInput,
-        }
-
-        updateUcfrListsFromContext({
-            ...ucfrListsFromContext,
-            tags: ucfrListsFromContext.tags.map(t => {
-                if (t.id === newTag.id) {
-                    return newTag
+        ucfrListsInterfaces.updateTagById({
+            tagId: receivedTag.id,
+            newTagName: tagEditNameInput,
+            newTagDescription: tagEditDescriptionInput
+        })
+        .then(() => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({status: "success", text: "Tag updated successfully"}),
                 }
-                return t
-            }
-            )
+            ])
+        })
+        .catch((err) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({status: "error", text: err.message}),
+                }
+            ])
         })
     }
 
     const deleteTagHandler = () => {
-        updateUcfrListsFromContext({
-            ...ucfrListsFromContext,
-            tags: ucfrListsFromContext.tags.filter(t => t.id !== receivedTag.id)
+        ucfrListsInterfaces.removeTag({tagId: receivedTag.id})
+        .then(() => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({status: "success", text: "Tag deleted successfully"}),
+                }
+            ])
+        })
+        .catch((err) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({status: "error", text: err.message}),
+                }
+            ])
         })
     }
 

@@ -1,6 +1,5 @@
 import { EditIcon } from '@chakra-ui/icons'
 import { Flex, Grid, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
 import { customTheme } from '../../theme'
 import { ITag } from '../../UcfrsContext'
 import TagModal from './TagModal'
