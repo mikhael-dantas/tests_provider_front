@@ -934,10 +934,15 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.nestedUseCases]
       }, [])
 
-      const nestedUseCase = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedUseCaseId) as INestedUseCase
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+         
+      }, [])
 
-      if (!nestedUseCase) {
-         throw new Error("Nested use case not found")
+      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+
+      if (!useCase) {
+         throw new Error("Use case not found")
       }
 
       const ListOfDependents = allNestedUseCasesFromAllModules.filter(scopedNestedUseCase => scopedNestedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
