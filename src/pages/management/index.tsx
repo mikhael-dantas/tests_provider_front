@@ -1,24 +1,25 @@
-import { Flex, Grid, Select, Tab, Tabs, theme } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid } from "@chakra-ui/react";
 import React from "react";
-import AddModule from "../../components/modules/AddModule";
 import FullPopup from "../../components/FullPopup";
-import { EUcfrListsTypes, UcfrListsContextInterfaces, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext, useUpdateUcfrListsContext } from "../../UcfrsContext";
+import AddModule from "../../components/modules/AddModule";
+import ListModules from "../../components/modules/ListModules";
+import AddTag from "../../components/tags/AddTag";
+import ListTags from "../../components/tags/ListTags";
+import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
+import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
 import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
-import AddTag from "../../components/tags/AddTag";
-import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
-import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
-import { AddIcon } from "@chakra-ui/icons";
-import { customTheme } from "../../theme";
-import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
-import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
 import ExportJson from "../../components/ucfrListsJson/ExportJson";
 import ImportJson from "../../components/ucfrListsJson/ImportJson";
-import ListModules from "../../components/modules/ListModules";
-import ListTags from "../../components/tags/ListTags";
+import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
+import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
+import { customTheme } from "../../theme";
+import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../UcfrsContext";
 
 
 export default function Index() {
+   console.log("render index");
    const currentModuleFromContext = useCurrentModuleContext()
    const updateCurrentModuleFromContext = useUpdateCurrentModuleContext()
 
@@ -26,11 +27,6 @@ export default function Index() {
    const setSelectedTabToDisplay = useUpdateSelectedTabToDisplayContext()
    
    const ucfrListsFromContext = useUcfrListsContext()
-   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
-   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
-      ucfrListsFromContext,
-      updateUcfrListsFromContext
-   )
 
 
    const currentModuleSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -45,8 +41,6 @@ export default function Index() {
    const [moduleAddDisplay, setModuleAddDisplay] = React.useState<boolean>(false)
    const [modulesShowDisplay, setModulesShowDisplay] = React.useState<boolean>(false)
 
-   const [tagEditNameDisplay, setTagEditNameDisplay] = React.useState<boolean>(false)
-   const [tagDeleteDisplay, setTagDeleteDisplay] = React.useState<boolean>(false)
    const [tagAddDisplay, setTagAddDisplay] = React.useState<boolean>(false)
    const [tagsShowDisplay, setTagsShowDisplay] = React.useState<boolean>(false)
 
@@ -63,86 +57,113 @@ export default function Index() {
       >
          <Flex className='CurrentModuleNameContainer'
          width={'100%'}
-         height={'3rem'}
+         height={'4rem'}
          alignItems={'center'}
-         justifyContent={'center'}
+         justifyContent={'space-between'}
          fontWeight={'bold'}
          backgroundColor={customTheme.colors[80]}
          >
             {currentModuleFromContext ? currentModuleFromContext.name : 'Create or select a module'}
-         </Flex>
-
-         <Grid className={'moduleManagementContainer'} 
-            templateColumns={'3fr 2fr'}
-            width={'100%'}
-            backgroundColor={customTheme.colors[30]}
-            padding={'.2rem'}
-            height={'3rem'}
-         >
-
-
             <Flex className='moduleSelectContainer'
-            width={'100%'}
-            height={'100%'}
+            width={'40%'}
+            height={'80%'}
             color={customTheme.colors[95]}
             >
-               <Select className={'select'} onChange={currentModuleSelectHandler}>
+               <select className={'select'} style={{width: '100%'}}onChange={currentModuleSelectHandler}>
                   <option value={''}>Select a module</option>
                   {ucfrListsFromContext.modules.map((module, i) => (
                      <option className={'option'} key={i} value={module.id}>{module.name}</option>
                   ))}
-               </Select>
+               </select>
             </Flex>
+         </Flex>
 
-            <Grid className='ManageModulesContainer' 
-            gridTemplateColumns={'1fr 2fr'}
-            height={'100%'}
-            >
-               <AddIcon height='100%' className={'button'} onClick={() => setModuleAddDisplay(!moduleAddDisplay)}/>
-               <button className="showModulesListButton button"
-               onClick={() => setModulesShowDisplay(true)}
-               >
-                  show all
-               </button>
-
-               <FullPopup display={modulesShowDisplay} setDisplay={setModulesShowDisplay}>
-                  <ListModules />
-               </FullPopup>
-
-               <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
-                  <AddModule/>
-               </FullPopup>
-            </Grid>
-
-         </Grid>
-
-
-         <Grid className={'tagManagementContainer'} 
-            templateColumns={'3fr 2fr'}
-            width={'100%'}
-            backgroundColor={customTheme.colors[30]}
-            padding={'.2rem'}
-            height={'3rem'}
+         <Accordion className={'ModulesAndTagsAccordionContainer'} defaultIndex={[0]} allowMultiple 
+         width={'100%'}
          >
-            <button className="showTagsListButton button" onClick={() => setTagsShowDisplay(true)}>
-               Show all Tags
-            </button>
+            <AccordionItem backgroundColor={customTheme.colors[60]} width='100%'>
+               <h1>
+                  <AccordionButton>
+                  <Box flex='1' textAlign='left'>
+                     {"Modules & Tags"}
+                  </Box>
+                  <AccordionIcon />
+                  </AccordionButton>
+               </h1>
+               <AccordionPanel pb={4}>
+                  <Grid className={'moduleManagementContainer'} 
+                     templateColumns={'1fr'}
+                     width={'100%'}
+                     backgroundColor={customTheme.colors[30]}
+                     padding={'.2rem'}
+                     height={'3rem'}
+                  >
 
-            <FullPopup display={tagsShowDisplay} setDisplay={setTagsShowDisplay}>
-               <ListTags />
-            </FullPopup>
+                     <Grid className='ManageModulesContainer' 
+                     gridTemplateColumns={'20fr 1fr 20fr'}
+                     height={'100%'}
+                     >
+                        <button className="showModulesListButton button"
+                        onClick={() => setModulesShowDisplay(true)}
+                        >
+                           Show all Modules
+                        </button>
+                        <div></div>
+                        <Flex className={'button'} 
+                        onClick={() => setModuleAddDisplay(!moduleAddDisplay)}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        >
+                           <AddIcon height='100%' marginRight={'.5rem'}/>
+                           {'Module'}
+                        </Flex>
 
-            <Grid className='ManageTagsContainer' gridTemplateColumns={'1fr 1fr 1fr'}>
-               <AddIcon height='100%' className={'button'} onClick={() => setTagAddDisplay(!tagAddDisplay)}/>
+                        <FullPopup display={modulesShowDisplay} setDisplay={setModulesShowDisplay}>
+                           <ListModules />
+                        </FullPopup>
 
+                        <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
+                           <AddModule/>
+                        </FullPopup>
+                     </Grid>
+                     
 
-               <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
-                  <AddTag/>
-               </FullPopup>
-            </Grid>
+                  </Grid>
 
-         </Grid>
+                  <Grid className={'tagManagementContainer'} 
+                     templateColumns={'20fr 1fr 20fr'}
+                     width={'100%'}
+                     backgroundColor={customTheme.colors[30]}
+                     padding={'.2rem'}
+                     height={'3rem'}
+                  >
+                     <button className="showTagsListButton button" onClick={() => setTagsShowDisplay(true)}>
+                        Show all Tags
+                     </button>
 
+                     <div></div>
+
+                     <Flex className='ManageTagsContainer button'
+                     alignItems={'center'}
+                     justifyContent={'center'}
+                     onClick={() => setTagAddDisplay(!tagAddDisplay)}
+                     >
+                        <AddIcon height='100%' marginRight={'.5rem'}/>
+                        Tag
+
+                        <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
+                           <AddTag/>
+                        </FullPopup>
+                     </Flex>
+
+                     <FullPopup display={tagsShowDisplay} setDisplay={setTagsShowDisplay}>
+                        <ListTags />
+                     </FullPopup>
+
+                  </Grid>
+               </AccordionPanel>
+            </AccordionItem>
+         </Accordion>
 
          <Flex className={'ucfrListsTabsContainer'} 
          display={'flex'} 
@@ -171,7 +192,6 @@ export default function Index() {
             </Flex>
          ))}
          </Flex>
-
 
          <Flex className={'ucfrListsContainer'}
             direction={'column'}
