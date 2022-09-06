@@ -45,6 +45,7 @@ function UseCaseTag({tagId: tagIdReceived}: {tagId: string}) {
         backgroundColor={customTheme.colors[45]}
         padding={'.3rem'}
         onClick={onTagModalOpen}
+        cursor={'pointer'}
         >
             {tagName}
             <TagModal tagId={tagIdReceived} isOpen={isTagModalOpen} onClose={onTagModalClose} />

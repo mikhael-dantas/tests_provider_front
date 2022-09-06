@@ -21,7 +21,35 @@ export default function UseCaseItem(
    const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
-   const completedToggleHandler = () => {}
+   const completedToggleHandler = () => {
+      ucfrListsInterfaces.updateUseCaseById({
+         useCaseId: useCaseReceived.id,
+         name: useCaseReceived.name,
+         completed: !useCaseReceived.completed,
+      })
+      .then(() => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({
+                  status: "success",
+                  text: "Use case updated successfully",
+               })
+            }
+         ])
+      })
+      .catch((error) => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({
+                  status: "error",
+                  text: error.message,
+               })
+            }
+         ])
+      })
+   }
 
    const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -96,33 +124,3 @@ export default function UseCaseItem(
       </Flex>
    )
 }
-
-{/* <Flex>UseCase Pipelines</Flex>
-                  <Grid className={'useCasePipelines'} templateColumns={'1fr'} 
-                  >
-                     {useCaseReceived.useCasesPipelineIds.map(useCasePipelineId => {
-                        return (
-                        <Flex key={useCaseReceived.id + useCasePipelineId}
-                        backgroundColor={customTheme.colors[45]}
-                        borderRadius={'.3rem'}
-                        padding={'.2rem'}
-                        margin={'.2rem'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        >
-                           <Flex className={'useCasePipelineName'} key={useCasePipelineId}>{getUseCasePipelineNameById(useCasePipelineId)}</Flex>
-                        </Flex>
-                        )
-                     } )}
-                  </Grid>
-
-                  <Flex>Needed FRs to work</Flex>
-                  <Grid className={'neededFrsToWork'}templateColumns={'1fr'}>
-                     {useCaseReceived.neededFrsToWorkIds.map(neededFr => {
-                        return (
-                        <Flex key={`${useCaseReceived.id} ${neededFr}`}className={'neededFrItem'}>
-                           <Flex className={'neededFrName'} key={neededFr}>{getNeededFrsToWorkNameById(neededFr)}</Flex>
-                        </Flex>
-                        )
-                     } )}
-                  </Grid> */}
