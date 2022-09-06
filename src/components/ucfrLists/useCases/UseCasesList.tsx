@@ -11,7 +11,7 @@ export default function UseCasesList() {
    const currentModuleFromContext = useCurrentModuleContext()
 
 
-   // make a draggable list of usecases
+   // make a draggable list of useCases
    const [dragItem, setDragItem] = React.useState<any>(null)
 
    const dragStart = (e: any, item: any) => {
@@ -29,18 +29,18 @@ export default function UseCasesList() {
       if (dragItem) {
          const module = ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)
          if (!module) { throw new Error("Module not found")}
-         const newUsecases = [...module.useCases]
-         const dragIndex = newUsecases.indexOf(dragItem)
-         const dropIndex = newUsecases.findIndex(u => u.id === id)
-         newUsecases.splice(dragIndex, 1)
-         newUsecases.splice(dropIndex, 0, dragItem)
+         const newUseCases = [...module.useCases]
+         const dragIndex = newUseCases.indexOf(dragItem)
+         const dropIndex = newUseCases.findIndex(u => u.id === id)
+         newUseCases.splice(dragIndex, 1)
+         newUseCases.splice(dropIndex, 0, dragItem)
          updateUcfrListsFromContext({
             ...ucfrListsFromContext,
             modules: ucfrListsFromContext.modules.map(m => {
                if (m.id === currentModuleFromContext.id) {
                   return {
                      ...m,
-                     useCases: newUsecases
+                     useCases: newUseCases
                   }
                } else {
                   return m
@@ -52,25 +52,25 @@ export default function UseCasesList() {
    }
    return (
       <Flex
-         className={'usecasesListContainer'}
+         className={'useCasesListContainer'}
          direction={'column'}
          alignItems={'center'}
          width={'100%'}
       >
-         {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.useCases.map((usecase, i) => (
+         {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.useCases.map((scopedUseCase, i) => (
             <Flex
-               key={usecase.id}
+               key={scopedUseCase.id + "useCaseItem"}
                draggable={true} 
-               onDragStart={(e) => dragStart(e, usecase)} 
+               onDragStart={(e) => dragStart(e, scopedUseCase)} 
                onDragEnd={(e) => dragEnd(e)} 
                onDragOver={(e) => dragOver(e)} 
-               onDrop={(e) => dragDrop(e, usecase.id)} 
+               onDrop={(e) => dragDrop(e, scopedUseCase.id)}
                direction={'row'} alignItems={'center'} 
-               width={'100%'}
+               width={'95%'}
                marginTop={'.5rem'}
                padding={'.5rem'}
             >
-               <UseCaseItem usecase={usecase}/>
+               <UseCaseItem useCase={scopedUseCase}/>
             </Flex>
          ))}
       </Flex>

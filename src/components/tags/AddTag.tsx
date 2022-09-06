@@ -2,6 +2,7 @@ import { Flex } from "@chakra-ui/react"
 import React from "react"
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../AlertStackContext"
 import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
+import { AddFormContainerStyle, AddInputStyle } from "../GlobalStyles"
 
 
 export default function AddTag() {
@@ -49,9 +50,18 @@ export default function AddTag() {
    }
 
    return (
-      <Flex direction="column">
-         <input className={'input'} type="text" value={TagAddInput} onChange={TagAddInputHandler} />
-         <input className={'input'} type="text" value={TagAddDescriptionInput} onChange={TagAddDescriptionInputHandler} />
+      <Flex direction="column"
+      style={AddFormContainerStyle}
+      >
+         Add Tag
+         <Flex alignItems={'center'}>
+            Name:
+            <input className={'input'} style={AddInputStyle} type="text" value={TagAddInput} onChange={TagAddInputHandler} />
+         </Flex>
+         <Flex alignItems={'center'}>
+            Description:
+            <input className={'input'} style={AddInputStyle} type="text" value={TagAddDescriptionInput} onChange={TagAddDescriptionInputHandler} />
+         </Flex>
          <button className={'button'} onClick={TagAddHandler}>Add Item</button>
       </Flex>
    )

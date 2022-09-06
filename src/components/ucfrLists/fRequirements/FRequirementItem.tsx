@@ -71,31 +71,6 @@ export default function FRequirementItem(
          })]
       })
    }
-   const toggleCompletedHandler = () => {
-      setCompleted(!completed);
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  functionalRequirements: [...module.functionalRequirements.map(Frequirement => {
-                     if (Frequirement.id === FRequirementReceived.id) {
-                        return {
-                           ...Frequirement,
-                           completed: !FRequirementReceived.done
-                        }
-                     } else {
-                        return Frequirement
-                     }
-                  })]
-               }
-            } else {
-               return module
-            }
-         })]
-      })
-   }
 
    const addTagIdsHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const tagId = e.target.value;

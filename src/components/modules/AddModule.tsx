@@ -1,7 +1,8 @@
-import { Flex, Input } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import React from "react"
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../AlertStackContext"
 import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
+import { AddFormContainerStyle, AddInputStyle, ModalInputStyle } from "../GlobalStyles"
 
 
 export default function AddModule() {
@@ -40,10 +41,22 @@ export default function AddModule() {
 
    return (
       <Flex className='popupContainer'
-      
+      style={AddFormContainerStyle}
       >
-         <Input className={'input'} type="text" value={moduleAddInput} onChange={moduleAddInputHandler} />
-         <button className={'button'} onClick={moduleAddHandler}>Add Item</button>
+         <Flex className='popupContent'
+         alignItems={'center'}
+         >
+            Name:
+            <input className={'input modalInput'} 
+            style={AddInputStyle}
+            type="text" value={moduleAddInput} onChange={moduleAddInputHandler} 
+            />
+         </Flex>
+         <button className={'button'}
+         style={{
+            marginTop: '1rem',
+         }}
+         onClick={moduleAddHandler}>Add Item</button>
       </Flex>
    )
 }

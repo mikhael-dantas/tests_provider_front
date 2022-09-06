@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, Modal, ModalCloseButton, ModalContent, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import FullPopup from "../../components/FullPopup";
 import AddModule from "../../components/modules/AddModule";
@@ -38,12 +38,29 @@ export default function Index() {
    }
 
 
-   const [moduleAddDisplay, setModuleAddDisplay] = React.useState<boolean>(false)
-   const [modulesShowDisplay, setModulesShowDisplay] = React.useState<boolean>(false)
+   const {
+      isOpen: isAddTagOpen,
+      onOpen: onAddTagOpen,
+      onClose: onAddTagClose,
+   } = useDisclosure()
 
-   const [tagAddDisplay, setTagAddDisplay] = React.useState<boolean>(false)
-   const [tagsShowDisplay, setTagsShowDisplay] = React.useState<boolean>(false)
+   const {
+      isOpen: isShowTagsOpen,
+      onOpen: onShowTagsOpen,
+      onClose: onShowTagsClose,
+   } = useDisclosure()
 
+   const {
+      isOpen: isAddModuleOpen,
+      onOpen: onAddModuleOpen,
+      onClose: onAddModuleClose,
+   } = useDisclosure()
+
+   const {
+      isOpen: isShowModulesOpen,
+      onOpen: onShowModulesOpen,
+      onClose: onShowModulesClose,
+   } = useDisclosure()
 
 
    return (
@@ -104,13 +121,13 @@ export default function Index() {
                      height={'100%'}
                      >
                         <button className="showModulesListButton button"
-                        onClick={() => setModulesShowDisplay(true)}
+                        onClick={() => onShowModulesOpen()}
                         >
                            Show all Modules
                         </button>
                         <div></div>
                         <Flex className={'button'} 
-                        onClick={() => setModuleAddDisplay(!moduleAddDisplay)}
+                        onClick={() => onAddModuleOpen()}
                         alignItems={'center'}
                         justifyContent={'center'}
                         >
@@ -118,11 +135,11 @@ export default function Index() {
                            {'Module'}
                         </Flex>
 
-                        <FullPopup display={modulesShowDisplay} setDisplay={setModulesShowDisplay}>
+                        <FullPopup isOpen={isShowModulesOpen} onClose={onShowModulesClose}>
                            <ListModules />
                         </FullPopup>
 
-                        <FullPopup display={moduleAddDisplay} setDisplay={setModuleAddDisplay}>
+                        <FullPopup isOpen={isAddModuleOpen} onClose={onAddModuleClose}>
                            <AddModule/>
                         </FullPopup>
                      </Grid>
@@ -137,7 +154,7 @@ export default function Index() {
                      padding={'.2rem'}
                      height={'3rem'}
                   >
-                     <button className="showTagsListButton button" onClick={() => setTagsShowDisplay(true)}>
+                     <button className="showTagsListButton button" onClick={() => onShowTagsOpen()}>
                         Show all Tags
                      </button>
 
@@ -146,17 +163,17 @@ export default function Index() {
                      <Flex className='ManageTagsContainer button'
                      alignItems={'center'}
                      justifyContent={'center'}
-                     onClick={() => setTagAddDisplay(!tagAddDisplay)}
+                     onClick={() => onAddTagOpen()}
                      >
                         <AddIcon height='100%' marginRight={'.5rem'}/>
                         Tag
 
-                        <FullPopup display={tagAddDisplay} setDisplay={setTagAddDisplay}>
+                        <FullPopup isOpen={isAddTagOpen} onClose={onAddTagClose}>
                            <AddTag/>
                         </FullPopup>
                      </Flex>
 
-                     <FullPopup display={tagsShowDisplay} setDisplay={setTagsShowDisplay}>
+                     <FullPopup isOpen={isShowTagsOpen} onClose={onShowTagsClose}>
                         <ListTags />
                      </FullPopup>
 
@@ -206,10 +223,12 @@ export default function Index() {
                   </>
                ) :
                selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
-                  <FRequirementList/>
+                  // <FRequirementList/>
+                  <></>
                   ) :
                selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
-                  <NestedUseCaseList/>
+                  // <NestedUseCaseList/>
+                  <></>
                ) : null
             ) : (
                <Flex

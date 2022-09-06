@@ -2,27 +2,22 @@ import { EditIcon } from '@chakra-ui/icons'
 import { Flex, useDisclosure } from '@chakra-ui/react'
 import { customTheme } from '../../theme'
 import { IModule, useCurrentModuleContext } from '../../UcfrsContext'
+import { ModalListItemStyle } from '../GlobalStyles'
 import ModuleModal from './ModuleModal'
 
-function ListModulesItem({ key, module: receivedModule }: {key: string, module: IModule}) {
+function ListModulesItem({ module: receivedModule }: { module: IModule}) {
     const currentModuleFromContext = useCurrentModuleContext()
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     return (
         <Flex
-        width={'100%'}
-        height={'2.8rem'}
-        margin={'0.1rem 0'}
         alignItems={'center'}
         justifyContent={'space-between'}
-        borderRadius={'.3rem'}
-        padding={'0 .5rem'}
-        backgroundColor={
-            currentModuleFromContext?.id === receivedModule.id ? 
-            customTheme.colors[60] : customTheme.colors[45]}
+        style={ModalListItemStyle}
         >
-            <div>
+            <div
+            >
                 {receivedModule.name}
             </div>
             <Flex>
@@ -32,11 +27,12 @@ function ListModulesItem({ key, module: receivedModule }: {key: string, module: 
                 padding={'0.3rem'}
                 cursor={'pointer'}
                 margin={'0 0.2rem'}
-                backgroundColor={customTheme.colors[80]}
+                backgroundColor={customTheme.colors[30]}
                 borderRadius={'.3rem'}
                 onClick={onOpen}
+                color={'white'}
                 />
-                <ModuleModal isOpen={isOpen} onClose={onClose} module={receivedModule}/>
+                <ModuleModal isOpen={isOpen} onClose={onClose} moduleId={receivedModule.id}/>
             </Flex>
         </Flex>
     )

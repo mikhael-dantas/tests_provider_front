@@ -1,5 +1,6 @@
-import { Alert, AlertIcon, Flex, Stack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Stack } from "@chakra-ui/react";
 import React from "react";
+import { GenerateUUID } from "./utils/UUIDGenerator";
 
 export interface IAlertStackComponentArrayItem {
    component: JSX.Element;
@@ -32,14 +33,20 @@ export function AlertStackProvider({children}) {
          position='fixed'
          bottom='0'
          left='0'
-         zIndex={99}
+         zIndex={2000}
          >
             {alertStackComponent.map((fAlertStackComponentItem) => {
                return (
                   fAlertStackComponentItem.component
                )
             })}
-            {alertStackComponent.length > 0 && <button onClick={dismissAllAlerts}>Dismiss All</button>}
+            {alertStackComponent.length > 0 && <button 
+            onClick={dismissAllAlerts}
+            style={{
+               backgroundColor: 'white',
+               boxShadow: '0 0 0 1px rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.05)',
+            }}
+            >Dismiss All</button>}
          </Stack>
       </updateAlertStackComponentContext.Provider>
       </alertStackComponentContext.Provider>
@@ -51,8 +58,8 @@ export function useAlertStackComponentContext() {
    return alertStackComponent
 }
 export function useUpdateAlertStackComponentContext() {
-   const updatealertStackComponent = React.useContext(updateAlertStackComponentContext)
-   return updatealertStackComponent
+   const updateAlertStackComponent = React.useContext(updateAlertStackComponentContext)
+   return updateAlertStackComponent
 }
 
 export interface IAlertStackGenerateDTO {
@@ -63,7 +70,7 @@ export interface IAlertStackGenerateDTO {
 
 export function GenerateAlertComponent({status, text}: IAlertStackGenerateDTO) {
    const alertComponent = (
-      <Alert status={status}>
+      <Alert key={GenerateUUID()} status={status}>
          <AlertIcon />
          {text}
       </Alert>
@@ -71,35 +78,3 @@ export function GenerateAlertComponent({status, text}: IAlertStackGenerateDTO) {
 
    return alertComponent
 }
-
-// got a hook rule error trying to use this outside of this component
-// export function PushAlertToAlertStackContextFunction() {
-//    const pushAlertToAlertStack = ({status, text}: IAlertStackGenerateDTO) => {
-//       const alertStackComponent = useAlertStackComponentContext()
-//       const updateAlertStackComponent = useUpdateAlertStackComponentContext()
-      
-//       const generatedId = GenerateUUID()
-
-//       const destroyComponent = (id: string) => {
-//          updateAlertStackComponent(alertStackComponent.filter(a => a.id !== id))
-//       }
-
-//       const alertComponent = (
-//          <Alert status={status}>
-//             <AlertIcon />
-//             {text}
-//          </Alert>
-//       )
-
-//       updateAlertStackComponent([...alertStackComponent, {id: generatedId, component: alertComponent}])
-
-//       // destroy after 5 seconds
-//       setTimeout(() => {
-//          destroyComponent(generatedId)
-//       }
-//       , 5000)
-//    }
-
-//    return pushAlertToAlertStack
-// }
-

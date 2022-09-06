@@ -26,7 +26,7 @@ export default function UseCaseAddTagModal({ isOpen, onClose, useCaseId: receive
                                 <button
                                     key={scopedTag.id}
                                     onClick={() => {
-                                        ucfrListsInterfaces.addTagToUseCase({
+                                        ucfrListsInterfaces.addTagToUseCaseById({
                                             tagId: scopedTag.id,
                                             useCaseId: receivedUseCaseId,
                                         })

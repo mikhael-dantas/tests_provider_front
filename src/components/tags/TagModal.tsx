@@ -1,10 +1,11 @@
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
+import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../AlertStackContext'
 import { ITag, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../UcfrsContext'
 import ConfirmationModal from '../ConfirmationModal'
+import { ModalInputStyle } from '../GlobalStyles'
 
-function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose: () => void, tag: ITag}) {
+function TagModal({isOpen, onClose, tagId: receivedTagId}: {isOpen: boolean, onClose: () => void, tagId: string}) {
 
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
@@ -17,8 +18,10 @@ function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose
     const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
-    const [tagEditNameInput, setTagEditNameInput] = React.useState<string>(receivedTag.name)
-    const [tagEditDescriptionInput, setTagEditDescriptionInput] = React.useState<string>(receivedTag.description)
+    const [tag, setTag] = React.useState<ITag | undefined>(undefined)
+
+    const [tagEditNameInput, setTagEditNameInput] = React.useState<string>('')
+    const [tagEditDescriptionInput, setTagEditDescriptionInput] = React.useState<string>('')
 
     const tagEditNameInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTagEditNameInput(e.target.value)
@@ -30,7 +33,7 @@ function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose
 
     const tagEditHandler = () => {
         ucfrListsInterfaces.updateTagById({
-            tagId: receivedTag.id,
+            tagId: receivedTagId,
             newTagName: tagEditNameInput,
             newTagDescription: tagEditDescriptionInput
         })
@@ -53,7 +56,7 @@ function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose
     }
 
     const deleteTagHandler = () => {
-        ucfrListsInterfaces.removeTag({tagId: receivedTag.id})
+        ucfrListsInterfaces.removeTag({tagId: receivedTagId})
         .then(() => {
             updateAlertStackComponentFromContext([
                 ...alertStackComponentFromContext,
@@ -72,6 +75,26 @@ function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose
         })
     }
 
+    useEffect(() => {
+        ucfrListsInterfaces.readTagById({tagId: receivedTagId})
+        .then((tag) => {
+            setTag(tag)
+            setTagEditNameInput(tag.name)
+            setTagEditDescriptionInput(tag.description)
+        })
+        .catch((error) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({
+                        status: "error",
+                        text: error.message
+                    })
+                }
+            ])
+        })
+    }, [receivedTagId])
+
     const { isOpen: isDeleteConfirmationModalOpen, onOpen: onOpenDeleteConfirmationModal, onClose: onCloseDeleteConfirmationModal } = useDisclosure()
 
     return (
@@ -79,11 +102,19 @@ function TagModal({isOpen, onClose, tag: receivedTag}: {isOpen: boolean, onClose
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-            <ModalHeader>{receivedTag.name}</ModalHeader>
+            <ModalHeader>{tag ? tag.name : ''}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <input type="text" value={tagEditNameInput} onChange={tagEditNameInputHandler} />
-                <input type="text" value={tagEditDescriptionInput} onChange={tagEditDescriptionInputHandler} />
+                <Flex alignItems="center">
+                    Name:
+                    <input style={ModalInputStyle}
+                    type="text" value={tagEditNameInput} onChange={tagEditNameInputHandler} />
+                </Flex>
+                <Flex alignItems="center">
+                    Description:
+                    <input style={ModalInputStyle}
+                    type="text" value={tagEditDescriptionInput} onChange={tagEditDescriptionInputHandler} />
+                </Flex>
             </ModalBody>
 
             <ModalFooter>

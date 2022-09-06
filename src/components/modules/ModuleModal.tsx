@@ -1,12 +1,13 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../AlertStackContext'
 import { customTheme } from '../../theme'
 import { IModule, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../UcfrsContext'
 import ConfirmationModal from '../ConfirmationModal'
+import { ModalInputStyle } from '../GlobalStyles'
 
-function ModuleModal({isOpen, onClose, module: receivedModule}: 
-    {isOpen: boolean, onClose: () => void, module: IModule}
+function ModuleModal({isOpen, onClose, moduleId: receivedModuleId}: 
+    {isOpen: boolean, onClose: () => void, moduleId: string}
     ) {
 
     // contextManagement SDK
@@ -27,7 +28,7 @@ function ModuleModal({isOpen, onClose, module: receivedModule}:
     }
 
     const moduleEditNameHandler = () => {
-        ucfrListsInterfaces.updateModuleById({moduleId: receivedModule.id, newModuleName: moduleEditNameInput})
+        ucfrListsInterfaces.updateModuleById({moduleId: receivedModuleId, newModuleName: moduleEditNameInput})
         .then(() => {
             setModuleEditNameInput("")
             updateAlertStackComponentFromContext([
@@ -44,7 +45,7 @@ function ModuleModal({isOpen, onClose, module: receivedModule}:
     }
 
     const deleteModuleHandler = () => {
-        ucfrListsInterfaces.removeModule({moduleId: receivedModule.id})
+        ucfrListsInterfaces.removeModule({moduleId: receivedModuleId})
         .then(() => {
             updateAlertStackComponentFromContext([
                 ...alertStackComponentFromContext,
@@ -59,17 +60,32 @@ function ModuleModal({isOpen, onClose, module: receivedModule}:
         })
     }
 
+    useEffect(() => {
+        ucfrListsInterfaces.readModuleById({moduleId: receivedModuleId}).then(module => {
+            setModuleEditNameInput(module.name)
+        })
+        .catch(err => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {component: GenerateAlertComponent({status: "error", text: err.message})}
+            ])
+        })
+    }, [receivedModuleId])
+
+
+
     const { isOpen: secondIsOpen, onOpen: secondOnOpen, onClose: secondOnClose } = useDisclosure()
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent backgroundColor={customTheme.colors[10]}>
-                <ModalHeader>{receivedModule.name}</ModalHeader>
+                <ModalHeader>{'Module View & edit'}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
+                    {"Name:"} 
                     <input 
-                    style={{backgroundColor: 'white', color: 'black'}}
+                    style={ModalInputStyle}
                     value={moduleEditNameInput} onChange={moduleEditNameInputHandler} />
                 </ModalBody>
 
