@@ -172,25 +172,25 @@ export default function Index() {
          marginTop={'.5rem'}
          height={'3rem'}
          >
-         {UcfrListsTypes.map((type, i) => (
-            <Flex className={'ucfrListsTab'} key={i} 
-               onClick={() => setSelectedTabToDisplay(type)}
-               display={'flex'}
-               flexDirection={'column'} alignItems={'center'}
-               justifyContent={'center'}
-               textAlign={'center'}
-               fontSize={'.9rem'}
-               fontWeight={'bold'}
-               backgroundColor={selectedTabToDisplay === type ?  customTheme.colors[60] : customTheme.colors[80]}
-               _hover={{backgroundColor: customTheme.colors[95]}}
-               width={'33%'}
-               maxWidth={'33%'}
-               cursor={'pointer'}
-               textOverflow={'clip'}
-            >
-               {type}
-            </Flex>
-         ))}
+            {UcfrListsTypes.map((type, i) => (
+               <Flex className={'ucfrListsTab'} key={i} 
+                  onClick={() => setSelectedTabToDisplay(type)}
+                  display={'flex'}
+                  flexDirection={'column'} alignItems={'center'}
+                  justifyContent={'center'}
+                  textAlign={'center'}
+                  fontSize={'.9rem'}
+                  fontWeight={'bold'}
+                  backgroundColor={selectedTabToDisplay === type ?  customTheme.colors[60] : customTheme.colors[80]}
+                  _hover={{backgroundColor: customTheme.colors[95]}}
+                  width={'33%'}
+                  maxWidth={'33%'}
+                  cursor={'pointer'}
+                  textOverflow={'clip'}
+               >
+                  {type}
+               </Flex>
+            ))}
          </Flex>
 
          <Flex className={'ucfrListsContainer'}
