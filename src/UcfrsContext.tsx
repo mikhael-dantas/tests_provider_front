@@ -950,7 +950,43 @@ export class UcfrListsContextInterfaces {
       return ListOfDependents
    }
 
+   async dragAndDropUseCase({dragUseCaseId: receivedDragUseCaseId, dropUseCaseId: receivedDropUseCaseId}: {dragUseCaseId: string, dropUseCaseId: string}) {
+      const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.useCases]
+      }, [])
 
+      const dragUseCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedDragUseCaseId) as IUseCase
+
+      if (!dragUseCase) {throw new Error("Drag use case not found")}
+
+      const dropUseCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedDropUseCaseId) as IUseCase
+
+      if (!dropUseCase) {throw new Error("Drop use case not found")}
+
+      const module = this.ucfrLists.modules.find(scopedModule => scopedModule.id === dragUseCase.moduleId) as IModule
+
+      if (!module) {throw new Error("Module not found")}
+
+      const dragUseCaseIndex = module.useCases.findIndex(scopedUseCase => scopedUseCase.id === receivedDragUseCaseId)
+      const dropUseCaseIndex = module.useCases.findIndex(scopedUseCase => scopedUseCase.id === receivedDropUseCaseId)
+
+      const newUseCases = [...module.useCases]
+      newUseCases.splice(dragUseCaseIndex, 1)
+      newUseCases.splice(dropUseCaseIndex, 0, dragUseCase)
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === module.id) {
+               return {
+                  ...scopedModule,
+                  useCases: newUseCases
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
 
    // NESTED USE CASES
    async createNestedUseCase({name: receivedName, parentId: receivedParentId, moduleId: receivedModuleId}: {name: string, parentId: string, moduleId: string}): Promise<INestedUseCase> {

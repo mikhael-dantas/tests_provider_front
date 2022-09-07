@@ -1,12 +1,20 @@
 import { Flex } from "@chakra-ui/react";
 import React from "react";
-import { useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
+import { UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import UseCaseItem from "./UseCaseItem";
 
 
 export default function UseCasesList() {
-   const ucfrListsFromContext = useUcfrListsContext();
-   const updateUcfrListsFromContext = useUpdateUcfrListsContext();
+   // contextManagement SDK
+   const ucfrListsFromContext = useUcfrListsContext()
+   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
+   const alertStackComponentFromContext = useAlertStackComponentContext()
+   const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
    const currentModuleFromContext = useCurrentModuleContext()
 
@@ -25,28 +33,10 @@ export default function UseCasesList() {
       e.dataTransfer.dropEffect = 'move'
    }
    const dragDrop = (e: React.DragEvent, id: string) => {
-    // the drag use case should exit the list, then on drop it should be added to the list moving the forward elements to the right
       if (dragItem) {
-         const module = ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)
-         if (!module) { throw new Error("Module not found")}
-         const newUseCases = [...module.useCases]
-         const dragIndex = newUseCases.indexOf(dragItem)
-         const dropIndex = newUseCases.findIndex(u => u.id === id)
-         newUseCases.splice(dragIndex, 1)
-         newUseCases.splice(dropIndex, 0, dragItem)
-         updateUcfrListsFromContext({
-            ...ucfrListsFromContext,
-            modules: ucfrListsFromContext.modules.map(m => {
-               if (m.id === currentModuleFromContext.id) {
-                  return {
-                     ...m,
-                     useCases: newUseCases
-                  }
-               } else {
-                  return m
-               }
-            }
-            )
+         ucfrListsInterfaces.dragAndDropUseCase({
+            dragUseCaseId: dragItem.id,
+            dropUseCaseId: id,
          })
       }
    }
