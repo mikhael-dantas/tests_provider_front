@@ -227,8 +227,7 @@ export default function Index() {
                   <></>
                   ) :
                selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
-                  // <NestedUseCaseList/>
-                  <></>
+                  <NestedUseCaseList/>
                ) : null
             ) : (
                <Flex

@@ -162,11 +162,13 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
                             </Flex>
                         </Flex>
 
+                        {/* todo */}
                         <button className='button' onClick={onOpenAddUseCasePipelineModal}>Add Use Case Pipeline</button>
                         <button className='button' onClick={onOpenRemoveUseCasePipelineModal}>Remove Use Case Pipeline</button>
 
                         <button className='button' onClick={onOpenAddNeededFrModal}>Add Needed FR</button>
                         <button className='button' onClick={onOpenRemoveNeededFrModal}>Remove Needed FR</button>
+                        {/* todo */}
                     </Flex>
                 </ModalBody>
 

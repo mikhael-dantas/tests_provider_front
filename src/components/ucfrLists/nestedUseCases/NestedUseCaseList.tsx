@@ -1,61 +1,31 @@
-import { Flex, Grid } from "@chakra-ui/react";
+import { Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import React from "react";
-import { INestedUseCase, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
+import { INestedUseCase, IUseCase, UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import { GenerateUUID } from "../../../utils/UUIDGenerator";
+import AddNestedUseCase from "./AddNestedUseCase";
 import NestedUseCaseItem from "./NestedUseCaseItem";
+import SelectUseCaseModal from "./SelectUseCaseModal";
 
 
 export default function NestedUseCaseList() {
-   const ucfrListsFromContext = useUcfrListsContext();
-   const updateUcfrListsFromContext = useUpdateUcfrListsContext();
+   // contextManagement SDK
+   const ucfrListsFromContext = useUcfrListsContext()
+   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
+   const alertStackComponentFromContext = useAlertStackComponentContext()
+   const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
    const currentModuleFromContext = useCurrentModuleContext()
 
-   const [nestedUseCaseAncorSelectValue, setNestedUseCaseAncorSelectValue] = React.useState<string>("")
-   const nestedUseCaseAncorSelectValueHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      if (!e.target.value || e.target.value === "") {
-         return
-      }
-      setNestedUseCaseAncorSelectValue(e.target.value)
-   }
+
+   const [selectedUseCaseToNestFrom, setSelectedUseCaseToNestFrom] = React.useState<IUseCase | null>(null)
 
 
-   const [nestedUseCaseAddInput, setNestedUsecaseAddInput] = React.useState<string>("")
-   const nestedUseCaseAddInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNestedUsecaseAddInput(e.target.value)
-   }
-   const nestedUseCaseAddHandler = () => {
-      if ("" === nestedUseCaseAddInput) {
-         return
-      }
-      if ("" === nestedUseCaseAncorSelectValue || !nestedUseCaseAncorSelectValue) {
-         return
-      }
-      const newNestedUseCase: INestedUseCase = {
-         id: GenerateUUID(),
-         name: nestedUseCaseAddInput,
-         moduleId: currentModuleFromContext.id,
-         completed: false,
-         parentUseCaseId: nestedUseCaseAncorSelectValue,
-         neededFrsToWorkIds: [],
-         tagIds: []
-      }
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: ucfrListsFromContext.modules.map(m => {
-            if (m.id !== currentModuleFromContext.id) {
-               return m
-            }
-            return {
-               ...m,
-               nestedUseCases: [...m.nestedUseCases, newNestedUseCase]
-            }
-         }
-         )
-      })
 
-      setNestedUsecaseAddInput("")
-   }
 
    // make a draggable list of usecases
    const [dragItem, setDragItem] = React.useState<any>(null)
@@ -95,46 +65,38 @@ export default function NestedUseCaseList() {
          })
       }
    }
-   return (
-      <>
-         <Flex className={'nestedUseCaseAddContainer'} direction={'column'}>
-            <select className='select' onChange={nestedUseCaseAncorSelectValueHandler}>
-               <option value={''}>Select a use case to add</option>
-               {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.useCases.map(u => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-               ))}
-            </select>
 
-            <Grid className={'addNestedUseCaseForm'} 
-               templateColumns={'3fr 1fr'}
-               width={'100%'}
-               height={'2rem'}
-            >
-               <input className={'input'} type={'text'} value={nestedUseCaseAddInput} onChange={nestedUseCaseAddInputHandler} />
-               <button className={'button'} onClick={nestedUseCaseAddHandler}>Add</button>
-            </Grid>
-         </Flex>
-         <Flex className={'nestedUseCasesListContainer'}
-            direction={'column'}
-            alignItems={'center'}
-            width={'100%'}
+
+   const { isOpen: isOpenSelectUseCaseModal, onOpen: onOpenSelectUseCaseModal, onClose: onCloseSelectUseCaseModal } = useDisclosure()
+   return (
+      <Flex direction={'column'}>
+         <Grid
+         templateColumns="2fr 3fr 3fr 2fr"
+         backgroundColor={'gray'}
          >
-            {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.nestedUseCases.filter(nestedU => nestedU.parentUseCaseId === nestedUseCaseAncorSelectValue).map(nestedU => (
-               <Flex
-                  key={nestedU.id}
-                  draggable={true} 
-                  onDragStart={(e) => dragStart(e, nestedU)} 
-                  onDragEnd={(e) => dragEnd(e)} 
-                  onDragOver={(e) => dragOver(e)} 
-                  onDrop={(e) => dragDrop(e, nestedU.id)} 
-                  direction={'row'} alignItems={'center'} 
-                  width={'100%'}
-                  marginTop={'.5rem'}
-               >
-                  <NestedUseCaseItem nestedUseCaseReceived={nestedU}/>
-               </Flex>
-            ))}
-         </Flex>
-      </>
+            <button className='button' onClick={onOpenSelectUseCaseModal}>Select Use Case To Deal With</button>
+            <SelectUseCaseModal
+               isOpen={isOpenSelectUseCaseModal} onClose={onCloseSelectUseCaseModal} 
+               setSelectedUseCaseToNestFrom={setSelectedUseCaseToNestFrom} selectedUseCaseToNestFrom={selectedUseCaseToNestFrom} 
+            />
+            <Flex>Selected Use Case</Flex>
+            <Flex>{selectedUseCaseToNestFrom ? selectedUseCaseToNestFrom.name : 'None'}</Flex>
+         </Grid>
+         {selectedUseCaseToNestFrom ? 
+            <>
+            <Flex className={'nestedUseCaseAddContainer'} direction={'column'}>
+               <AddNestedUseCase selectedUseCase={selectedUseCaseToNestFrom} />
+            </Flex>
+            <Flex className={'nestedUseCasesListContainer'}
+               direction={'column'}
+               alignItems={'center'}
+               width={'100%'}
+            >
+               teste
+            </Flex>
+            </> 
+            : null
+         }
+      </Flex>
    )
 }
