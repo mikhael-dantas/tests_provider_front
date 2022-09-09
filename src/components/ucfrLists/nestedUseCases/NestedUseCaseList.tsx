@@ -92,7 +92,16 @@ export default function NestedUseCaseList() {
                alignItems={'center'}
                width={'100%'}
             >
-               teste
+               {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.nestedUseCases.map((nestedUseCase) => {
+                  if (nestedUseCase.parentUseCaseId === selectedUseCaseToNestFrom.id) {
+                     return (
+                        <NestedUseCaseItem
+                           key={nestedUseCase.id}
+                           nestedUseCase={nestedUseCase}
+                        />
+                     )
+                  }
+               })}
             </Flex>
             </> 
             : null

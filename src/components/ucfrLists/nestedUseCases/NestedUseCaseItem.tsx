@@ -1,295 +1,128 @@
-import { Flex, Grid } from "@chakra-ui/react";
-import React from "react";
-import { INestedUseCase, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
-import FullPopup from "../../FullPopup";
-
-// interface INestedUseCase {
-//    id: string
-//    moduleId: string
-//    tagIds: string[]
-//    name: string
-//    completed: boolean
-//    neededFrsToWorkIds: string[]
-//    parentUseCaseId: string
-// }
+import { EditIcon } from "@chakra-ui/icons";
+import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
+import { customTheme } from "../../../theme";
+import { INestedUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
+import NestedUseCaseModal from "./NestedUseCaseModal";
+import NestedUseCaseTag from "./NestedUseCaseTag";
 
 
 export default function NestedUseCaseItem(
-   {nestedUseCaseReceived}:
-   {nestedUseCaseReceived: INestedUseCase}
+   {nestedUseCase: nestedUseCaseReceived}:
+   {nestedUseCase: INestedUseCase}
 ) {
-   const ucfrListsFromContext = useUcfrListsContext();
-   const updateUcfrListsFromContext = useUpdateUcfrListsContext();
+   // contextManagement SDK
+   const ucfrListsFromContext = useUcfrListsContext()
+   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
+   const alertStackComponentFromContext = useAlertStackComponentContext()
+   const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
-   const currentModuleFromContext = useCurrentModuleContext()
 
-   const [completed, setCompleted] = React.useState(nestedUseCaseReceived.completed);
-   const [editNameDisplay, setEditNameDisplay] = React.useState(false);
-   const [useCaseNewNameInput, setUseCaseNewNameInput] = React.useState(nestedUseCaseReceived.name);
-
-   const handleChangeUseCaseNewNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setUseCaseNewNameInput(e.target.value);
-   }
-
-   const editUseCaseNameHandler = () => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.map(nestedUseCase => {
-                     if (nestedUseCase.id === nestedUseCaseReceived.id) {
-                        return {
-                           ...nestedUseCase,
-                           name: useCaseNewNameInput
-                        }
-                     } else {
-                        return nestedUseCase
-                     }
-                  })]
-               }
-            } else {
-               return module
-            }
-         })]
+   const completedToggleHandler = () => {
+      ucfrListsInterfaces.updateNestedUseCaseById({
+         nestedUseCaseId: nestedUseCaseReceived.id,
+         completed: !nestedUseCaseReceived.completed,
+         name: nestedUseCaseReceived.name,
       })
-      setEditNameDisplay(false);
-   }
-   const deleteNestedUseCaseHandler = () => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.filter(nestedUseCase => nestedUseCase.id !== nestedUseCaseReceived.id)]
-               }
-            } else {
-               return module
+      .then(() => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({
+                  status: "success",
+                  text: "nested use case updated"
+               })
             }
-         })]
+         ])
       })
-   }
-   const toggleCompletedHandler = () => {
-      setCompleted(!completed);
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.map(nestedUseCase => {
-                     if (nestedUseCase.id === nestedUseCaseReceived.id) {
-                        return {
-                           ...nestedUseCase,
-                           completed: !nestedUseCaseReceived.completed
-                        }
-                     } else {
-                        return nestedUseCase
-                     }
-                  })]
-               }
-            } else {
-               return module
+      .catch((error) => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({
+                  status: "error",
+                  text: error.message
+               })
             }
-         })]
+         ])
       })
    }
 
-   const addTagIdsHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const tagId = e.target.value;
-
-      const alreadyAdded = nestedUseCaseReceived.tagIds.includes(tagId);
-
-      if (alreadyAdded) {
-         return 
-      }
-
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.map(nestedUseCase => {
-                     if (nestedUseCase.id === nestedUseCaseReceived.id) {
-                        return {
-                           ...nestedUseCase,
-                           tagIds: [...nestedUseCase.tagIds, tagId]
-                        }
-                     } else {
-                        return nestedUseCase
-                     }
-                  })]
-               }
-            } else {
-               return module
-            }
-         })]
-      })
-   }
-
-   const removeTagIdsHandler = (tagIdReceived: string) => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.map(nestedUseCase => {
-                     if (nestedUseCase.id === nestedUseCaseReceived.id) {
-                        return {
-                           ...nestedUseCase,
-                           tagIds: [...nestedUseCase.tagIds.filter(tagId => tagId !== tagIdReceived)]
-                        }
-                     } else {
-                        return nestedUseCase
-                     }
-                  })]
-               }
-            } else {
-               return module
-            }
-         })]
-      })
-   }
-
-   const addNeededFrsToWorkIdsHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const neededFrsToWorkId = e.target.value;
-
-      const alreadyAdded = nestedUseCaseReceived.neededFrsToWorkIds.includes(neededFrsToWorkId);
-
-      if (alreadyAdded) {
-         return
-      }
-
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.map(nestedUseCase => {
-                     if (nestedUseCase.id === nestedUseCaseReceived.id) {
-                        return {
-                           ...nestedUseCase,
-                           neededFrsToWorkIds: [...nestedUseCase.neededFrsToWorkIds, neededFrsToWorkId]
-                        }
-                     } else {
-                        return nestedUseCase
-                     }
-                  })]
-               }
-            } else {
-               return module
-            }
-         })]
-      })
-   }
-   const removeNeededFrsToWorkIdsHandler = (neededFrsToWorkIdReceived: string) => {
-      updateUcfrListsFromContext({
-         ...ucfrListsFromContext,
-         modules: [...ucfrListsFromContext.modules.map(module => {
-            if (module.id === currentModuleFromContext.id) {
-               return {
-                  ...module,
-                  nestedUseCases: [...module.nestedUseCases.map(nestedUseCase => {
-                     if (nestedUseCase.id === nestedUseCase.id) {
-                        return {
-                           ...nestedUseCase,
-                           neededFrsToWorkIds: [...nestedUseCase.neededFrsToWorkIds.filter(neededFrsToWorkId => neededFrsToWorkId !== neededFrsToWorkIdReceived)]
-                        }
-                     } else {
-                        return nestedUseCase
-                     }
-                  })]
-               }
-            } else {
-               return module
-            }
-         })]
-      })
-   }
-
-   const getFrToWorkNameById = (idReceived: string) => {
-      const allFrsFromAllModules = ucfrListsFromContext.modules.reduce((acc, module) => {
-         return [...acc, ...module.functionalRequirements]
-      } , []);
-
-      const frToWork = allFrsFromAllModules.find(fr => fr.id === idReceived);
-
-      return frToWork ? frToWork.name : 'not found';
-   }
-
-   const getTagNameById = (idReceived: string) => {
-      const name = ucfrListsFromContext.tags.find(tag => tag.id === idReceived);
-
-      if (name) {
-         return name.name;
-      }
-      return 'not found';
-   }
-
+   const { isOpen, onOpen, onClose } = useDisclosure()
+   
    return (
-      <Flex
-         flexDirection="column"
-         alignItems="center"
-         width={"100%"}
-         backgroundColor={'#f5bbf5'}
+      <Flex className={'nestedUseCasesListItemContainer'}
+         cursor={'pointer'}
+         direction={'column'}
       >
-         <Flex className={'nestedUseCaseItemId'}>{nestedUseCaseReceived.id}</Flex>
-         <Grid className={'nestedUseCaseInfo'} templateColumns='1fr 10fr 1fr' alignItems={'center'}>
-            {/* make a checkbox with completeded boolean */}
-            <input type='checkbox' checked={completed} onChange={() => setCompleted(!completed)} />
-            <Flex>{nestedUseCaseReceived.name}</Flex>
-            <Flex direction={'column'}>
-               <Flex onClick={() => {setUseCaseNewNameInput(nestedUseCaseReceived.name);setEditNameDisplay(!editNameDisplay)}}>
-                  edit
+         <Grid className={'nestedUseCasesListItem'}
+         templateColumns={'7fr 1fr'}
+         alignItems={'center'}
+         width={'100%'}
+         marginTop={'.5rem'}
+         margin={'0 auto'}
+         padding={'.4rem'}
+         borderRadius={'.3rem'}
+         boxShadow={'0px 0px 5px rgba(0,0,0,0.5)'}
+         backgroundColor={customTheme.colors[60]}
+         >
+
+            <Flex className="nestedUseCaseContent"
+            direction={'column'}
+            >
+               <Flex className={'nestedUseCaseItemId'}
+               fontSize={'.6rem'}
+               >
+                  {nestedUseCaseReceived.id}
                </Flex>
-               <Flex onClick={deleteNestedUseCaseHandler}>delete</Flex>
+               <Grid className={'nestedUseCaseInfo'} 
+               templateColumns='1fr 10fr 1fr' 
+               alignItems={'center'}
+               marginTop={'.4rem'}
+               >
+                  <input width={'10%'}type='checkbox' checked={nestedUseCaseReceived.completed} onChange={completedToggleHandler} />
+                  <Flex maxWidth={'90%'} fontSize={'1.2rem'}>{nestedUseCaseReceived.name}</Flex>
+               </Grid>
+            </Flex>
+
+            <Flex className="actions"
+            direction={'column'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            >
+               <EditIcon className="editNestedUseCase"
+               width={'60%'}
+               height={'60%'}
+               cursor={'pointer'}
+               onClick={onOpen}/>
+
+               <NestedUseCaseModal isOpen={isOpen} onClose={onClose} nestedUseCaseId={nestedUseCaseReceived.id} />
             </Flex>
          </Grid>
 
-         <Flex className={'useCaseTags'}>
-            {nestedUseCaseReceived.tagIds.map(tagId => {
-               return (
-               <Flex key={`${nestedUseCaseReceived.id} ${tagId}`}className={'tagItem'}>
-                  <Flex className={'tagName'} key={tagId}>{getTagNameById(tagId)}</Flex>
-                  <Flex className={'removeTag'} onClick={() => removeTagIdsHandler(tagId)}>x</Flex>
-               </Flex>
-               )
-            })}
-         </Flex>
-         <Flex className={'addTags'}>
-            <select onChange={addTagIdsHandler}>
-               <option value="">Select a tag to add</option>
-               {ucfrListsFromContext.tags.map(tag => <option key={tag.id} value={tag.id}>{tag.name}</option>)}
-            </select>
-         </Flex>
-         <Flex className={'neededFrsToWork'}>
-            {nestedUseCaseReceived.neededFrsToWorkIds.map(neededFr => {
-               return (
-               <Flex key={`${nestedUseCaseReceived.id} ${neededFr}`}className={'neededFrItem'}>
-                  <Flex className={'neededFrName'} key={neededFr}>{getFrToWorkNameById(neededFr)}</Flex>
-                  <Flex className={'removeNeededFr'} onClick={() => removeNeededFrsToWorkIdsHandler(neededFr)}>x</Flex>
-               </Flex>
-               )
-            } )}
-         </Flex>
-         <Flex className={'addNeededFrsToWork'}>
-            <select onChange={addNeededFrsToWorkIdsHandler}>
-               <option value="">Select a needed fr to work to add</option>
-               {ucfrListsFromContext.modules.reduce((acc, module) => {
-                  return [...acc, ...module.functionalRequirements]
-               } ,[]).map(fr => <option key={fr.id} value={fr.id}>{fr.name}</option>)}
-            </select>
-         </Flex>
 
-         <FullPopup key={nestedUseCaseReceived.id} display={editNameDisplay} setDisplay={setEditNameDisplay}>
-            <input className={'editUseCase'} value={useCaseNewNameInput} onChange={handleChangeUseCaseNewNameInput} />
-            <Flex onClick={editUseCaseNameHandler}>save</Flex>
-         </FullPopup>
+         <Flex className={'nestedUseCaseTags'}
+         width={'95%'}
+         margin={'0 auto'}
+         backgroundColor={customTheme.colors[60]}
+         flexWrap={'wrap'}
+         justifyContent={'space-around'}
+         fontSize={'.8rem'}
+         borderRadius={'0 0 .5rem .5rem'}
+         borderTop={'1px solid '+customTheme.colors[30]}
+         padding={'.3rem'}
+         >
+            {nestedUseCaseReceived.tagIds.map(tagId => (
+               <NestedUseCaseTag
+               key={tagId}
+               tagId={tagId}
+               />
+            ))}
+         </Flex>
       </Flex>
    )
 }
