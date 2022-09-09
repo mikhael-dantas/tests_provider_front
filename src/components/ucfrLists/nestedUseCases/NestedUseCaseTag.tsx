@@ -1,8 +1,8 @@
 import { Flex, useDisclosure } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
-import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from '../../../AlertStackContext'
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
 import { customTheme } from '../../../theme'
-import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces } from '../../../UcfrsContext'
+import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
 import TagModal from '../../tags/TagModal'
 
 function NestedUseCaseTag({tagId: tagIdReceived}: {tagId: string}) {

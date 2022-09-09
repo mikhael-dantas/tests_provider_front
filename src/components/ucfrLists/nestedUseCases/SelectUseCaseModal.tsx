@@ -1,7 +1,7 @@
-import { Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select } from '@chakra-ui/react'
+import { Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
 import React from 'react'
 import { customTheme } from '../../../theme'
-import { INestedUseCase, IUseCase, useCurrentModuleContext, useUcfrListsContext } from '../../../UcfrsContext'
+import { IUseCase, useCurrentModuleContext, useUcfrListsContext } from '../../../UcfrsContext'
 
 function SelectUseCaseModal({
     selectedUseCaseToNestFrom,

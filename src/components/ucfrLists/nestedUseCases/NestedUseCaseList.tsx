@@ -1,8 +1,7 @@
-import { Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
+import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
-import { INestedUseCase, IUseCase, UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
-import { GenerateUUID } from "../../../utils/UUIDGenerator";
+import { IUseCase, UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import AddNestedUseCase from "./AddNestedUseCase";
 import NestedUseCaseItem from "./NestedUseCaseItem";
 import SelectUseCaseModal from "./SelectUseCaseModal";
