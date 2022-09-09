@@ -1,6 +1,7 @@
-import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
+import { Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
+import { customTheme } from "../../../theme";
 import { IUseCase, UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
 import AddNestedUseCase from "./AddNestedUseCase";
 import NestedUseCaseItem from "./NestedUseCaseItem";
@@ -21,12 +22,7 @@ export default function NestedUseCaseList() {
    const currentModuleFromContext = useCurrentModuleContext()
 
 
-   const [selectedUseCaseToNestFrom, setSelectedUseCaseToNestFrom] = React.useState<IUseCase | null>(null)
-
-
-
-
-   // make a draggable list of usecases
+   // make a draggable list of useCases
    const [dragItem, setDragItem] = React.useState<any>(null)
 
    const dragStart = (e: any, item: any) => {
@@ -40,70 +36,94 @@ export default function NestedUseCaseList() {
       e.dataTransfer.dropEffect = 'move'
    }
    const dragDrop = (e: React.DragEvent, id: string) => {
-    // the drag use case should exit the list, then on drop it should take place of the dropped index and send the item back to the first index
       if (dragItem) {
-         const module = ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)
-         if (!module) { throw new Error("Module not found")}
-         const newNestedUseCases = [...module.nestedUseCases]
-         const dragIndex = newNestedUseCases.indexOf(dragItem)
-         const dropIndex = newNestedUseCases.findIndex(u => u.id === id)
-         newNestedUseCases[dragIndex] = newNestedUseCases[dropIndex]
-         newNestedUseCases[dropIndex] = dragItem
-         updateUcfrListsFromContext({
-            ...ucfrListsFromContext,
-            modules: ucfrListsFromContext.modules.map(m => {
-               if (m.id !== currentModuleFromContext.id) {
-                  return m
-               }
-               return {
-                  ...m,
-                  nestedUseCases: newNestedUseCases
-               }
-            }
-            )
+         ucfrListsInterfaces.dragAndDropNestedUseCase({
+            dragNestedUseCaseId: dragItem.id,
+            dropNestedUseCaseId: id,
          })
       }
    }
 
 
+   const [selectedUseCaseToNestFrom, setSelectedUseCaseToNestFrom] = React.useState<IUseCase | null>(null)
+
+
+
    const { isOpen: isOpenSelectUseCaseModal, onOpen: onOpenSelectUseCaseModal, onClose: onCloseSelectUseCaseModal } = useDisclosure()
    return (
       <Flex direction={'column'}>
-         <Grid
-         templateColumns="2fr 3fr 3fr 2fr"
-         backgroundColor={'gray'}
+         <Grid className='useCaseSelectManagement'
+         templateColumns="2fr 3fr"
+         backgroundColor={customTheme.colors[30]}
+         alignItems={'center'}
+         marginBottom={'.5rem'}
          >
             <button className='button' onClick={onOpenSelectUseCaseModal}>Select Use Case To Deal With</button>
             <SelectUseCaseModal
                isOpen={isOpenSelectUseCaseModal} onClose={onCloseSelectUseCaseModal} 
                setSelectedUseCaseToNestFrom={setSelectedUseCaseToNestFrom} selectedUseCaseToNestFrom={selectedUseCaseToNestFrom} 
             />
-            <Flex>Selected Use Case</Flex>
-            <Flex>{selectedUseCaseToNestFrom ? selectedUseCaseToNestFrom.name : 'None'}</Flex>
+            <Grid className="useCaseSelectedDisplay"
+            templateRows={'1fr 3fr'}
+            >
+               <Flex align={'center'} justify={'center'}>Selected Use Case:</Flex>
+               {selectedUseCaseToNestFrom ? 
+                  <Flex className='selectedUseCaseName'
+                  backgroundColor="lightblue" 
+                  height={'95%'} width='95%' 
+                  margin={'0 auto'}
+                  maxWidth={'95%'}
+                  cursor={'pointer'}
+                  borderRadius={'.4rem'}
+                  alignItems={'center'} justify={'center'}
+                  flexWrap={'wrap'} textAlign='center'
+                  >
+                     {selectedUseCaseToNestFrom.name.length > 50 ?
+                     selectedUseCaseToNestFrom.name.slice(0, 50) + '...' :
+                     selectedUseCaseToNestFrom.name}
+                  </Flex>
+
+                  :
+
+                  <Flex 
+                  backgroundColor={'lightcoral'}
+                  height={'95%'} width='95%' margin={'0 auto'} 
+                  align='center' justify={'center'}>None Selected</Flex>
+               }
+            </Grid>
          </Grid>
+
          {selectedUseCaseToNestFrom ? 
             <>
-            <Flex className={'nestedUseCaseAddContainer'} direction={'column'}>
-               <AddNestedUseCase selectedUseCase={selectedUseCaseToNestFrom} />
-            </Flex>
-            <Flex className={'nestedUseCasesListContainer'}
-               direction={'column'}
-               alignItems={'center'}
-               width={'100%'}
-            >
-               {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.nestedUseCases.map((nestedUseCase) => {
-                  if (nestedUseCase.parentUseCaseId === selectedUseCaseToNestFrom.id) {
-                     return (
-                        <NestedUseCaseItem
-                           key={nestedUseCase.id}
-                           nestedUseCase={nestedUseCase}
-                        />
-                     )
-                  }
-               })}
-            </Flex>
-            </> 
-            : null
+               <Flex className={'nestedUseCaseAddContainer'} direction={'column'}>
+                  <AddNestedUseCase selectedUseCase={selectedUseCaseToNestFrom} />
+               </Flex>
+
+               <Flex className={'nestedUseCasesListContainer'}
+                  direction={'column'}
+                  alignItems={'center'}
+                  width={'100%'}
+               >
+                  {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.nestedUseCases.map((nestedUseCase) => {
+                     if (nestedUseCase.parentUseCaseId === selectedUseCaseToNestFrom.id) {
+                        return (
+                           <NestedUseCaseItem
+                              key={nestedUseCase.id}
+                              nestedUseCase={nestedUseCase}
+                              dragStart={dragStart}
+                              dragEnd={dragEnd}
+                              dragOver={dragOver}
+                              dragDrop={dragDrop}
+                           />
+                        )
+                     }
+                  })}
+               </Flex>
+            </>
+
+            : 
+
+            null
          }
       </Flex>
    )

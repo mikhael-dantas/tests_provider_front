@@ -1126,6 +1126,48 @@ export class UcfrListsContextInterfaces {
       })
    }
 
+   async dragAndDropNestedUseCase({dragNestedUseCaseId: receivedDragNestedUseCaseId, dropNestedUseCaseId: receivedDropNestedUseCaseId}: {dragNestedUseCaseId: string, dropNestedUseCaseId: string}) {
+      const allNestedUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.nestedUseCases]
+      }, [])
+
+      const dragNestedUseCase = allNestedUseCasesFromAllModules.find(nestedUseCase => nestedUseCase.id === receivedDragNestedUseCaseId) as INestedUseCase
+
+      if (!dragNestedUseCase) { throw new Error("Drag nested use case not found") }
+
+      const dropNestedUseCase = allNestedUseCasesFromAllModules.find(nestedUseCase => nestedUseCase.id === receivedDropNestedUseCaseId) as INestedUseCase
+
+      if (!dropNestedUseCase) { throw new Error("Drop nested use case not found") }
+
+      const nestedUseCasesList = this.ucfrLists.modules.find(scopedModule => scopedModule.id === dragNestedUseCase.moduleId)?.nestedUseCases as INestedUseCase[]
+
+      const nestedUseCasesWithoutSameParentIdList = nestedUseCasesList.filter(nestedUseCase => nestedUseCase.parentUseCaseId !== dragNestedUseCase.parentUseCaseId)
+
+      const nestedUseCasesWithSameParentIdList = nestedUseCasesList.filter(nestedUseCase => nestedUseCase.parentUseCaseId === dragNestedUseCase.parentUseCaseId)
+
+      const dragNestedUseCaseIndex = nestedUseCasesWithSameParentIdList.findIndex(nestedUseCase => nestedUseCase.id === dragNestedUseCase.id)
+      const dropNestedUseCaseIndex = nestedUseCasesWithSameParentIdList.findIndex(nestedUseCase => nestedUseCase.id === dropNestedUseCase.id)
+      
+      const newNestedUseCasesWithSameParentIdList = [...nestedUseCasesWithSameParentIdList]
+
+      newNestedUseCasesWithSameParentIdList.splice(dragNestedUseCaseIndex, 1)
+      newNestedUseCasesWithSameParentIdList.splice(dropNestedUseCaseIndex, 0, dragNestedUseCase)
+
+      const newNestedUseCasesList = [...nestedUseCasesWithoutSameParentIdList, ...newNestedUseCasesWithSameParentIdList]
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === dragNestedUseCase.moduleId) {
+               return {
+                  ...scopedModule,
+                  nestedUseCases: newNestedUseCasesList
+               }
+            }
+            return scopedModule
+         }
+      )})
+   }
 
 
    // FUNCTIONAL REQUIREMENTS

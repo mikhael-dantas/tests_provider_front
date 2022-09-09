@@ -51,7 +51,7 @@ function AddNestedUseCase({selectedUseCase}:{selectedUseCase: IUseCase}) {
 
     return (
         <Flex>
-            <input type="text" value={nestedUseCaseNameInput} onChange={handleNestedUseCaseNameInputChange} />
+            <input style={{color:'black'}}type="text" value={nestedUseCaseNameInput} onChange={handleNestedUseCaseNameInputChange} />
             <button className='button' onClick={handleAddNestedUseCase}>Add Nested Use Case</button>
         </Flex>
     )

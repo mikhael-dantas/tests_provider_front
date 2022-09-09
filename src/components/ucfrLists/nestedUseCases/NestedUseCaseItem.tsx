@@ -8,8 +8,20 @@ import NestedUseCaseTag from "./NestedUseCaseTag";
 
 
 export default function NestedUseCaseItem(
-   {nestedUseCase: nestedUseCaseReceived}:
-   {nestedUseCase: INestedUseCase}
+   {
+      nestedUseCase: nestedUseCaseReceived,
+      dragStart,
+      dragEnd,
+      dragOver,
+      dragDrop,
+   }:
+   {
+      nestedUseCase: INestedUseCase,
+      dragStart: any,
+      dragEnd: any,
+      dragOver: any,
+      dragDrop: any,
+   }
 ) {
    // contextManagement SDK
    const ucfrListsFromContext = useUcfrListsContext()
@@ -58,6 +70,12 @@ export default function NestedUseCaseItem(
       <Flex className={'nestedUseCasesListItemContainer'}
          cursor={'pointer'}
          direction={'column'}
+         margin={'0.7rem 0'}
+         draggable={true}
+         onDragStart={(e) => dragStart(e, nestedUseCaseReceived)}
+         onDragEnd={dragEnd}
+         onDragOver={dragOver}
+         onDrop={(e) => dragDrop(e, nestedUseCaseReceived.id)}
       >
          <Grid className={'nestedUseCasesListItem'}
          templateColumns={'7fr 1fr'}
