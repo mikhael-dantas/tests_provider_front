@@ -3,14 +3,14 @@ import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertSt
 import { customTheme } from '../../../theme'
 import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
 
-function UseCaseAddPipelineModal({
+function NestedUseCaseAddPipelineModal({
     isOpen: isOpenReceived,
     onClose: onCloseReceived,
-    useCaseId: useCaseIdReceived,
+    nestedUseCaseId: nestedUseCaseIdReceived,
 }: {
     isOpen: boolean
     onClose: () => void
-    useCaseId: string
+    nestedUseCaseId: string
 }) {
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
@@ -24,9 +24,9 @@ function UseCaseAddPipelineModal({
 
 
     const addPipelineHandler = (pipelineId: string) => {
-        ucfrListsInterfaces.addUseCaseToUseCasePipeline({
-            useCaseIdToAdd: useCaseIdReceived,
-            useCasePipelineId: pipelineId,
+        ucfrListsInterfaces.addUseCaseToNestedUseCasePipeline({
+            useCaseIdToAdd: pipelineId,
+            nestedUseCasePipelineId: nestedUseCaseIdReceived,
         })
         .then(() => {
             updateAlertStackComponentFromContext([
@@ -90,4 +90,4 @@ function UseCaseAddPipelineModal({
     )
 }
 
-export default UseCaseAddPipelineModal
+export default NestedUseCaseAddPipelineModal

@@ -3,12 +3,12 @@ import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
 import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces } from '../../../UcfrsContext'
 
-function UseCasePipelineItem({
-    useCaseId: useCaseIdReceived,
+function NestedUseCasePipelineItem({
+    nestedUseCaseId: nestedUseCaseIdReceived,
     pipelineId: pipelineIdReceived,
 }:
 {
-    useCaseId: string
+    nestedUseCaseId: string
     pipelineId: string
 }) {
     // contextManagement SDK
@@ -25,9 +25,9 @@ function UseCasePipelineItem({
     const [pipelineName, setPipelineName] = React.useState('')
 
     const removeUseCasesPipelineHandler = () => {
-        ucfrListsInterfaces.removeUseCaseFromUseCasePipeline({
-            useCaseIdToRemove: useCaseIdReceived,
-            useCasePipelineId: pipelineIdReceived,
+        ucfrListsInterfaces.removeUseCaseFromNestedUseCasePipeline({
+            useCaseIdToRemove: pipelineIdReceived,
+            nestedUseCasePipelineId: nestedUseCaseIdReceived,
         })
         .then(() => {
             updateAlertStackComponentFromContext([
@@ -65,7 +65,7 @@ function UseCasePipelineItem({
                 }
             ])
         })
-    }, [pipelineIdReceived])
+    }, [])
 
 
     return (
@@ -77,4 +77,4 @@ function UseCasePipelineItem({
     )
 }
 
-export default UseCasePipelineItem
+export default NestedUseCasePipelineItem
