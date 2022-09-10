@@ -1,11 +1,13 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure, Flex } from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure, Flex, Grid, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
 import { customTheme } from '../../../theme'
 import { IUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
 import ConfirmationModal from '../../ConfirmationModal'
 import { ModalInputStyle } from '../../GlobalStyles'
+import UseCaseAddPipelineModal from './UseCaseAddPipelineModal'
 import UseCaseAddTagModal from './UseCaseAddTagModal'
+import UseCasePipelineItem from './UseCasePipelineListItem'
 import UseCaseTag from './UseCaseTag'
 
 function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: boolean, onClose: () => void, useCase: IUseCase } ) {
@@ -98,6 +100,7 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
         })
     }
 
+    
 
 
     useEffect(() => {
@@ -109,10 +112,8 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
     const { isOpen: isOpenAddTagModal, onOpen: onOpenAddTagModal, onClose: onCloseAddTagModal } = useDisclosure()
 
     const { isOpen: isOpenAddUseCasePipelineModal, onOpen: onOpenAddUseCasePipelineModal, onClose: onCloseAddUseCasePipelineModal } = useDisclosure()
-    const { isOpen: isOpenRemoveUseCasePipelineModal, onOpen: onOpenRemoveUseCasePipelineModal, onClose: onCloseRemoveUseCasePipelineModal } = useDisclosure()
 
     const { isOpen: isOpenAddNeededFrModal, onOpen: onOpenAddNeededFrModal, onClose: onCloseAddNeededFrModal } = useDisclosure()
-    const { isOpen: isOpenRemoveNeededFrModal, onOpen: onOpenRemoveNeededFrModal, onClose: onCloseRemoveNeededFrModal } = useDisclosure()
     
     const { isOpen: isConfirmationModalOpen, onOpen: onConfirmationModalOpen, onClose: onConfirmationModalClose} = useDisclosure()
 
@@ -123,17 +124,20 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
                 <ModalHeader>Use Case View</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Flex direction="column" backgroundColor={'lightblue'}>
-                        <Flex className='useCaseNameContainer' alignItems={'center'}>
+                    <Flex direction="column" backgroundColor={'lightblue'} padding={'.5rem'}>
+                        <Grid className='useCaseNameContainer' 
+                        alignItems={'center'}
+                        templateColumns={'1fr 2fr'}
+                        >
                             Name:
                             <input 
                             style={ModalInputStyle}
                             value={useCaseEditNameInput} onChange={useCaseEditNameInputHandler} 
                             />
-                            <Button colorScheme='green' mr={3} onClick={saveUseCaseEditHandler}>
-                                Save Name
-                            </Button>
-                        </Flex>
+                        </Grid>
+                        <Button colorScheme='green' mr={3} onClick={saveUseCaseEditHandler}>
+                            Save Name
+                        </Button>
                         <Flex className='useCaseTagsContainer' direction={'column'} marginTop={'1rem'}>
                             <Flex>
                                 Tags:
@@ -150,10 +154,11 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
                             padding={'.3rem'}
                             color={customTheme.colors[10]}
                             >
-                                {useCaseReceived.tagIds.map(tagId => (
-                                    <Flex>
+                                {useCaseReceived.tagIds.map((tagId, i) => (
+                                    <Flex
+                                    key={tagId}
+                                    >
                                         <UseCaseTag
-                                        key={tagId}
                                         tagId={tagId}
                                         />
                                         <Button colorScheme='red' onClick={() => {removeTagHandler(tagId)}}>X</Button>
@@ -162,13 +167,47 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
                             </Flex>
                         </Flex>
 
-                        {/* todo */}
-                        <button className='button' onClick={onOpenAddUseCasePipelineModal}>Add Use Case Pipeline</button>
-                        <button className='button' onClick={onOpenRemoveUseCasePipelineModal}>Remove Use Case Pipeline</button>
 
-                        <button className='button' onClick={onOpenAddNeededFrModal}>Add Needed FR</button>
-                        <button className='button' onClick={onOpenRemoveNeededFrModal}>Remove Needed FR</button>
-                        {/* todo */}
+                        <Accordion className={'useCasePipelinesContainer'} allowMultiple>
+                            <AccordionItem>
+                            <h2>
+                                <AccordionButton>
+                                <Box flex='1' textAlign='left' color='black'>
+                                    Required PipeLines
+                                </Box>
+                                <AccordionIcon />
+                                </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                                <button className='button' onClick={onOpenAddUseCasePipelineModal}>Add Use Case Pipeline</button>
+                                <UseCaseAddPipelineModal isOpen={isOpenAddUseCasePipelineModal} onClose={onCloseAddUseCasePipelineModal} useCaseId={useCaseReceived.id} />
+
+                                <Flex className='pipelinesList'>
+                                    {useCaseReceived.useCasesPipelineIds.map((useCasePipelineId, i) => (
+                                        <Flex key={useCasePipelineId}>
+                                            <UseCasePipelineItem pipelineId={useCasePipelineId} useCaseId={useCaseReceived.id} />
+                                        </Flex>
+                                    ))}
+                                </Flex>
+                            </AccordionPanel>
+                            </AccordionItem>
+
+                            <AccordionItem>
+                            <h2>
+                                <AccordionButton>
+                                <Box flex='1' textAlign='left' color='black'>
+                                    Required functionalities
+                                </Box>
+                                <AccordionIcon />
+                                </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                                <button className='button' onClick={onOpenAddNeededFrModal}>Add Needed FR</button>
+                                lala
+                            </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
+
                     </Flex>
                 </ModalBody>
 
