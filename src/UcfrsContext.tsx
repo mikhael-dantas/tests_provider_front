@@ -784,21 +784,21 @@ export class UcfrListsContextInterfaces {
 
       if (!useCasePipeline) {throw new Error("Use case pipeline not found")}
 
-      if (!useCasePipeline.useCasesPipelineIds.includes(receivedUseCaseId)) {
+      if (!useCase.useCasesPipelineIds.includes(receivedUseCasePipelineId)) {
          throw new Error("Use case is not in pipeline")
       }
 
       this.setUcfrLists({
          ...this.ucfrLists,
          modules: this.ucfrLists.modules.map(scopedModule => {
-            if (scopedModule.id === useCasePipeline.moduleId) {
+            if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
                   useCases: scopedModule.useCases.map(scopedUseCase => {
-                     if (scopedUseCase.id === receivedUseCasePipelineId) {
+                     if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
-                           useCasesPipelineIds: scopedUseCase.useCasesPipelineIds.filter(scopedUseCaseId => scopedUseCaseId !== receivedUseCaseId)
+                           useCasesPipelineIds: scopedUseCase.useCasesPipelineIds.filter(scopedUseCaseId => scopedUseCaseId !== receivedUseCasePipelineId)
                         }
                      }
                      return scopedUseCase
