@@ -1624,4 +1624,47 @@ export class UcfrListsContextInterfaces {
          })
       })
    }
+
+   async dragAndDropFunctionalRequirement({ dragFunctionalRequirementId: receivedDragFunctionalRequirementId, dropFunctionalRequirementId: receivedDropFunctionalRequirementId }: { dragFunctionalRequirementId: string, dropFunctionalRequirementId: string }) {
+      const allFunctionalRequirementsFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+         return [...acc, ...module.functionalRequirements]
+      }, [])
+
+      const dragFunctionalRequirement = allFunctionalRequirementsFromAllModules.find(functionalRequirement => functionalRequirement.id === receivedDragFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!dragFunctionalRequirement) {
+         throw new Error("Drag functional requirement not found")
+      }
+
+      const dropFunctionalRequirement = allFunctionalRequirementsFromAllModules.find(functionalRequirement => functionalRequirement.id === receivedDropFunctionalRequirementId) as IFunctionalRequirement
+
+      if (!dropFunctionalRequirement) {
+         throw new Error("Drop functional requirement not found")
+      }
+
+      const foundedModule = this.ucfrLists.modules.find(module => module.id === dragFunctionalRequirement.moduleId) as IModule
+
+      if (!foundedModule) { throw new Error("Module not found") }
+
+      const dragFunctionalRequirementIndex = foundedModule.functionalRequirements.findIndex(functionalRequirement => functionalRequirement.id === receivedDragFunctionalRequirementId)
+      const dropFunctionalRequirementIndex = foundedModule.functionalRequirements.findIndex(functionalRequirement => functionalRequirement.id === receivedDropFunctionalRequirementId)
+
+      const newFunctionalRequirements = [...foundedModule.functionalRequirements]
+
+      newFunctionalRequirements.splice(dragFunctionalRequirementIndex, 1)
+      newFunctionalRequirements.splice(dropFunctionalRequirementIndex, 0, dragFunctionalRequirement)
+
+      this.setUcfrLists({
+         ...this.ucfrLists,
+         modules: this.ucfrLists.modules.map(scopedModule => {
+            if (scopedModule.id === foundedModule.id) {
+               return {
+                  ...scopedModule,
+                  functionalRequirements: newFunctionalRequirements
+               }
+            }
+            return scopedModule
+         })
+      })
+   }
 }

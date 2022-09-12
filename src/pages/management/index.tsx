@@ -223,8 +223,7 @@ export default function Index() {
                   </>
                ) :
                selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
-                  // <FRequirementList/>
-                  <></>
+                  <FRequirementList/>
                   ) :
                selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
                   <NestedUseCaseList/>
