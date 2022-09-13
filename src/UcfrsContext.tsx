@@ -365,7 +365,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -401,7 +401,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -438,7 +438,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCase.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
@@ -474,7 +474,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCase.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
@@ -680,7 +680,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -725,7 +725,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.filter(scopedUseCase => scopedUseCase.id !== receivedUseCaseId)
+                  useCases: scopedModule.useCases.filter((scopedUseCase: IUseCase) => scopedUseCase.id !== receivedUseCaseId)
                }
             }
             return scopedModule
@@ -738,11 +738,11 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+      const useCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCaseId) as IUseCase
 
       if (!useCase) {throw new Error("Use case not found")}
 
-      const useCasePipeline = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCasePipelineId) as IUseCase
+      const useCasePipeline = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCasePipelineId) as IUseCase
 
       if (!useCasePipeline) {throw new Error("Use case pipeline not found")}
 
@@ -756,7 +756,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -776,11 +776,11 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+      const useCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCaseId) as IUseCase
 
       if (!useCase) {throw new Error("Use case not found")}
 
-      const useCasePipeline = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCasePipelineId) as IUseCase
+      const useCasePipeline = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCasePipelineId) as IUseCase
 
       if (!useCasePipeline) {throw new Error("Use case pipeline not found")}
 
@@ -794,7 +794,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -815,7 +815,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+      const useCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCaseId) as IUseCase
 
       if (!useCase) {throw new Error("Use case not found")}
 
@@ -823,7 +823,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.nestedUseCases]
       }, [])
 
-      const nestedUseCasePipeline = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedNestedUseCasePipelineId) as INestedUseCase
+      const nestedUseCasePipeline = allNestedUseCasesFromAllModules.find((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.id === receivedNestedUseCasePipelineId) as INestedUseCase
 
       if (!nestedUseCasePipeline) {throw new Error("Nested use case pipeline not found")}
 
@@ -837,7 +837,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCasePipeline.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCasePipelineId) {
                         return {
                            ...scopedNestedUseCase,
@@ -857,7 +857,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+      const useCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCaseId) as IUseCase
 
       if (!useCase) {throw new Error("Use case not found")}
 
@@ -865,7 +865,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.nestedUseCases]
       }, [])
 
-      const nestedUseCasePipeline = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedNestedUseCasePipelineId) as INestedUseCase
+      const nestedUseCasePipeline = allNestedUseCasesFromAllModules.find((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.id === receivedNestedUseCasePipelineId) as INestedUseCase
 
       if (!nestedUseCasePipeline) {throw new Error("Nested use case pipeline not found")}
       if (!nestedUseCasePipeline.useCasesPipelineIds.includes(receivedUseCaseId)) {
@@ -878,7 +878,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCasePipeline.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCasePipelineId) {
                         return {
                            ...scopedNestedUseCase,
@@ -919,13 +919,13 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+      const useCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCaseId) as IUseCase
 
       if (!useCase) {
          throw new Error("Use case not found")
       }
 
-      const ListOfDependents = allUseCasesFromAllModules.filter(scopedUseCase => scopedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
+      const ListOfDependents = allUseCasesFromAllModules.filter((scopedUseCase: IUseCase) => scopedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
 
       return ListOfDependents
    }
@@ -939,13 +939,13 @@ export class UcfrListsContextInterfaces {
          
       }, [])
 
-      const useCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedUseCaseId) as IUseCase
+      const useCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedUseCaseId) as IUseCase
 
       if (!useCase) {
          throw new Error("Use case not found")
       }
 
-      const ListOfDependents = allNestedUseCasesFromAllModules.filter(scopedNestedUseCase => scopedNestedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
+      const ListOfDependents = allNestedUseCasesFromAllModules.filter((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.useCasesPipelineIds.find(scopedUseCaseId => scopedUseCaseId === receivedUseCaseId))
 
       return ListOfDependents
    }
@@ -955,11 +955,11 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const dragUseCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedDragUseCaseId) as IUseCase
+      const dragUseCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedDragUseCaseId) as IUseCase
 
       if (!dragUseCase) {throw new Error("Drag use case not found")}
 
-      const dropUseCase = allUseCasesFromAllModules.find(scopedUseCase => scopedUseCase.id === receivedDropUseCaseId) as IUseCase
+      const dropUseCase = allUseCasesFromAllModules.find((scopedUseCase: IUseCase) => scopedUseCase.id === receivedDropUseCaseId) as IUseCase
 
       if (!dropUseCase) {throw new Error("Drop use case not found")}
 
@@ -967,8 +967,8 @@ export class UcfrListsContextInterfaces {
 
       if (!module) {throw new Error("Module not found")}
 
-      const dragUseCaseIndex = module.useCases.findIndex(scopedUseCase => scopedUseCase.id === receivedDragUseCaseId)
-      const dropUseCaseIndex = module.useCases.findIndex(scopedUseCase => scopedUseCase.id === receivedDropUseCaseId)
+      const dragUseCaseIndex = module.useCases.findIndex((scopedUseCase: IUseCase) => scopedUseCase.id === receivedDragUseCaseId)
+      const dropUseCaseIndex = module.useCases.findIndex((scopedUseCase: IUseCase) => scopedUseCase.id === receivedDropUseCaseId)
 
       const newUseCases = [...module.useCases]
       newUseCases.splice(dragUseCaseIndex, 1)
@@ -1061,7 +1061,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.nestedUseCases]
       }, [])
 
-      const nestedUseCase = allNestedUseCasesFromAllModules.find(scopedNestedUseCase => scopedNestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
+      const nestedUseCase = allNestedUseCasesFromAllModules.find((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.id === receivedNestedUseCaseId) as INestedUseCase
 
       if (!nestedUseCase) {
          throw new Error("Nested use case not found")
@@ -1085,7 +1085,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCase.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
@@ -1118,7 +1118,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCase.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.filter(scopedNestedUseCase => scopedNestedUseCase.id !== receivedNestedUseCaseId)
+                  nestedUseCases: scopedModule.nestedUseCases.filter((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.id !== receivedNestedUseCaseId)
                }
             }
             return scopedModule
@@ -1325,7 +1325,7 @@ export class UcfrListsContextInterfaces {
          throw new Error("Functional requirement not found")
       }
 
-      const listOfFunctionalRequirementDependents = allFunctionalRequirementsFromAllModules.filter(scopedFunctionalRequirement => scopedFunctionalRequirement.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
+      const listOfFunctionalRequirementDependents = allFunctionalRequirementsFromAllModules.filter((scopedFunctionalRequirement: IFunctionalRequirement) => scopedFunctionalRequirement.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
 
       return listOfFunctionalRequirementDependents
    }
@@ -1334,7 +1334,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.useCases]
       }, [])
 
-      const listOfUseCaseDependents = allUseCasesFromAllModules.filter(scopedUseCase => scopedUseCase.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
+      const listOfUseCaseDependents = allUseCasesFromAllModules.filter((scopedUseCase: IUseCase) => scopedUseCase.neededFrsToWorkIds.some(frDependency => frDependency === receivedFunctionalRequirementId))
 
       return listOfUseCaseDependents
    }
@@ -1343,7 +1343,7 @@ export class UcfrListsContextInterfaces {
          return [...acc, ...module.nestedUseCases]
       }, [])
 
-      const listOfNestedUseCaseDependents = allNestedUseCasesFromAllModules.filter(scopedNestedUseCase => scopedNestedUseCase.frDependencies.some(frDependency => frDependency === receivedFunctionalRequirementId))
+      const listOfNestedUseCaseDependents = allNestedUseCasesFromAllModules.filter((scopedNestedUseCase: INestedUseCase) => scopedNestedUseCase.neededFrsToWorkIds.some(frDependency => frDependency === receivedFunctionalRequirementId))
 
       return listOfNestedUseCaseDependents
    }
@@ -1381,7 +1381,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -1429,7 +1429,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === useCase.moduleId) {
                return {
                   ...scopedModule,
-                  useCases: scopedModule.useCases.map(scopedUseCase => {
+                  useCases: scopedModule.useCases.map((scopedUseCase: IUseCase) => {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
@@ -1478,7 +1478,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCase.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
@@ -1526,7 +1526,7 @@ export class UcfrListsContextInterfaces {
             if (scopedModule.id === nestedUseCase.moduleId) {
                return {
                   ...scopedModule,
-                  nestedUseCases: scopedModule.nestedUseCases.map(scopedNestedUseCase => {
+                  nestedUseCases: scopedModule.nestedUseCases.map((scopedNestedUseCase: INestedUseCase) => {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
