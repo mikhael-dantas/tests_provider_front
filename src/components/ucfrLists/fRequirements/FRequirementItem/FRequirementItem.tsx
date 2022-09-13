@@ -1,20 +1,9 @@
-
-
-// interface IFunctionalRequirement {
-//    id: string
-//    moduleId: string
-//    tagIds: string[]
-//    name: string
-//    done: boolean
-//    frDependencies: string[]
-// }
-
 import { EditIcon } from "@chakra-ui/icons";
 import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { customTheme } from "../../../../theme";
-import { IFunctionalRequirement, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../../UcfrsContext";
-import FullPopup from "../../../FullPopup";
+import { IFunctionalRequirement } from "../../../../UcfrsContext";
+import TagClickable from "../../../tags/TagClickable";
 import FRequirementModal from "../fRequirementModal/FRequirementModal";
 
 export default function FRequirementItem(
@@ -108,13 +97,12 @@ export default function FRequirementItem(
          borderTop={'1px solid '+customTheme.colors[30]}
          padding={'.3rem'}
          >
-            oie
-            {/* {FRequirementReceived.tagIds.map(tagId => (
-               <fRequirementTag
+            {FRequirementReceived.tagIds.map(tagId => (
+               <TagClickable
                key={tagId}
                tagId={tagId}
                />
-            ))} */}
+            ))}
          </Flex>
       </Flex>
    )
