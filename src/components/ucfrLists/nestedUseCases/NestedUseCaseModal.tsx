@@ -2,12 +2,14 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
 import { customTheme } from '../../../theme'
-import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces } from '../../../UcfrsContext'
+import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces, INestedUseCase } from '../../../UcfrsContext'
 import ConfirmationModal from '../../ConfirmationModal'
 import { ModalInputStyle } from '../../GlobalStyles'
+import FRequirementClickable from '../fRequirements/FRequirementClickable'
 import UseCaseTag from '../useCases/UseCaseTag'
 import NestedUseCaseAddPipelineModal from './NestedUseCaseAddPipelineModal'
 import NestedUseCaseAddTagModal from './NestedUseCaseAddTagModal'
+import AddFRequirementToItModal from './nestedUseCaseModal/fRequirementRelation/AddFRequirementToItModal'
 import NestedUseCasePipelinesList from './NestedUseCasePipelinesList'
 
 
@@ -112,6 +114,29 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
         })
     }
 
+    const removeFRequirementFromNestedUseCaseHandler = (fRequirementId: string) => {
+        ucfrListsInterfaces.removeFunctionalRequirementFromNestedUseCase({
+            nestedUseCaseId: nestedUseCaseIdReceived,
+            functionalRequirementId: fRequirementId
+        })
+        .then(() => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({ status: 'success', text: 'F-Requirement removed from nested use case successfully' }),
+                }
+            ])
+        })
+        .catch((error) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({ status: 'error', text: error.message }),
+                }
+            ])
+        })
+    }
+
 
     useEffect(() => {
         ucfrListsInterfaces.readNestedUseCaseById({nestedUseCaseId: nestedUseCaseIdReceived})
@@ -135,6 +160,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
     const { isOpen: isOpenAddTagModal, onOpen: onOpenAddTagModal, onClose: onCloseAddTagModal } = useDisclosure()
     const { isOpen: isConfirmationModalOpen, onOpen: onConfirmationModalOpen, onClose: onConfirmationModalClose } = useDisclosure()
     const { isOpen: isOpenAddNestedUseCasePipelineModal, onOpen: onOpenAddNestedUseCasePipelineModal, onClose: onCloseAddNestedUseCasePipelineModal } = useDisclosure()
+    const { isOpen: isOpenAddFRequirementToItModal, onOpen: onOpenAddFRequirementToItModal, onClose: onCloseAddFRequirementToItModal } = useDisclosure()
     return (
         <Modal isOpen={isOpenReceived} onClose={onCloseReceived}>
             <ModalOverlay />
@@ -190,7 +216,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                         </Flex>
 
 
-                        <Accordion className={'nestedUseCasePipelinesContainer'} allowMultiple>
+                        <Accordion className={'nestedUseCaseDependenciesContainer'} allowMultiple>
                             <AccordionItem>
                             <h2>
                                 <AccordionButton>
@@ -218,8 +244,18 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                {/* <button className='button' onClick={onOpenAddNeededFrModal}>Add Needed FR</button> */}
-                                lala
+                                <button className='button' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
+                                <AddFRequirementToItModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} nestedUseCaseId={nestedUseCaseIdReceived} />
+
+                                {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.nestedUseCases] }, []).find((nestedUseCase) => nestedUseCase.id === nestedUseCaseIdReceived) as INestedUseCase)
+                                .neededFrsToWorkIds.map((dependencyId) => {
+                                    return (
+                                        <Flex className='FRDependency' key={dependencyId}>
+                                            <FRequirementClickable fRequirementId={dependencyId} />
+                                            <Button colorScheme='red' onClick={() => { removeFRequirementFromNestedUseCaseHandler(dependencyId) }}>X</Button>
+                                        </Flex>
+                                    )
+                                })}
                             </AccordionPanel>
                             </AccordionItem>
                         </Accordion>

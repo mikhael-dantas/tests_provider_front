@@ -1385,7 +1385,7 @@ export class UcfrListsContextInterfaces {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
-                           frDependencies: [...scopedUseCase.neededFrsToWorkIds, receivedFunctionalRequirementId]
+                           neededFrsToWorkIds: [...scopedUseCase.neededFrsToWorkIds, receivedFunctionalRequirementId]
                         }
                      }
                      return scopedUseCase
@@ -1433,7 +1433,7 @@ export class UcfrListsContextInterfaces {
                      if (scopedUseCase.id === receivedUseCaseId) {
                         return {
                            ...scopedUseCase,
-                           frDependencies: scopedUseCase.neededFrsToWorkIds.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
+                           neededFrsToWorkIds: scopedUseCase.neededFrsToWorkIds.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
                         }
                      }
                      return scopedUseCase
@@ -1482,7 +1482,7 @@ export class UcfrListsContextInterfaces {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
-                           frDependencies: [...scopedNestedUseCase.neededFrsToWorkIds, receivedFunctionalRequirementId]
+                           neededFrsToWorkIds: [...scopedNestedUseCase.neededFrsToWorkIds, receivedFunctionalRequirementId]
                         }
                      }
                      return scopedNestedUseCase
@@ -1530,7 +1530,7 @@ export class UcfrListsContextInterfaces {
                      if (scopedNestedUseCase.id === receivedNestedUseCaseId) {
                         return {
                            ...scopedNestedUseCase,
-                           frDependencies: scopedNestedUseCase.neededFrsToWorkIds.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
+                           neededFrsToWorkIds: scopedNestedUseCase.neededFrsToWorkIds.filter(frDependency => frDependency !== receivedFunctionalRequirementId)
                         }
                      }
                      return scopedNestedUseCase
