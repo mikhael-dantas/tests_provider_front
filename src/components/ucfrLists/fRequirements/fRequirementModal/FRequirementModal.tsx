@@ -6,6 +6,8 @@ import { IFunctionalRequirement, UcfrListsContextInterfaces, useUcfrListsContext
 import ConfirmationModal from '../../../ConfirmationModal'
 import { ModalInputStyle } from '../../../GlobalStyles'
 import TagClickable from '../../../tags/TagClickable'
+import FRequirementClickable from '../FRequirementClickable'
+import AddFRequirementToItModal from './fRequirementRelation/AddFRequirementToIt'
 import AddTagToItModal from './tagRelation/AddTagToItModal'
 
 function FRequirementModal({
@@ -82,6 +84,29 @@ function FRequirementModal({
         })
     }
 
+    const removeFRequirementFromFRHandler = (fRequirementId: string) => {
+        ucfrListsInterfaces.removeFunctionalRequirementFromFunctionalRequirement({
+            functionalRequirementReceiverId: fRequirementIdReceived,
+            functionalRequirementId: fRequirementId,
+        })
+        .then(() => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({ status: 'success', text: 'FRequirement removed from FRequirement' }),
+                }
+            ])
+        })
+        .catch((error) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({ status: 'error', text: error.message }),
+                }
+            ])
+        })
+    }
+
 
     const deleteFRequirementHandler = () => {
         ucfrListsInterfaces.removeFunctionalRequirementById({
@@ -127,6 +152,7 @@ function FRequirementModal({
 
     
     const { isOpen: isOpenAddTagToItModal, onOpen: onOpenAddTagToItModal, onClose: onCloseAddTagToItModal } = useDisclosure()
+    const { isOpen: isOpenAddFRequirementToItModal, onOpen: onOpenAddFRequirementToItModal, onClose: onCloseAddFRequirementToItModal } = useDisclosure()
 
     const { isOpen: isConfirmationModalOpen, onOpen: onConfirmationModalOpen, onClose: onConfirmationModalClose } = useDisclosure()
     return (
@@ -197,10 +223,18 @@ function FRequirementModal({
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                {/* <button className='button' onClick={onOpenAddNestedUseCasePipelineModal}>Add Nested Use Case Pipeline</button>
-                                <NestedUseCaseAddPipelineModal isOpen={isOpenAddNestedUseCasePipelineModal} onClose={onCloseAddNestedUseCasePipelineModal} nestedUseCaseId={nestedUseCaseIdReceived} />
+                                <button className='button' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
+                                <AddFRequirementToItModal fRequirementId={fRequirementIdReceived} isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} />
 
-                                <NestedUseCasePipelinesList nestedUseCaseId={nestedUseCaseIdReceived} /> */}
+                                {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.functionalRequirements] }, []).find((fRequirement) => fRequirement.id === fRequirementIdReceived) as IFunctionalRequirement)
+                                .frDependencies.map((dependencyId) => {
+                                    return (
+                                        <Flex className='FRDependency' key={dependencyId}>
+                                            <FRequirementClickable fRequirementId={dependencyId} />
+                                            <Button colorScheme='red' onClick={() => { removeFRequirementFromFRHandler(dependencyId) }}>X</Button>
+                                        </Flex>
+                                    )
+                                })}
                             </AccordionPanel>
                             </AccordionItem>
                         </Accordion>
