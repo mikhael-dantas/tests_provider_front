@@ -1,12 +1,14 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure, Flex, Grid, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box } from '@chakra-ui/react'
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
 import { customTheme } from '../../../theme'
 import { IUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
 import ConfirmationModal from '../../ConfirmationModal'
 import { ModalInputStyle } from '../../GlobalStyles'
+import FRequirementClickable from '../fRequirements/FRequirementClickable'
 import UseCaseAddPipelineModal from './UseCaseAddPipelineModal'
 import UseCaseAddTagModal from './UseCaseAddTagModal'
+import AddFRequirementToItModal from './useCaseModal/fRequirementRelation/AddFRequirementToItModal'
 import UseCasePipelineItem from './UseCasePipelineListItem'
 import UseCaseTag from './UseCaseTag'
 
@@ -100,6 +102,30 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
         })
     }
 
+    const removeFRequirementFromUseCaseHandler = (fRequirementId: string) => {
+        ucfrListsInterfaces.removeFunctionalRequirementFromUseCase({
+            useCaseId: useCaseReceived.id,
+            functionalRequirementId: fRequirementId,
+        })
+        .then(() => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({status: 'success', text: 'Functional requirement removed from use case'}),
+                }
+            ])
+        })
+        .catch((err) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({status: 'error', text: err.message}),
+                }
+            ])
+        })
+    }
+
+
     
 
 
@@ -113,9 +139,8 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
 
     const { isOpen: isOpenAddUseCasePipelineModal, onOpen: onOpenAddUseCasePipelineModal, onClose: onCloseAddUseCasePipelineModal } = useDisclosure()
 
-    const { isOpen: isOpenAddNeededFrModal, onOpen: onOpenAddNeededFrModal, onClose: onCloseAddNeededFrModal } = useDisclosure()
-    
     const { isOpen: isConfirmationModalOpen, onOpen: onConfirmationModalOpen, onClose: onConfirmationModalClose} = useDisclosure()
+    const { isOpen: isOpenAddFRequirementToItModal, onOpen: onOpenAddFRequirementToItModal, onClose: onCloseAddFRequirementToItModal } = useDisclosure()
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -202,8 +227,18 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                <button className='button' onClick={onOpenAddNeededFrModal}>Add Needed FR</button>
-                                lala
+                                <button className='button' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
+                                <AddFRequirementToItModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} useCaseId={useCaseReceived.id} />
+
+                                {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.useCases] }, []).find((scopedUseCase) => scopedUseCase.id === useCaseReceived.id) as IUseCase)
+                                .neededFrsToWorkIds.map((dependencyId) => {
+                                    return (
+                                        <Flex className='FRDependency' key={dependencyId}>
+                                            <FRequirementClickable fRequirementId={dependencyId} />
+                                            <Button colorScheme='red' onClick={() => { removeFRequirementFromUseCaseHandler(dependencyId) }}>X</Button>
+                                        </Flex>
+                                    )
+                                })}
                             </AccordionPanel>
                             </AccordionItem>
                         </Accordion>

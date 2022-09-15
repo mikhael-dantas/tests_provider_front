@@ -2,7 +2,7 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
 import { customTheme } from '../../../theme'
-import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces, INestedUseCase } from '../../../UcfrsContext'
+import { INestedUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
 import ConfirmationModal from '../../ConfirmationModal'
 import { ModalInputStyle } from '../../GlobalStyles'
 import FRequirementClickable from '../fRequirements/FRequirementClickable'
