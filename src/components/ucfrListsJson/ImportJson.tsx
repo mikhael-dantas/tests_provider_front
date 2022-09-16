@@ -18,7 +18,8 @@ function ImportJson() {
             }
 
             setImportJsonError(false)
-        } catch (jsonError) {
+        } catch (err) {
+            console.log(err)
             setImportJsonError(true)
         }
     }

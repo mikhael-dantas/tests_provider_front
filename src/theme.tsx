@@ -39,6 +39,17 @@ export const customTheme = {
     60: '#5f5f5f',
     80: '#2d2d2d',
     95: '#101010',
+    green: {
+      10: '#e3f9e5',
+      20: '#c7f3cb',
+      30: '#a9ecb0',
+      40: '#8de599',
+      50: '#6ddc7f',
+      60: '#4cd467',
+      70: '#2dc84f',
+      80: '#1ab23a',
+      90: '#0a9c26',
+    }
   }
 } as {
   colors: {
@@ -49,5 +60,16 @@ export const customTheme = {
     60: string,
     80: string,
     95: string,
+    green: {
+      10: string,
+      20: string,
+      30: string,
+      40: string,
+      50: string,
+      60: string,
+      70: string,
+      80: string,
+      90: string,
+    }
   }
 }

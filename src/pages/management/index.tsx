@@ -10,6 +10,7 @@ import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirem
 import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
 import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
 import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
+import CopyToClipboard from "../../components/ucfrListsJson/CopyToClipboard";
 import ExportJson from "../../components/ucfrListsJson/ExportJson";
 import ImportJson from "../../components/ucfrListsJson/ImportJson";
 import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
@@ -262,6 +263,7 @@ export default function Index() {
             >
                <ExportJson/>
             </Flex>
+            <CopyToClipboard/>
          </Flex>
 
          <Flex className="blank space at the end"
