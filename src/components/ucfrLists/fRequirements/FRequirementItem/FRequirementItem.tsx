@@ -1,8 +1,9 @@
 import { EditIcon } from "@chakra-ui/icons";
 import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import React from "react";
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../../AlertStackContext";
 import { customTheme } from "../../../../theme";
-import { IFunctionalRequirement } from "../../../../UcfrsContext";
+import { IFunctionalRequirement, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../../UcfrsContext";
 import TagClickable from "../../../tags/TagClickable";
 import FRequirementModal from "../fRequirementModal/FRequirementModal";
 
@@ -22,9 +23,45 @@ export default function FRequirementItem(
       dragDrop: (e: any, id: string) => void,
    }
 ) {
+   // contextManagement SDK
+   const ucfrListsFromContext = useUcfrListsContext()
+   const updateUcfrListsFromContext = useUpdateUcfrListsContext()
+   const ucfrListsInterfaces = new UcfrListsContextInterfaces(
+      ucfrListsFromContext,
+      updateUcfrListsFromContext
+   )
+   const alertStackComponentFromContext = useAlertStackComponentContext()
+   const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
    const completedToggleHandler = () => {
+      ucfrListsInterfaces.updateFunctionalRequirementById({
+         name: FRequirementReceived.name,
+         done: !FRequirementReceived.done,
+         functionalRequirementId: FRequirementReceived.id,
+      })
+      .then(() => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({
+                  status: "success",
+                  text: "Functional requirement updated successfully",
+               })
+            }
+         ])
+      })
+      .catch((error) => {
+         updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+               component: GenerateAlertComponent({
+                  status: "error",
+                  text: error.message,
+               })
+            }
+         ])
+      })
    }
 
 
