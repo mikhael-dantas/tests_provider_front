@@ -56,7 +56,7 @@ export default function AddFRequirementToItModal({ isOpen, onClose, useCaseId: r
                 }
             ])
         })
-    }, [receivedUseCaseId])
+    }, [receivedUseCaseId, isOpen])
 
 
     return (

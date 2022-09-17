@@ -1,10 +1,10 @@
 import React from 'react'
+import { useUcfrListsContext } from '../../UcfrsContext'
 
-// a component that copies the content of a variable to the user's clipboard
-const variable = 'some text'
 export default function CopyToClipboard() { 
+    const ucfrListsFromContext = useUcfrListsContext()
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(variable)
+        navigator.clipboard.writeText(JSON.stringify(ucfrListsFromContext))
     }
     return (
         <button className='button'onClick={copyToClipboard}>Copy to clipboard</button>
