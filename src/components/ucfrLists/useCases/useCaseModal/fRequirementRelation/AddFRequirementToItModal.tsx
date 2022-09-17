@@ -1,7 +1,8 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
+import React, { useEffect } from 'react'
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../../../AlertStackContext'
 import { customTheme } from '../../../../../theme'
-import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../../../UcfrsContext'
+import { IFunctionalRequirement, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../../../UcfrsContext'
 
 export default function AddFRequirementToItModal({ isOpen, onClose, useCaseId: receivedUseCaseId}: { isOpen: boolean, onClose: () => void, useCaseId: string}) {
     // contextManagement SDK
@@ -13,6 +14,7 @@ export default function AddFRequirementToItModal({ isOpen, onClose, useCaseId: r
     )
     const alertStackComponentFromContext = useAlertStackComponentContext()
     const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
+
 
     const addFRequirementToUseCaseHandler = (scopedFRequirementId: string) => {
         ucfrListsInterfaces.addFunctionalRequirementToUseCase({
@@ -39,6 +41,24 @@ export default function AddFRequirementToItModal({ isOpen, onClose, useCaseId: r
         onClose()
     }
 
+    const [listOfDependencies, setListOfDependencies] = React.useState<string[]>([])
+
+    useEffect(() => {
+        ucfrListsInterfaces.readUseCaseById({useCaseId: receivedUseCaseId})
+        .then((useCase) => {
+            setListOfDependencies(useCase.neededFrsToWorkIds)
+        })
+        .catch((error) => {
+            updateAlertStackComponentFromContext([
+                ...alertStackComponentFromContext,
+                {
+                    component: GenerateAlertComponent({ status: 'error', text: error.message })
+                }
+            ])
+        })
+    }, [receivedUseCaseId])
+
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -49,13 +69,16 @@ export default function AddFRequirementToItModal({ isOpen, onClose, useCaseId: r
                     {
                         ucfrListsFromContext.modules.reduce((acc, scopedModule) => {
                             return [ ...acc, ...scopedModule.functionalRequirements ]
-                        }, []).map(scopedFRequirement => {
+                        }, []).map((scopedFRequirement: IFunctionalRequirement) => {
                             return (
                                 <button className='button'
+                                    style={listOfDependencies.includes(scopedFRequirement.id) ? {backgroundColor:  'green'} : {}}
                                     key={scopedFRequirement.id}
                                     onClick={() => {addFRequirementToUseCaseHandler(scopedFRequirement.id)}}
                                 >
-                                    {scopedFRequirement.name}
+                                    <ModuleNameComponent moduleId={scopedFRequirement.moduleId} />
+
+                                    : {scopedFRequirement.name}
                                 </button>
                             )
                         })
@@ -66,5 +89,23 @@ export default function AddFRequirementToItModal({ isOpen, onClose, useCaseId: r
                 </ModalFooter>
             </ModalContent>
         </Modal>
+    )
+}
+
+function ModuleNameComponent({moduleId}: {moduleId: string}) {
+    const ucfrListsFromContext = useUcfrListsContext()
+    const [moduleName, setModuleName] = React.useState('searching...')
+
+    useEffect(() => {
+        const scopedModule = ucfrListsFromContext.modules.find((scopedModule) => scopedModule.id === moduleId)
+        if (scopedModule) {
+            setModuleName(scopedModule.name)
+        }
+    }, [moduleId])
+
+    return (
+        <div>
+            {moduleName}
+        </div>
     )
 }
