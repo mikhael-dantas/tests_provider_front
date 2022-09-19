@@ -1,11 +1,11 @@
-import { EditIcon } from "@chakra-ui/icons";
-import { Flex, Grid, useDisclosure } from "@chakra-ui/react";
-import React from "react";
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../../AlertStackContext";
-import { customTheme } from "../../../../theme";
-import { IFunctionalRequirement, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../../UcfrsContext";
-import TagClickable from "../../../tags/TagClickable";
-import FRequirementModal from "../fRequirementModal/FRequirementModal";
+import { EditIcon } from "@chakra-ui/icons"
+import { useDisclosure, Flex, Grid } from "@chakra-ui/react"
+import TagClickable from "@myComponents/tags/TagClickable"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { IFunctionalRequirement, useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { customTheme } from "@myStyles/GlobalStyles"
+import FRequirementModal from "../fRequirementModal/FRequirementModal"
 
 export default function FRequirementItem(
    {

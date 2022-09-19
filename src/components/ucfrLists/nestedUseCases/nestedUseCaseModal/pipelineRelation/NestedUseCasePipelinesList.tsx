@@ -1,8 +1,6 @@
-import { Flex } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
-import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces, INestedUseCase, useCurrentModuleContext } from '../../../UcfrsContext'
-import NestedUseCasePipelineItem from './NestedUseCasePipelineItem'
+import { Flex } from "@chakra-ui/react"
+import { useUcfrListsContext, INestedUseCase } from "@myContexts/UcfrsContext"
+import NestedUseCasePipelineItem from "./NestedUseCasePipelineItem"
 
 function NestedUseCasePipelinesList({
     nestedUseCaseId: nestedUseCaseIdReceived,

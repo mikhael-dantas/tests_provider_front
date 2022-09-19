@@ -1,26 +1,25 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, Modal, ModalCloseButton, ModalContent, ModalOverlay, useDisclosure } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import React from "react";
-import FullPopup from "../../components/FullPopup";
-import AddModule from "../../components/modules/AddModule";
-import ListModules from "../../components/modules/ListModules";
-import AddTag from "../../components/tags/AddTag";
-import ListTags from "../../components/tags/ListTags";
-import FRequirementList from "../../components/ucfrLists/fRequirements/FRequirementsList";
-import NestedUseCaseList from "../../components/ucfrLists/nestedUseCases/NestedUseCaseList";
-import AddUseCase from "../../components/ucfrLists/useCases/AddUseCase";
-import UseCasesList from "../../components/ucfrLists/useCases/UseCasesList";
-import CopyToClipboard from "../../components/ucfrListsJson/CopyToClipboard";
-import ExportJson from "../../components/ucfrListsJson/ExportJson";
-import ImportJson from "../../components/ucfrListsJson/ImportJson";
-import LoadFromLs from "../../components/ucfrListsJson/LoadFromLs";
-import SaveInLS from "../../components/ucfrListsJson/SaveInLS";
-import { customTheme } from "../../theme";
-import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../UcfrsContext";
+import FullPopup from "@myComponents/FullPopup";
+import CreateModule from "@myComponents/modules/CreateModule";
+import ListModules from "@myComponents/modules/ListModules";
+import CreateTag from "@myComponents/tags/CreateTag";
+import ListTags from "@myComponents/tags/ListTags";
+import FRequirementList from "@myComponents/ucfrLists/fRequirements/FRequirementsList";
+import NestedUseCaseList from "@myComponents/ucfrLists/nestedUseCases/nestedUseCaseList/NestedUseCaseList";
+import CreateUseCase from "@myComponents/ucfrLists/useCases/CreateUseCase";
+import UseCasesList from "@myComponents/ucfrLists/useCases/useCaseList/UseCasesList";
+import CopyToClipboard from "@myComponents/ucfrListsJson/CopyToClipboard";
+import ExportJson from "@myComponents/ucfrListsJson/ExportJson";
+import ImportJson from "@myComponents/ucfrListsJson/ImportJson";
+import LoadFromLs from "@myComponents/ucfrListsJson/LoadFromLs";
+import SaveInLS from "@myComponents/ucfrListsJson/SaveInLS";
+import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../contexts/UcfrsContext";
+import { customTheme } from "@myStyles/GlobalStyles";
 
 
 export default function Index() {
-   console.log("render index");
    const currentModuleFromContext = useCurrentModuleContext()
    const updateCurrentModuleFromContext = useUpdateCurrentModuleContext()
 
@@ -39,33 +38,17 @@ export default function Index() {
    }
 
 
-   const {
-      isOpen: isAddTagOpen,
-      onOpen: onAddTagOpen,
-      onClose: onAddTagClose,
-   } = useDisclosure()
+   const { isOpen: isAddTagOpen, onOpen: onAddTagOpen, onClose: onAddTagClose,} = useDisclosure()
 
-   const {
-      isOpen: isShowTagsOpen,
-      onOpen: onShowTagsOpen,
-      onClose: onShowTagsClose,
-   } = useDisclosure()
+   const {isOpen: isShowTagsOpen, onOpen: onShowTagsOpen, onClose: onShowTagsClose,} = useDisclosure()
 
-   const {
-      isOpen: isAddModuleOpen,
-      onOpen: onAddModuleOpen,
-      onClose: onAddModuleClose,
-   } = useDisclosure()
+   const { isOpen: isAddModuleOpen, onOpen: onAddModuleOpen, onClose: onAddModuleClose, } = useDisclosure()
 
-   const {
-      isOpen: isShowModulesOpen,
-      onOpen: onShowModulesOpen,
-      onClose: onShowModulesClose,
-   } = useDisclosure()
+   const { isOpen: isShowModulesOpen, onOpen: onShowModulesOpen, onClose: onShowModulesClose, } = useDisclosure()
 
 
    return (
-      <Flex className={'container'} 
+      <Flex className={'mainContainer'} 
       position={'relative'} 
       direction={'column'} 
       alignItems={'center'}
@@ -96,6 +79,7 @@ export default function Index() {
             </Flex>
          </Flex>
 
+
          <Accordion className={'ModulesAndTagsAccordionContainer'} defaultIndex={[0]} allowMultiple 
          width={'100%'}
          >
@@ -109,44 +93,37 @@ export default function Index() {
                   </AccordionButton>
                </h1>
                <AccordionPanel pb={4}>
-                  <Grid className={'moduleManagementContainer'} 
-                     templateColumns={'1fr'}
-                     width={'100%'}
-                     backgroundColor={customTheme.colors[30]}
-                     padding={'.2rem'}
-                     height={'3rem'}
+                  <Grid className='ManageModulesContainer' 
+                  width={'100%'}
+                  backgroundColor={customTheme.colors[30]}
+                  gridTemplateColumns={'20fr 1fr 20fr'}
+                  padding={'.2rem'}
+                  height={'3rem'}
                   >
-
-                     <Grid className='ManageModulesContainer' 
-                     gridTemplateColumns={'20fr 1fr 20fr'}
-                     height={'100%'}
+                     <button className="showModulesListButton button"
+                     onClick={() => onShowModulesOpen()}
                      >
-                        <button className="showModulesListButton button"
-                        onClick={() => onShowModulesOpen()}
-                        >
-                           Show all Modules
-                        </button>
-                        <div></div>
-                        <Flex className={'button'} 
-                        onClick={() => onAddModuleOpen()}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        >
-                           <AddIcon height='100%' marginRight={'.5rem'}/>
-                           {'Module'}
-                        </Flex>
+                        Show all Modules
+                     </button>
+                     <div></div>
+                     <Flex className={'button'} 
+                     onClick={() => onAddModuleOpen()}
+                     alignItems={'center'}
+                     justifyContent={'center'}
+                     >
+                        <AddIcon height='100%' marginRight={'.5rem'}/>
+                        {'Module'}
+                     </Flex>
 
-                        <FullPopup isOpen={isShowModulesOpen} onClose={onShowModulesClose}>
-                           <ListModules />
-                        </FullPopup>
+                     <FullPopup isOpen={isShowModulesOpen} onClose={onShowModulesClose}>
+                        <ListModules />
+                     </FullPopup>
 
-                        <FullPopup isOpen={isAddModuleOpen} onClose={onAddModuleClose}>
-                           <AddModule/>
-                        </FullPopup>
-                     </Grid>
-                     
-
+                     <FullPopup isOpen={isAddModuleOpen} onClose={onAddModuleClose}>
+                        <CreateModule/>
+                     </FullPopup>
                   </Grid>
+
 
                   <Grid className={'tagManagementContainer'} 
                      templateColumns={'20fr 1fr 20fr'}
@@ -161,7 +138,7 @@ export default function Index() {
 
                      <div></div>
 
-                     <Flex className='ManageTagsContainer button'
+                     <Flex className='CreateTagContainer button'
                      alignItems={'center'}
                      justifyContent={'center'}
                      onClick={() => onAddTagOpen()}
@@ -170,7 +147,7 @@ export default function Index() {
                         Tag
 
                         <FullPopup isOpen={isAddTagOpen} onClose={onAddTagClose}>
-                           <AddTag/>
+                           <CreateTag/>
                         </FullPopup>
                      </Flex>
 
@@ -182,6 +159,7 @@ export default function Index() {
                </AccordionPanel>
             </AccordionItem>
          </Accordion>
+
 
          <Flex className={'ucfrListsTabsContainer'} 
          display={'flex'} 
@@ -211,6 +189,7 @@ export default function Index() {
             ))}
          </Flex>
 
+
          <Flex className={'ucfrListsContainer'}
             direction={'column'}
             width={'100%'}
@@ -219,7 +198,7 @@ export default function Index() {
             {currentModuleFromContext ? (
                selectedTabToDisplay === EUcfrListsTypes.useCases ? (
                   <>
-                     <AddUseCase/>
+                     <CreateUseCase/>
                      <UseCasesList/>
                   </>
                ) :
@@ -238,6 +217,7 @@ export default function Index() {
             )}
          </Flex>
 
+
          <Flex className={'jsonManagementContainer'}
          direction={'column'}
          marginTop={'3rem'}
@@ -250,21 +230,25 @@ export default function Index() {
             width={'100%'}
             >
                <SaveInLS/>
+               <Flex width={'.5rem'} height='.5rem'/>
                <LoadFromLs/>
             </Flex>
+
             <Flex
             marginTop={'1rem'}
             >
                <ImportJson/>
-
             </Flex>
+
             <Flex className={'jsonManagementImportAndExport'}
             marginTop={'.5rem'}
             >
                <ExportJson/>
             </Flex>
+
             <CopyToClipboard/>
          </Flex>
+
 
          <Flex className="blank space at the end"
          height='5rem'/>

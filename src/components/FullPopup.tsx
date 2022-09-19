@@ -2,7 +2,6 @@
 
 import { Flex, Modal, ModalCloseButton, ModalContent, ModalOverlay } from "@chakra-ui/react"
 import React from "react"
-import { customTheme } from "../theme"
 
 export default function FullPopup({isOpen: isOpenReceived, onClose: onCloseReceived, children}) {
 

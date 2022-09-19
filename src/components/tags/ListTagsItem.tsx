@@ -1,9 +1,9 @@
-import { EditIcon } from '@chakra-ui/icons'
-import { Flex, Grid, useDisclosure } from '@chakra-ui/react'
-import { customTheme } from '../../theme'
-import { ITag } from '../../UcfrsContext'
-import { ModalListItemStyle } from '../GlobalStyles'
-import TagModal from './TagModal'
+import { EditIcon } from "@chakra-ui/icons"
+import { useDisclosure, Flex } from "@chakra-ui/react"
+import { ITag } from "@myContexts/UcfrsContext"
+import { ModalListItemStyle, customTheme } from "@myStyles/GlobalStyles"
+import TagModal from "./TagModal"
+
 
 function ListTagsItem({tag: receivedTag}: {key: string, tag: ITag}) {
     const {isOpen, onOpen, onClose} = useDisclosure()

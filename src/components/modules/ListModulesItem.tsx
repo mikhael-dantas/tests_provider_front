@@ -1,12 +1,11 @@
-import { EditIcon } from '@chakra-ui/icons'
-import { Flex, useDisclosure } from '@chakra-ui/react'
-import { customTheme } from '../../theme'
-import { IModule, useCurrentModuleContext } from '../../UcfrsContext'
-import { ModalListItemStyle } from '../GlobalStyles'
-import ModuleModal from './ModuleModal'
+import { EditIcon } from "@chakra-ui/icons"
+import { useDisclosure, Flex } from "@chakra-ui/react"
+import { IModule } from "@myContexts/UcfrsContext"
+import { ModalListItemStyle, customTheme } from "@myStyles/GlobalStyles"
+import ModuleModal from "./ModuleModal"
+
 
 function ListModulesItem({ module: receivedModule }: { module: IModule}) {
-    const currentModuleFromContext = useCurrentModuleContext()
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 

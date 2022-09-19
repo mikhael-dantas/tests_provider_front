@@ -1,7 +1,8 @@
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../../../AlertStackContext'
-import { customTheme } from '../../../../../theme'
-import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../../../UcfrsContext'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext,  } from "@myContexts/UcfrsContext"
+import { customTheme } from "@myStyles/GlobalStyles"
 
 export default function AddFRequirementToItModal({ isOpen, onClose, fRequirementId: receivedFRequirementId}: { isOpen: boolean, onClose: () => void, fRequirementId: string}) {
     // contextManagement SDK

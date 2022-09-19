@@ -1,14 +1,15 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../../AlertStackContext'
-import { customTheme } from '../../../../theme'
-import { IFunctionalRequirement, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../../UcfrsContext'
-import ConfirmationModal from '../../../ConfirmationModal'
-import { ModalInputStyle } from '../../../GlobalStyles'
-import TagClickable from '../../../tags/TagClickable'
-import FRequirementClickable from '../FRequirementClickable'
-import AddFRequirementToItModal from './fRequirementRelation/AddFRequirementToIt'
-import AddTagToItModal from './tagRelation/AddTagToItModal'
+import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Flex, Grid, Button, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, ModalFooter, Box } from "@chakra-ui/react"
+import ConfirmationModal from "@myComponents/ConfirmationModal"
+import TagClickable from "@myComponents/tags/TagClickable"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext, IFunctionalRequirement } from "@myContexts/UcfrsContext"
+import { customTheme, ModalInputStyle } from "@myStyles/GlobalStyles"
+import React, { useEffect } from "react"
+import FRequirementClickable from "../FRequirementClickable"
+import AddFRequirementToItModal from "./fRequirementRelation/AddFRequirementToIt"
+import AddTagToItModal from "./tagRelation/AddTagToItModal"
+
 
 function FRequirementModal({
     fRequirementId: fRequirementIdReceived,

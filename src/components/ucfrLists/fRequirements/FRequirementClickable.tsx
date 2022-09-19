@@ -1,9 +1,11 @@
-import { Flex, useDisclosure } from "@chakra-ui/react"
+import { useDisclosure, Flex } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { customTheme } from "@myStyles/GlobalStyles"
 import React, { useEffect } from "react"
-import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "../../../AlertStackContext"
-import { customTheme } from "../../../theme"
-import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext"
 import FRequirementModal from "./fRequirementModal/FRequirementModal"
+
 
 
 export default function FRequirementClickable({fRequirementId: fRequirementIdReceived}: {fRequirementId: string}) {

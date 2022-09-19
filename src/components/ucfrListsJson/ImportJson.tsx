@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react'
+import { useUpdateUcfrListsContext } from '@myContexts/UcfrsContext'
 import React from 'react'
-import { useUpdateUcfrListsContext } from '../../UcfrsContext'
 
 function ImportJson() {
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()

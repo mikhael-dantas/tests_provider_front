@@ -1,5 +1,5 @@
-import React from 'react'
-import { useUcfrListsContext } from '../../UcfrsContext'
+import { useUcfrListsContext } from "@myContexts/UcfrsContext"
+
 
 export default function CopyToClipboard() { 
     const ucfrListsFromContext = useUcfrListsContext()

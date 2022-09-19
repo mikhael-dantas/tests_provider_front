@@ -1,12 +1,19 @@
 import { useDisclosure, Flex } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
 import React, { useEffect } from "react"
-import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "../../AlertStackContext"
-import { customTheme } from "../../theme"
-import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces } from "../../UcfrsContext"
 import TagModal from "./TagModal"
 
 
-function TagClickable({tagId: tagIdReceived}: {tagId: string}) {
+
+function TagClickable({
+    tagId: tagIdReceived,
+    style: styleReceived
+}: {
+    tagId: string
+    style?: object
+}) {
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
@@ -43,8 +50,7 @@ function TagClickable({tagId: tagIdReceived}: {tagId: string}) {
 
     return (
         <Flex className={'useCaseItemTag'}
-        backgroundColor={customTheme.colors[45]}
-        padding={'.3rem'}
+        style={styleReceived ? styleReceived : {}}
         onClick={onTagModalOpen}
         cursor={'pointer'}
         >

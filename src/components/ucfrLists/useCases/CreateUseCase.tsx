@@ -1,10 +1,10 @@
 import { Grid } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext, useCurrentModuleContext } from "@myContexts/UcfrsContext"
 import React from "react"
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext"
-import { UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext"
-import { GenerateUUID } from "../../../utils/UUIDGenerator"
 
-export default function AddUseCase() {
+export default function CreateUseCase() {
    // contextManagement SDK
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()

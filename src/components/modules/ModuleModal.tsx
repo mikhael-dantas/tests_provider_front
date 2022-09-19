@@ -1,10 +1,11 @@
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../AlertStackContext'
-import { customTheme } from '../../theme'
-import { IModule, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../UcfrsContext'
-import ConfirmationModal from '../ConfirmationModal'
-import { ModalInputStyle } from '../GlobalStyles'
+import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from "@chakra-ui/react"
+import ConfirmationModal from "@myComponents/ConfirmationModal"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { customTheme, ModalInputStyle } from "@myStyles/GlobalStyles"
+import React, { useEffect } from "react"
+
 
 function ModuleModal({isOpen, onClose, moduleId: receivedModuleId}: 
     {isOpen: boolean, onClose: () => void, moduleId: string}

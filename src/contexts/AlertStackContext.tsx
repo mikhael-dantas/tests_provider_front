@@ -1,6 +1,6 @@
 import { Alert, AlertIcon, Stack } from "@chakra-ui/react";
+import { GenerateUUID } from "@myUtils/UUIDGenerator";
 import React from "react";
-import { GenerateUUID } from "./utils/UUIDGenerator";
 
 export interface IAlertStackComponentArrayItem {
    component: JSX.Element;

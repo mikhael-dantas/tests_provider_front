@@ -1,10 +1,9 @@
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, theme } from "@chakra-ui/react"
+import { AlertStackProvider } from "@myContexts/AlertStackContext"
+import { UcfrsProvider } from "@myContexts/UcfrsContext"
+import { AppProps } from "next/app"
 
-import theme from '../theme'
-import { AppProps } from 'next/app'
-import './style.css';
-import { UcfrsProvider } from '../UcfrsContext';
-import { AlertStackProvider } from '../AlertStackContext';
+import './styles.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

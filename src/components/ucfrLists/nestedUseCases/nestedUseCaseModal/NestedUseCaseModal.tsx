@@ -1,17 +1,16 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Flex, Grid, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
-import { customTheme } from '../../../theme'
-import { INestedUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
-import ConfirmationModal from '../../ConfirmationModal'
-import { ModalInputStyle } from '../../GlobalStyles'
-import FRequirementClickable from '../fRequirements/FRequirementClickable'
-import UseCaseTag from '../useCases/UseCaseTag'
-import NestedUseCaseAddPipelineModal from './NestedUseCaseAddPipelineModal'
-import NestedUseCaseAddTagModal from './NestedUseCaseAddTagModal'
-import AddFRequirementToItModal from './nestedUseCaseModal/fRequirementRelation/AddFRequirementToItModal'
-import NestedUseCasePipelinesList from './NestedUseCasePipelinesList'
-
+import { useDisclosure, Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Flex, Grid, Button, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, ModalFooter } from "@chakra-ui/react"
+import ConfirmationModal from "@myComponents/ConfirmationModal"
+import TagClickable from "@myComponents/tags/TagClickable"
+import FRequirementClickable from "@myComponents/ucfrLists/fRequirements/FRequirementClickable"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext,  INestedUseCase } from "@myContexts/UcfrsContext"
+import { customTheme, ModalInputStyle } from "@myStyles/GlobalStyles"
+import React, { useEffect } from "react"
+import AddFRequirementToItModal from "./fRequirementRelation/AddFRequirementToItModal"
+import NestedUseCaseAddPipelineModal from "./pipelineRelation/NestedUseCaseAddPipelineModal"
+import NestedUseCasePipelinesList from "./pipelineRelation/NestedUseCasePipelinesList"
+import NestedUseCaseAddTagModal from "./tagRelation/NestedUseCaseAddTagModal"
 
 
 function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: isOpenReceived, onClose: onCloseReceived}: {nestedUseCaseId: string, isOpen: boolean, onClose: () => void}) {
@@ -205,7 +204,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                                         <Flex
                                         key={tagId}
                                         >
-                                            <UseCaseTag
+                                            <TagClickable
                                             tagId={tagId}
                                             />
                                             <Button colorScheme='red' onClick={() => {removeTagFromNestedUseCaseHandler(tagId)}}>X</Button>

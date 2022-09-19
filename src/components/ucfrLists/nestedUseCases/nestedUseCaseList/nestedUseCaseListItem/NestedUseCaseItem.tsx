@@ -1,15 +1,29 @@
 import { EditIcon } from "@chakra-ui/icons"
-import { Flex, Grid, useDisclosure } from "@chakra-ui/react"
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext"
-import { customTheme } from "../../../theme"
-import { IUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext"
-import UseCaseModal from "./UseCaseModal"
-import UseCaseTag from "./UseCaseTag"
+import { useDisclosure, Flex, Grid } from "@chakra-ui/react"
+import TagClickable from "@myComponents/tags/TagClickable"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { INestedUseCase, useUcfrListsContext, useUpdateUcfrListsContext,  } from "@myContexts/UcfrsContext"
+import { customTheme } from "@myStyles/GlobalStyles"
+import NestedUseCaseModal from "../../nestedUseCaseModal/NestedUseCaseModal"
 
-export default function UseCaseItem(
-{useCase: useCaseReceived}: {
-   useCase: IUseCase
-}) {
+
+export default function NestedUseCaseItem(
+   {
+      nestedUseCase: nestedUseCaseReceived,
+      dragStart,
+      dragEnd,
+      dragOver,
+      dragDrop,
+   }:
+   {
+      nestedUseCase: INestedUseCase,
+      dragStart: any,
+      dragEnd: any,
+      dragOver: any,
+      dragDrop: any,
+   }
+) {
    // contextManagement SDK
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()
@@ -22,10 +36,10 @@ export default function UseCaseItem(
 
 
    const completedToggleHandler = () => {
-      ucfrListsInterfaces.updateUseCaseById({
-         useCaseId: useCaseReceived.id,
-         name: useCaseReceived.name,
-         completed: !useCaseReceived.completed,
+      ucfrListsInterfaces.updateNestedUseCaseById({
+         nestedUseCaseId: nestedUseCaseReceived.id,
+         completed: !nestedUseCaseReceived.completed,
+         name: nestedUseCaseReceived.name,
       })
       .then(() => {
          updateAlertStackComponentFromContext([
@@ -33,7 +47,7 @@ export default function UseCaseItem(
             {
                component: GenerateAlertComponent({
                   status: "success",
-                  text: "Use case updated successfully",
+                  text: "nested use case updated"
                })
             }
          ])
@@ -44,7 +58,7 @@ export default function UseCaseItem(
             {
                component: GenerateAlertComponent({
                   status: "error",
-                  text: error.message,
+                  text: error.message
                })
             }
          ])
@@ -52,14 +66,19 @@ export default function UseCaseItem(
    }
 
    const { isOpen, onOpen, onClose } = useDisclosure()
-
+   
    return (
-
-      <Flex className={'useCasesListItemContainer'}
+      <Flex className={'nestedUseCasesListItemContainer'}
          cursor={'pointer'}
          direction={'column'}
+         margin={'0.7rem 0'}
+         draggable={true}
+         onDragStart={(e) => dragStart(e, nestedUseCaseReceived)}
+         onDragEnd={dragEnd}
+         onDragOver={dragOver}
+         onDrop={(e) => dragDrop(e, nestedUseCaseReceived.id)}
       >
-         <Grid className={'useCasesListItem'}
+         <Grid className={'nestedUseCasesListItem'}
          templateColumns={'7fr 1fr'}
          alignItems={'center'}
          width={'100%'}
@@ -68,24 +87,24 @@ export default function UseCaseItem(
          padding={'.4rem'}
          borderRadius={'.3rem'}
          boxShadow={'0px 0px 5px rgba(0,0,0,0.5)'}
-         backgroundColor={useCaseReceived.completed ? customTheme.colors.green[80] : customTheme.colors[60]}
+         backgroundColor={customTheme.colors[60]}
          >
 
-            <Flex className="useCaseContent"
+            <Flex className="nestedUseCaseContent"
             direction={'column'}
             >
-               <Flex className={'useCaseItemId'}
+               <Flex className={'nestedUseCaseItemId'}
                fontSize={'.6rem'}
                >
-                  {useCaseReceived.id}
+                  {nestedUseCaseReceived.id}
                </Flex>
-               <Grid className={'useCaseInfo'} 
+               <Grid className={'nestedUseCaseInfo'} 
                templateColumns='1fr 10fr 1fr' 
                alignItems={'center'}
                marginTop={'.4rem'}
                >
-                  <input width={'10%'}type='checkbox' checked={useCaseReceived.completed} onChange={completedToggleHandler} />
-                  <Flex maxWidth={'90%'} fontSize={'1.2rem'}>{useCaseReceived.name}</Flex>
+                  <input width={'10%'}type='checkbox' checked={nestedUseCaseReceived.completed} onChange={completedToggleHandler} />
+                  <Flex maxWidth={'90%'} fontSize={'1.2rem'}>{nestedUseCaseReceived.name}</Flex>
                </Grid>
             </Flex>
 
@@ -94,16 +113,18 @@ export default function UseCaseItem(
             alignItems={'center'}
             justifyContent={'center'}
             >
-               <EditIcon className="editUseCase"
+               <EditIcon className="editNestedUseCase"
                width={'60%'}
                height={'60%'}
                cursor={'pointer'}
                onClick={onOpen}/>
 
-               <UseCaseModal isOpen={isOpen} onClose={onClose} useCase={useCaseReceived} />
+               <NestedUseCaseModal isOpen={isOpen} onClose={onClose} nestedUseCaseId={nestedUseCaseReceived.id} />
             </Flex>
          </Grid>
-         <Flex className={'useCaseTags'}
+
+
+         <Flex className={'nestedUseCaseTags'}
          width={'95%'}
          margin={'0 auto'}
          backgroundColor={customTheme.colors[60]}
@@ -114,8 +135,8 @@ export default function UseCaseItem(
          borderTop={'1px solid '+customTheme.colors[30]}
          padding={'.3rem'}
          >
-            {useCaseReceived.tagIds.map(tagId => (
-               <UseCaseTag
+            {nestedUseCaseReceived.tagIds.map(tagId => (
+               <TagClickable
                key={tagId}
                tagId={tagId}
                />

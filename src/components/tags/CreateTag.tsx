@@ -1,11 +1,13 @@
 import { Flex } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { AddFormContainerStyle, AddInputStyle } from "@myStyles/GlobalStyles"
 import React from "react"
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../AlertStackContext"
-import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from "../../UcfrsContext"
-import { AddFormContainerStyle, AddInputStyle } from "../GlobalStyles"
 
 
-export default function AddTag() {
+
+export default function CreateTag() {
    // contextManagement SDK
    const ucfrListsFromContext = useUcfrListsContext()
    const updateUcfrListsFromContext = useUpdateUcfrListsContext()

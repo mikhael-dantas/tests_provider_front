@@ -1,8 +1,8 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from '@chakra-ui/react'
-import React from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../../../AlertStackContext'
-import { customTheme } from '../../../../../theme'
-import { useUcfrListsContext, useUpdateUcfrListsContext, UcfrListsContextInterfaces } from '../../../../../UcfrsContext'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext, } from "@myContexts/UcfrsContext"
+import { customTheme } from "@myStyles/GlobalStyles"
 
 function AddTagToItModal({ isOpen, onClose, fRequirementId: receivedFRequirementId}: { isOpen: boolean, onClose: () => void, fRequirementId: string}) {
     // contextManagement SDK

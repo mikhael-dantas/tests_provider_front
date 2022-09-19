@@ -1,5 +1,5 @@
+import { useUcfrListsContext } from '@myContexts/UcfrsContext'
 import React from 'react'
-import { useUcfrListsContext } from '../../UcfrsContext'
 
 function SaveInLS() {
     const ucfrListsFromContext = useUcfrListsContext()

@@ -1,11 +1,13 @@
-import { Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
-import React from "react";
-import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
-import { customTheme } from "../../../theme";
-import { IUseCase, UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
-import AddNestedUseCase from "./AddNestedUseCase";
-import NestedUseCaseItem from "./NestedUseCaseItem";
-import SelectUseCaseModal from "./SelectUseCaseModal";
+import { useDisclosure, Flex, Grid } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext,  useCurrentModuleContext, IUseCase } from "@myContexts/UcfrsContext"
+import { customTheme } from "@myStyles/GlobalStyles"
+import React from "react"
+import CreateNestedUseCase from "../CreateNestedUseCase"
+import SelectUseCaseModal from "../SelectUseCaseModal"
+import NestedUseCaseItem from "./nestedUseCaseListItem/NestedUseCaseItem"
+
 
 
 export default function NestedUseCaseList() {
@@ -96,7 +98,7 @@ export default function NestedUseCaseList() {
          {selectedUseCaseToNestFrom ? 
             <>
                <Flex className={'nestedUseCaseAddContainer'} direction={'column'}>
-                  <AddNestedUseCase selectedUseCase={selectedUseCaseToNestFrom} />
+                  <CreateNestedUseCase selectedUseCase={selectedUseCaseToNestFrom} />
                </Flex>
 
                <Flex className={'nestedUseCasesListContainer'}

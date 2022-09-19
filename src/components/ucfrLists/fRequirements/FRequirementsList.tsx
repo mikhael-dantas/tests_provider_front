@@ -1,8 +1,10 @@
-import { Flex, Grid } from "@chakra-ui/react";
-import React from "react";
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
-import { UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
-import FRequirementItem from "./FRequirementItem/FRequirementItem";
+import { Flex, Grid } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { useUcfrListsContext, useUpdateUcfrListsContext, useCurrentModuleContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import React from "react"
+import FRequirementItem from "./FRequirementItem/FRequirementItem"
+
 
 export default function FRequirementList() {
    // contextManagement SDK

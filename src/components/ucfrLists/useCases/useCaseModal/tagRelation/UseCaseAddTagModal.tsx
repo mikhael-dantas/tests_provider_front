@@ -1,10 +1,10 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from '@chakra-ui/react'
-import React from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
-import { customTheme } from '../../../theme'
-import { UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext,  } from "@myContexts/UcfrsContext"
+import { customTheme } from "@myStyles/GlobalStyles"
 
-export default function NestedUseCaseAddTagModal({ isOpen, onClose, nestedUseCaseId: receivedNestedUseCaseId}: { isOpen: boolean, onClose: () => void, nestedUseCaseId: string}) {
+export default function UseCaseAddTagModal({ isOpen, onClose, useCaseId: receivedUseCaseId}: { isOpen: boolean, onClose: () => void, useCaseId: string}) {
 
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
@@ -17,9 +17,9 @@ export default function NestedUseCaseAddTagModal({ isOpen, onClose, nestedUseCas
     const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
     const addTagToUseCaseHandler = (scopedTagId: string) => {
-        ucfrListsInterfaces.addTagToNestedUseCaseById({
+        ucfrListsInterfaces.addTagToUseCaseById({
             tagId: scopedTagId,
-            nestedUseCaseId: receivedNestedUseCaseId,
+            useCaseId: receivedUseCaseId,
         })
         .then(() => {
             updateAlertStackComponentFromContext([

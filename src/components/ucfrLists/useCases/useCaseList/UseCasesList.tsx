@@ -1,8 +1,9 @@
-import { Flex } from "@chakra-ui/react";
-import React from "react";
-import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "../../../AlertStackContext";
-import { UcfrListsContextInterfaces, useCurrentModuleContext, useUcfrListsContext, useUpdateUcfrListsContext } from "../../../UcfrsContext";
-import UseCaseItem from "./UseCaseItem";
+import { Flex } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { useUcfrListsContext, useUpdateUcfrListsContext, useCurrentModuleContext } from "@myContexts/UcfrsContext"
+import React from "react"
+import UseCaseItem from "./useCaseListItem/UseCaseItem"
 
 
 export default function UseCasesList() {

@@ -1,10 +1,11 @@
-import { Flex } from '@chakra-ui/react'
-import React from 'react'
-import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '../../../AlertStackContext'
-import { IUseCase, UcfrListsContextInterfaces, useUcfrListsContext, useUpdateUcfrListsContext } from '../../../UcfrsContext'
+import { Flex } from "@chakra-ui/react"
+import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { IUseCase, useUcfrListsContext, useUpdateUcfrListsContext, } from "@myContexts/UcfrsContext"
+import React from "react"
 
 
-function AddNestedUseCase({selectedUseCase}:{selectedUseCase: IUseCase}) {
+export default function CreateNestedUseCase({selectedUseCase}:{selectedUseCase: IUseCase}) {
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
@@ -56,5 +57,3 @@ function AddNestedUseCase({selectedUseCase}:{selectedUseCase: IUseCase}) {
         </Flex>
     )
 }
-
-export default AddNestedUseCase

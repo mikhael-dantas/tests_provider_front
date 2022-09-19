@@ -1,5 +1,5 @@
+import { useUpdateUcfrListsContext, IUcfrLists } from '@myContexts/UcfrsContext'
 import React from 'react'
-import { IUcfrLists, useUpdateUcfrListsContext } from '../../UcfrsContext'
 
 function LoadFromLs() {
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
