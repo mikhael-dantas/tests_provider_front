@@ -3,7 +3,7 @@ import { AlertStackProvider } from "@myContexts/AlertStackContext"
 import { UcfrsProvider } from "@myContexts/UcfrsContext"
 import { AppProps } from "next/app"
 
-import './styles.css'
+import '../styles/Global.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
