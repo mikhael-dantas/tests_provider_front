@@ -1538,4 +1538,67 @@ export class UcfrListsContextInterfaces {
             })
         })
     }
+
+
+    async searchSubstring({ 
+            substring, 
+            searchIn = { functionalRequirements: true, useCases: true, nestedUseCases: true} 
+        }: { 
+            substring: string, 
+            searchIn?: {
+                functionalRequirements: boolean,
+                useCases: boolean,
+                nestedUseCases: boolean,
+            },
+        }): Promise<{
+            functionalRequirements: IFunctionalRequirement[],
+            useCases: IUseCase[],
+            nestedUseCases: INestedUseCase[],
+        }> {
+
+        const allFunctionalRequirementsFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+            return [...acc, ...module.functionalRequirements]
+        }, [])
+
+        const allUseCasesFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
+            return [...acc, ...module.useCases]
+        }, [])
+
+        const allNestedUseCasesFromAllUseCases = this.ucfrLists.modules.reduce((acc, module) => {
+            return [...acc, ...module.nestedUseCases]
+        }, [])
+
+        let useCasesFiltered = []
+        let nestedUseCasesFiltered = []
+        let functionalRequirementsFiltered = []
+
+        if (searchIn.functionalRequirements) {
+            functionalRequirementsFiltered.push(...allFunctionalRequirementsFromAllModules)
+            functionalRequirementsFiltered = functionalRequirementsFiltered.filter((item: IFunctionalRequirement) => {
+                return !!(item.name.toLowerCase().match(substring.toLowerCase()))
+            })
+        }
+
+        if (searchIn.useCases) {
+            useCasesFiltered.push(...allUseCasesFromAllModules)
+            useCasesFiltered = useCasesFiltered.filter((item: IUseCase) => {
+                return !!(item.name.toLowerCase().match(substring.toLowerCase()))
+            })
+        }
+
+        if (searchIn.nestedUseCases) {
+            nestedUseCasesFiltered.push(...allNestedUseCasesFromAllUseCases)
+            nestedUseCasesFiltered = nestedUseCasesFiltered.filter((item: INestedUseCase) => {
+                return !!(item.name.toLowerCase().match(substring.toLowerCase()))
+            })
+        }
+
+
+        return {
+            functionalRequirements: functionalRequirementsFiltered,
+            useCases: useCasesFiltered,
+            nestedUseCases: nestedUseCasesFiltered,
+        }
+    }
+
 }

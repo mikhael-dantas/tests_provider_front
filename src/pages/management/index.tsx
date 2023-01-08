@@ -17,6 +17,7 @@ import LoadFromLs from "@myComponents/ucfrListsJson/LoadFromLs";
 import SaveInLS from "@myComponents/ucfrListsJson/SaveInLS";
 import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../contexts/UcfrsContext";
 import { customTheme } from "@myStyles/GlobalStyles";
+import SearchSubstring from "@myComponents/filters/SearchSubstring";
 
 
 export default function Index() {
@@ -56,6 +57,7 @@ export default function Index() {
       backgroundColor={customTheme.colors[10]} 
       color={customTheme.colors[10]}
       >
+         <SearchSubstring/>
          <Flex className='CurrentModuleNameContainer'
          width={'100%'}
          height={'4rem'}
