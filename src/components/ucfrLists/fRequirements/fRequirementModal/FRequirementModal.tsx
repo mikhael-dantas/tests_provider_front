@@ -12,11 +12,11 @@ import AddTagToItModal from "./tagRelation/AddTagToItModal"
 
 
 function FRequirementModal({
-    fRequirementId: fRequirementIdReceived,
+    fRequirement: fRequirementReceived,
     isOpen: isOpenReceived,
     onClose: onCloseReceived,
 }: {
-    fRequirementId: string,
+    fRequirement: IFunctionalRequirement,
     isOpen: boolean,
     onClose: () => void,
 }) {
@@ -32,7 +32,7 @@ function FRequirementModal({
     const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
-    const [editFRequirementNameInput, setEditFRequirementNameInput] = React.useState('')
+    const [editFRequirementNameInput, setEditFRequirementNameInput] = React.useState(fRequirementReceived.name)
     
     const handleEditFRequirementNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEditFRequirementNameInput(event.target.value)
@@ -40,8 +40,8 @@ function FRequirementModal({
 
     const saveFRequirementNameHandler = () => {
         ucfrListsInterfaces.updateFunctionalRequirementById({
-            functionalRequirementId: fRequirementIdReceived,
-            done: false,
+            functionalRequirementId: fRequirementReceived.id,
+            done: fRequirementReceived.done,
             name: editFRequirementNameInput,
         })
         .then(() => {
@@ -64,7 +64,7 @@ function FRequirementModal({
 
     const removeTagFromFRHandler = (tagId: string) => {
         ucfrListsInterfaces.removeTagFromFunctionalRequirementById({
-            functionalRequirementId: fRequirementIdReceived,
+            functionalRequirementId: fRequirementReceived.id,
             tagId: tagId,
         })
         .then(() => {
@@ -87,7 +87,7 @@ function FRequirementModal({
 
     const removeFRequirementFromFRHandler = (fRequirementId: string) => {
         ucfrListsInterfaces.removeFunctionalRequirementFromFunctionalRequirement({
-            functionalRequirementReceiverId: fRequirementIdReceived,
+            functionalRequirementReceiverId: fRequirementReceived.id,
             functionalRequirementId: fRequirementId,
         })
         .then(() => {
@@ -111,7 +111,7 @@ function FRequirementModal({
 
     const deleteFRequirementHandler = () => {
         ucfrListsInterfaces.removeFunctionalRequirementById({
-            functionalRequirementId: fRequirementIdReceived,
+            functionalRequirementId: fRequirementReceived.id,
         })
         .then(() => {
             updateAlertStackComponentFromContext([
@@ -135,7 +135,7 @@ function FRequirementModal({
     useEffect(() => {
         if (isOpenReceived) {
             ucfrListsInterfaces.readFunctionalRequirementById({
-                functionalRequirementId: fRequirementIdReceived,
+                functionalRequirementId: fRequirementReceived.id,
             })
             .then((fRequirement) => {
                 setEditFRequirementNameInput(fRequirement.name)
@@ -181,7 +181,7 @@ function FRequirementModal({
                             <Flex className='AddTagContainer'>
                                 Tags:
                                 <button className='button' onClick={onOpenAddTagToItModal}>+</button>
-                                <AddTagToItModal isOpen={isOpenAddTagToItModal} onClose={onCloseAddTagToItModal} fRequirementId={fRequirementIdReceived} />
+                                <AddTagToItModal isOpen={isOpenAddTagToItModal} onClose={onCloseAddTagToItModal} fRequirementId={fRequirementReceived.id} />
                             </Flex>
                             <Flex className={'FRequirementTags'}
                             width={'95%'}
@@ -193,9 +193,7 @@ function FRequirementModal({
                             padding={'.3rem'}
                             color={customTheme.colors[10]}
                             >
-                                {(ucfrListsFromContext.modules.reduce((acc, module) => {
-                                    return [...acc, ...module.functionalRequirements]
-                                }, []).find((fRequirement) => fRequirement.id === fRequirementIdReceived) as IFunctionalRequirement)?.tagIds.map((scopedTagId) => {
+                                {fRequirementReceived.tagIds.map((scopedTagId) => {
                                     return (
                                         <Flex className='tag'
                                         key={scopedTagId}
@@ -225,16 +223,19 @@ function FRequirementModal({
                             </h2>
                             <AccordionPanel pb={4}>
                                 <button className='button' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
-                                <AddFRequirementToItModal fRequirementId={fRequirementIdReceived} isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} />
+                                <AddFRequirementToItModal fRequirementId={fRequirementReceived.id} isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} />
 
-                                {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.functionalRequirements] }, []).find((fRequirement) => fRequirement.id === fRequirementIdReceived) as IFunctionalRequirement)
-                                .frDependencies.map((dependencyId) => {
-                                    return (
-                                        <Flex className='FRDependency' key={dependencyId}>
-                                            <FRequirementClickable fRequirementId={dependencyId} />
+                                {fRequirementReceived.frDependencies.map((dependencyId) => {
+                                    const fRequirementToReturn = ucfrListsFromContext.modules.reduce
+                                    ((acc, module) => { return acc.concat(module.functionalRequirements) }, []).find
+                                    ((fRequirementScoped) => { return fRequirementScoped.id === dependencyId })
+
+                                    return fRequirementToReturn ? (
+                                        <Flex className='FRDependency' key={fRequirementToReturn.id}>
+                                            <FRequirementClickable fRequirement={fRequirementToReturn} />
                                             <Button colorScheme='red' onClick={() => { removeFRequirementFromFRHandler(dependencyId) }}>X</Button>
                                         </Flex>
-                                    )
+                                    ) : null
                                 })}
                             </AccordionPanel>
                             </AccordionItem>
