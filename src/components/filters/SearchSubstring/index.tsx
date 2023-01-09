@@ -78,7 +78,7 @@ const SearchSubstring: React.FC = () => {
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
-    return (
+    return ( 
         <>
         <div className='search-toggle-icon
         absolute top-0 right-0 p-2 cursor-pointer
@@ -108,10 +108,14 @@ const SearchSubstring: React.FC = () => {
                             {FRsFilteredBySubstring.map((FR) => {
                                 return (
                                     <li key={FR.id} className='search-substring-results__functional-requirements__list__item bg-blue-200 mt-3 p-2'>
-                                        <div className='search-substring-results__functional-requirements__list__item__id text-[.8rem] font-semibold'>
-                                            {FR.id}
-                                        </div>
-                                        <FRequirementClickable fRequirementId={FR.id} key={FR.id} />
+                                        <FRequirementClickable fRequirement={FR} key={FR.id}>
+                                            <div className='search-substring-results__functional-requirements__list__item__id text-[.8rem] font-semibold'>
+                                                {FR.id}
+                                            </div>
+                                            <div className='search-substring-results__functional-requirements__list__item__title text-[.8rem] font-semibold'>
+                                                {FR.name}
+                                            </div>
+                                        </FRequirementClickable>
                                     </li>
                                 )
                             })}
