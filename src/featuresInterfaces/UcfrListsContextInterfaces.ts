@@ -1540,9 +1540,12 @@ export class UcfrListsContextInterfaces {
     }
 
 
-    async searchSubstring({ 
+    async searchSubstringAndFilter({ 
             substring, 
-            searchIn = { functionalRequirements: true, useCases: true, nestedUseCases: true} 
+            searchIn = { functionalRequirements: true, useCases: true, nestedUseCases: true},
+            tagIds = [],
+            functionalRequirementIds = [],
+            useCaseIds = [],
         }: { 
             substring: string, 
             searchIn?: {
@@ -1550,6 +1553,9 @@ export class UcfrListsContextInterfaces {
                 useCases: boolean,
                 nestedUseCases: boolean,
             },
+            tagIds?: string[],
+            functionalRequirementIds?: string[],
+            useCaseIds?: string[],
         }): Promise<{
             functionalRequirements: IFunctionalRequirement[],
             useCases: IUseCase[],
@@ -1575,21 +1581,54 @@ export class UcfrListsContextInterfaces {
         if (searchIn.functionalRequirements) {
             functionalRequirementsFiltered.push(...allFunctionalRequirementsFromAllModules)
             functionalRequirementsFiltered = functionalRequirementsFiltered.filter((item: IFunctionalRequirement) => {
-                return !!(item.name.toLowerCase().match(substring.toLowerCase()))
+                const substringFilterBoolean = 
+                !!(item.name.toLowerCase().match(substring.toLowerCase()))
+
+                const tagFilterBoolean = 
+                tagIds.length === 0 || item.tagIds.some(tagId => tagIds.includes(tagId))
+
+                const functionalRequirementFilterBoolean = 
+                functionalRequirementIds.length === 0 || item.frDependencies.some(frDependency => functionalRequirementIds.includes(frDependency))
+
+                return substringFilterBoolean && tagFilterBoolean && functionalRequirementFilterBoolean
             })
         }
 
         if (searchIn.useCases) {
             useCasesFiltered.push(...allUseCasesFromAllModules)
             useCasesFiltered = useCasesFiltered.filter((item: IUseCase) => {
-                return !!(item.name.toLowerCase().match(substring.toLowerCase()))
+                const substringFilterBoolean =
+                !!(item.name.toLowerCase().match(substring.toLowerCase()))
+
+                const tagFilterBoolean = 
+                tagIds.length === 0 || item.tagIds.some(tagId => tagIds.includes(tagId))
+
+                const functionalRequirementFilterBoolean =
+                functionalRequirementIds.length === 0 || item.neededFrsToWorkIds.some(functionalRequirementId => functionalRequirementIds.includes(functionalRequirementId))
+
+                const useCaseFilterBoolean =
+                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId))
+
+                return substringFilterBoolean && tagFilterBoolean && functionalRequirementFilterBoolean && useCaseFilterBoolean
             })
         }
 
         if (searchIn.nestedUseCases) {
             nestedUseCasesFiltered.push(...allNestedUseCasesFromAllUseCases)
             nestedUseCasesFiltered = nestedUseCasesFiltered.filter((item: INestedUseCase) => {
-                return !!(item.name.toLowerCase().match(substring.toLowerCase()))
+                const substringFilterBoolean =
+                !!(item.name.toLowerCase().match(substring.toLowerCase()))
+
+                const tagFilterBoolean =
+                tagIds.length === 0 || item.tagIds.some(tagId => tagIds.includes(tagId))
+
+                const functionalRequirementFilterBoolean =
+                functionalRequirementIds.length === 0 || item.neededFrsToWorkIds.some(functionalRequirementId => functionalRequirementIds.includes(functionalRequirementId))
+
+                const useCaseFilterBoolean =
+                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId))
+
+                return substringFilterBoolean && tagFilterBoolean && functionalRequirementFilterBoolean && useCaseFilterBoolean
             })
         }
 
