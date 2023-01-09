@@ -8,6 +8,7 @@ import { UcfrListsContextInterfaces } from '@myFeaturesInterfaces/UcfrListsConte
 import FullPopup from '../../FullPopup';
 import FRequirementClickable from '@myComponents/ucfrLists/fRequirements/FRequirementClickable';
 import UseCaseClickable from '@myComponents/ucfrLists/useCases/UseCaseClickable';
+import NestedUseCaseClickable from '@myComponents/ucfrLists/nestedUseCases/NestedUseCaseClicklable';
 
 const SearchSubstring: React.FC = () => {
     // contextManagement SDK
@@ -76,6 +77,11 @@ const SearchSubstring: React.FC = () => {
         }
     }, [searchSubstringInput])
 
+    useEffect(() => {
+        // rerender component when the context changes
+        console.log('rerendering SearchSubstring')
+        setSearchSubstringInput("")
+    }, [ucfrListsFromContext])
     const {isOpen, onOpen, onClose} = useDisclosure()
 
     return ( 
@@ -93,7 +99,7 @@ const SearchSubstring: React.FC = () => {
 
                 <div className='search-substring-modal w-[100%] h-[3rem] flex flex-row'>
                     <input type='text' className='w-full h-full rounded-md p-2 w-90' placeholder='Search for a substring'
-                    onChange={searchSubstringHandler}
+                    onChange={searchSubstringHandler} value={searchSubstringInput}
                     />
                     <div className='filters w-[3rem] h-[3rem] bg-blue-200 rounded-md p-2 ml-2'>
                         <img src='https://img.icons8.com/ios/50/000000/filter--v1.png' alt='filter icon'/>
@@ -125,7 +131,7 @@ const SearchSubstring: React.FC = () => {
                     <div className='text-center p-2'>----------------------------</div>
 
                     <div className='search-substring-results__use-cases'>
-                        <h3 className='text-xl font-bold'>Use Cases</h3>
+                        <h3 className='text-xl font-bold text-center'>Use Cases</h3>
                         <ul className='search-substring-results__use-cases__list'>
                             {UCsFilteredBySubstring.map((UC) => {
                                 return (
@@ -149,17 +155,19 @@ const SearchSubstring: React.FC = () => {
                     <div className='text-center p-2'>----------------------------</div>
 
                     <div className='search-substring-results__nested-use-cases'>
-                        <h3 className='text-xl font-bold'>Nested Use Cases</h3>
+                        <h3 className='text-xl font-bold text-center'>Nested Use Cases</h3>
                         <ul className='search-substring-results__nested-use-cases__list'>
                             {NUCsFilteredBySubstring.map((NUC) => {
                                 return (
                                     <li key={NUC.id} className='search-substring-results__nested-use-cases__list__item bg-blue-200 mt-3'>
-                                        <div className='search-substring-results__nested-use-cases__list__item__id'>
-                                            {NUC.id}
-                                        </div>
-                                        <div className='search-substring-results__nested-use-cases__list__item__description'>
-                                            {NUC.name}
-                                        </div>
+                                        <NestedUseCaseClickable NestedUseCase={NUC}>
+                                            <div className='search-substring-results__nested-use-cases__list__item__id'>
+                                                {NUC.id}
+                                            </div>
+                                            <div className='search-substring-results__nested-use-cases__list__item__description'>
+                                                {NUC.name}
+                                            </div>
+                                        </NestedUseCaseClickable>
                                     </li>
                                 )
                             })}

@@ -13,7 +13,7 @@ import NestedUseCasePipelinesList from "./pipelineRelation/NestedUseCasePipeline
 import NestedUseCaseAddTagModal from "./tagRelation/NestedUseCaseAddTagModal"
 
 
-function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: isOpenReceived, onClose: onCloseReceived}: {nestedUseCaseId: string, isOpen: boolean, onClose: () => void}) {
+function NestedUseCaseModal({nestedUseCase: nestedUseCaseReceived, isOpen: isOpenReceived, onClose: onCloseReceived}: {nestedUseCase: INestedUseCase, isOpen: boolean, onClose: () => void}) {
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
@@ -25,7 +25,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
     const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
 
 
-    const [nestedUseCaseEditNameInput, setNestedUseCaseEditNameInput] = React.useState('')
+    const [nestedUseCaseEditNameInput, setNestedUseCaseEditNameInput] = React.useState(nestedUseCaseReceived.name)
 
     const nestedUseCaseEditNameInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNestedUseCaseEditNameInput(e.target.value)
@@ -35,7 +35,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
         ucfrListsInterfaces.updateNestedUseCaseById({
             completed: false,
             name: nestedUseCaseEditNameInput,
-            nestedUseCaseId: nestedUseCaseIdReceived
+            nestedUseCaseId: nestedUseCaseReceived.id
         })
         .then(() => {
             updateAlertStackComponentFromContext([
@@ -57,7 +57,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
 
     const deleteNestedUseCaseHandler = () => {
         ucfrListsInterfaces.removeNestedUseCaseById({
-            nestedUseCaseId: nestedUseCaseIdReceived,
+            nestedUseCaseId: nestedUseCaseReceived.id,
         })
         .then(() => {
             updateAlertStackComponentFromContext([
@@ -86,7 +86,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
 
     const removeTagFromNestedUseCaseHandler = (tagId: string) => {
         ucfrListsInterfaces.removeTagFromNestedUseCaseById({
-            nestedUseCaseId: nestedUseCaseIdReceived,
+            nestedUseCaseId: nestedUseCaseReceived.id,
             tagId: tagId
         })
         .then(() => {
@@ -115,7 +115,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
 
     const removeFRequirementFromNestedUseCaseHandler = (fRequirementId: string) => {
         ucfrListsInterfaces.removeFunctionalRequirementFromNestedUseCase({
-            nestedUseCaseId: nestedUseCaseIdReceived,
+            nestedUseCaseId: nestedUseCaseReceived.id,
             functionalRequirementId: fRequirementId
         })
         .then(() => {
@@ -135,25 +135,6 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
             ])
         })
     }
-
-
-    useEffect(() => {
-        ucfrListsInterfaces.readNestedUseCaseById({nestedUseCaseId: nestedUseCaseIdReceived})
-        .then((nestedUseCase) => {
-            setNestedUseCaseEditNameInput(nestedUseCase.name)
-        })
-        .catch((error) => {
-            updateAlertStackComponentFromContext([
-                ...alertStackComponentFromContext,
-                {
-                    component: GenerateAlertComponent({
-                        status: "error",
-                        text: error.message,
-                    })
-                }
-            ])
-        })
-    }, [nestedUseCaseIdReceived])
 
 
     const { isOpen: isOpenAddTagModal, onOpen: onOpenAddTagModal, onClose: onCloseAddTagModal } = useDisclosure()
@@ -185,7 +166,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                             <Flex>
                                 Tags:
                                 <button className='button' onClick={onOpenAddTagModal}>+</button>
-                                <NestedUseCaseAddTagModal isOpen={isOpenAddTagModal} onClose={onCloseAddTagModal} nestedUseCaseId={nestedUseCaseIdReceived} />
+                                <NestedUseCaseAddTagModal isOpen={isOpenAddTagModal} onClose={onCloseAddTagModal} nestedUseCaseId={nestedUseCaseReceived.id} />
                             </Flex>
                             <Flex className={'useCaseTags'}
                             width={'95%'}
@@ -199,7 +180,7 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                             >
                                 {ucfrListsFromContext.modules.reduce((acc, module) => {
                                     return [...acc, ...module.nestedUseCases]
-                                }, []).find((nestedUseCase) => nestedUseCase.id === nestedUseCaseIdReceived)?.tagIds.map((tagId) => {
+                                }, []).find((nestedUseCase) => nestedUseCase.id === nestedUseCaseReceived.id)?.tagIds.map((tagId) => {
                                     return (
                                         <Flex
                                         key={tagId}
@@ -227,9 +208,9 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                             </h2>
                             <AccordionPanel pb={4}>
                                 <button className='button' onClick={onOpenAddNestedUseCasePipelineModal}>Add Nested Use Case Pipeline</button>
-                                <NestedUseCaseAddPipelineModal isOpen={isOpenAddNestedUseCasePipelineModal} onClose={onCloseAddNestedUseCasePipelineModal} nestedUseCaseId={nestedUseCaseIdReceived} />
+                                <NestedUseCaseAddPipelineModal isOpen={isOpenAddNestedUseCasePipelineModal} onClose={onCloseAddNestedUseCasePipelineModal} nestedUseCaseId={nestedUseCaseReceived.id} />
 
-                                <NestedUseCasePipelinesList nestedUseCaseId={nestedUseCaseIdReceived} />
+                                <NestedUseCasePipelinesList nestedUseCaseId={nestedUseCaseReceived.id} />
                             </AccordionPanel>
                             </AccordionItem>
 
@@ -244,15 +225,21 @@ function NestedUseCaseModal({nestedUseCaseId: nestedUseCaseIdReceived, isOpen: i
                             </h2>
                             <AccordionPanel pb={4}>
                                 <button className='button' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
-                                <AddFRequirementToItModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} nestedUseCaseId={nestedUseCaseIdReceived} />
+                                <AddFRequirementToItModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} nestedUseCaseId={nestedUseCaseReceived.id} />
 
-                                {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.nestedUseCases] }, []).find((nestedUseCase) => nestedUseCase.id === nestedUseCaseIdReceived) as INestedUseCase)
+                                {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.nestedUseCases] }, []).find((nestedUseCase) => nestedUseCase.id === nestedUseCaseReceived.id) as INestedUseCase)
                                 .neededFrsToWorkIds.map((dependencyId) => {
+                                    const fRequirement = ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.functionalRequirements] }, []).find((fr) => fr.id === dependencyId)
+                                    if (!fRequirement) return (<>error</>)
                                     return (
-                                        <Flex className='FRDependency' key={dependencyId}>
-                                            <FRequirementClickable fRequirementId={dependencyId} />
-                                            <Button colorScheme='red' onClick={() => { removeFRequirementFromNestedUseCaseHandler(dependencyId) }}>X</Button>
-                                        </Flex>
+                                        <FRequirementClickable key={dependencyId} fRequirement={fRequirement}>
+                                            <Flex className='FRDependency' >
+                                                <h1>
+                                                    {fRequirement.name}
+                                                </h1>
+                                                <Button colorScheme='red' onClick={() => { removeFRequirementFromNestedUseCaseHandler(dependencyId) }}>X</Button>
+                                            </Flex>
+                                        </FRequirementClickable>
                                     )
                                 })}
                             </AccordionPanel>

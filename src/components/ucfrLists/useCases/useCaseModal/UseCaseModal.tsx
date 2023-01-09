@@ -4,7 +4,7 @@ import TagClickable from "@myComponents/tags/TagClickable"
 import FRequirementClickable from "@myComponents/ucfrLists/fRequirements/FRequirementClickable"
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
 import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
-import { IUseCase, useUcfrListsContext, useUpdateUcfrListsContext,  } from "@myContexts/UcfrsContext"
+import { IFunctionalRequirement, IUseCase, useUcfrListsContext, useUpdateUcfrListsContext,  } from "@myContexts/UcfrsContext"
 import { customTheme, ModalInputStyle } from "@myStyles/GlobalStyles"
 import React, { useEffect } from "react"
 import AddFRequirementToItModal from "./fRequirementRelation/AddFRequirementToItModal"
@@ -233,11 +233,17 @@ function UseCaseModal( { isOpen, onClose, useCase: useCaseReceived }: { isOpen: 
 
                                 {(ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.useCases] }, []).find((scopedUseCase) => scopedUseCase.id === useCaseReceived.id) as IUseCase)
                                 .neededFrsToWorkIds.map((dependencyId) => {
+                                    const fRequirement = ucfrListsFromContext.modules.reduce((acc, module) => { return [...acc, ...module.functionalRequirements] }, []).find((fr) => fr.id === dependencyId)
+                                    if (!fRequirement) return (<>error</>)
                                     return (
-                                        <Flex className='FRDependency' key={dependencyId}>
-                                            <FRequirementClickable fRequirementId={dependencyId} />
-                                            <Button colorScheme='red' onClick={() => { removeFRequirementFromUseCaseHandler(dependencyId) }}>X</Button>
-                                        </Flex>
+                                        <FRequirementClickable key={dependencyId} fRequirement={fRequirement}>
+                                            <Flex className='FRDependency' >
+                                                <h1>
+                                                    {fRequirement.name}
+                                                </h1>
+                                                <Button colorScheme='red' onClick={() => { removeFRequirementFromUseCaseHandler(dependencyId) }}>X</Button>
+                                            </Flex>
+                                        </FRequirementClickable>
                                     )
                                 })}
                             </AccordionPanel>
