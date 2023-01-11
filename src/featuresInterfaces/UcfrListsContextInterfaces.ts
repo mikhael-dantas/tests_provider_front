@@ -1,6 +1,19 @@
 import { IUcfrLists, IUseCase, INestedUseCase, IFunctionalRequirement, IModule } from "@myContexts/UcfrsContext"
 import { GenerateUUID } from "@myUtils/UUIDGenerator"
 
+export type TFilters = { 
+    searchIn?: {
+        functionalRequirements: boolean,
+        useCases: boolean,
+        nestedUseCases: boolean,
+    },
+    tagIds?: string[],
+    functionalRequirementIds?: string[],
+    useCaseIds?: string[],
+    moduleIds?: string[],
+    completed?: boolean | null
+    nestedUseCaseIds?: string[],
+}
 export class UcfrListsContextInterfaces {
     constructor(
         private ucfrLists: IUcfrLists,
@@ -1540,23 +1553,15 @@ export class UcfrListsContextInterfaces {
     }
 
 
-    async searchSubstringAndFilter({ 
-            substring, 
+    async searchSubstringAndFilter(substring: string, { 
             searchIn = { functionalRequirements: true, useCases: true, nestedUseCases: true},
             tagIds = [],
             functionalRequirementIds = [],
             useCaseIds = [],
-        }: { 
-            substring: string, 
-            searchIn?: {
-                functionalRequirements: boolean,
-                useCases: boolean,
-                nestedUseCases: boolean,
-            },
-            tagIds?: string[],
-            functionalRequirementIds?: string[],
-            useCaseIds?: string[],
-        }): Promise<{
+            moduleIds = [],
+            completed = null,
+            nestedUseCaseIds = [],
+        }: TFilters ): Promise<{
             functionalRequirements: IFunctionalRequirement[],
             useCases: IUseCase[],
             nestedUseCases: INestedUseCase[],
@@ -1590,7 +1595,29 @@ export class UcfrListsContextInterfaces {
                 const functionalRequirementFilterBoolean = 
                 functionalRequirementIds.length === 0 || item.frDependencies.some(frDependency => functionalRequirementIds.includes(frDependency))
 
-                return substringFilterBoolean && tagFilterBoolean && functionalRequirementFilterBoolean
+                const moduleFilterBoolean =
+                moduleIds.length === 0 || moduleIds.includes(item.moduleId)
+
+                const completedFilterBoolean =
+                completed === null || item.done === completed
+
+                const nestedUseCaseFilterBoolean =
+                nestedUseCaseIds.length === 0 || this.ucfrLists.modules.reduce((acc, module) => {
+                    return [...acc, ...module.nestedUseCases]
+                }, []).some(nestedUseCase => nestedUseCaseIds.includes(nestedUseCase.id) && nestedUseCase.functionalRequirementId === item.id)
+
+                const useCaseFilterBoolean =
+                useCaseIds.length === 0 || this.ucfrLists.modules.reduce((acc, module) => {
+                    return [...acc, ...module.useCases]
+                }, []).some(useCase => useCaseIds.includes(useCase.id) && useCase.functionalRequirementId === item.id)
+
+                return substringFilterBoolean && 
+                tagFilterBoolean && 
+                functionalRequirementFilterBoolean &&
+                moduleFilterBoolean &&
+                completedFilterBoolean &&
+                nestedUseCaseFilterBoolean &&
+                useCaseFilterBoolean
             })
         }
 
@@ -1607,9 +1634,29 @@ export class UcfrListsContextInterfaces {
                 functionalRequirementIds.length === 0 || item.neededFrsToWorkIds.some(functionalRequirementId => functionalRequirementIds.includes(functionalRequirementId))
 
                 const useCaseFilterBoolean =
-                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId))
+                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId)) || 
+                this.ucfrLists.modules.reduce((acc, module) => {
+                    return [...acc, ...module.useCases]
+                }, []).some(useCase => useCaseIds.includes(useCase.id) && useCase.useCasesPipelineIds.includes(item.id))
 
-                return substringFilterBoolean && tagFilterBoolean && functionalRequirementFilterBoolean && useCaseFilterBoolean
+                const moduleFilterBoolean =
+                moduleIds.length === 0 || moduleIds.includes(item.moduleId)
+
+                const completedFilterBoolean =
+                completed === null || item.completed === completed
+
+                const nestedUseCaseFilterBoolean =
+                nestedUseCaseIds.length === 0 || this.ucfrLists.modules.reduce((acc, module) => {
+                    return [...acc, ...module.nestedUseCases]
+                }, []).some(nestedUseCase => nestedUseCaseIds.includes(nestedUseCase.id) && nestedUseCase.useCaseId === item.id)
+
+                return substringFilterBoolean && 
+                tagFilterBoolean && 
+                functionalRequirementFilterBoolean && 
+                useCaseFilterBoolean &&
+                moduleFilterBoolean &&
+                completedFilterBoolean &&
+                nestedUseCaseFilterBoolean
             })
         }
 
@@ -1626,9 +1673,23 @@ export class UcfrListsContextInterfaces {
                 functionalRequirementIds.length === 0 || item.neededFrsToWorkIds.some(functionalRequirementId => functionalRequirementIds.includes(functionalRequirementId))
 
                 const useCaseFilterBoolean =
-                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId))
+                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId)) ||
+                this.ucfrLists.modules.reduce((acc, module) => {
+                    return [...acc, ...module.useCases]
+                }, []).some(useCase => useCaseIds.includes(useCase.id) && useCase.useCasesPipelineIds.includes(item.id))
 
-                return substringFilterBoolean && tagFilterBoolean && functionalRequirementFilterBoolean && useCaseFilterBoolean
+                const moduleFilterBoolean =
+                moduleIds.length === 0 || moduleIds.includes(item.moduleId)
+
+                const completedFilterBoolean =
+                completed === null || item.completed === completed
+
+                return substringFilterBoolean && 
+                tagFilterBoolean &&
+                functionalRequirementFilterBoolean &&
+                useCaseFilterBoolean &&
+                moduleFilterBoolean &&
+                completedFilterBoolean
             })
         }
 

@@ -4,11 +4,12 @@ import React, { useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '@myContexts/AlertStackContext';
 import { IFunctionalRequirement, INestedUseCase, IUseCase, useUcfrListsContext, useUpdateUcfrListsContext } from '@myContexts/UcfrsContext';
-import { UcfrListsContextInterfaces } from '@myFeaturesInterfaces/UcfrListsContextInterfaces';
+import { TFilters, UcfrListsContextInterfaces } from '@myFeaturesInterfaces/UcfrListsContextInterfaces';
 import FullPopup from '../../FullPopup';
 import FRequirementClickable from '@myComponents/ucfrLists/fRequirements/FRequirementClickable';
 import UseCaseClickable from '@myComponents/ucfrLists/useCases/UseCaseClickable';
 import NestedUseCaseClickable from '@myComponents/ucfrLists/nestedUseCases/NestedUseCaseClicklable';
+import FilterFieldsClickable from '../FilterFields/FilterFieldsClickable';
 
 const SearchSubstring: React.FC = () => {
     // contextManagement SDK
@@ -29,13 +30,25 @@ const SearchSubstring: React.FC = () => {
     const [UCsFilteredBySubstring, setUCsFilteredBySubstring] = React.useState<IUseCase[]>([])
     const [NUCsFilteredBySubstring, setNUCsFilteredBySubstring] = React.useState<INestedUseCase[]>([])
 
+    const [filters, setFilters] = React.useState<TFilters>({
+        completed: null,
+        functionalRequirementIds: [],
+        useCaseIds: [],
+        moduleIds: [],
+        searchIn: {
+            functionalRequirements: true,
+            useCases: true,
+            nestedUseCases: true,
+        },
+        tagIds: [],
+    })
 
     const searchSubstringHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSubstringInput(e.target.value)
     }
 
     function performFilterAction() {
-        ucfrListsInterfaces.searchSubstringAndFilter({ substring: searchSubstringInput })
+        ucfrListsInterfaces.searchSubstringAndFilter(searchSubstringInput, filters)
         .then((result) => {
             updateAlertStackComponentFromContext([
                 ...alertStackComponentFromContext,
@@ -61,7 +74,16 @@ const SearchSubstring: React.FC = () => {
     }
 
     useEffect(() => {
-        if (searchSubstringInput === "") {
+        if (searchSubstringInput === "" && 
+            filters.completed === null &&
+            filters.functionalRequirementIds.length === 0 &&
+            filters.useCaseIds.length === 0 &&
+            filters.moduleIds.length === 0 &&
+            filters.searchIn.functionalRequirements &&
+            filters.searchIn.useCases &&
+            filters.searchIn.nestedUseCases &&
+            filters.tagIds.length === 0
+        ) {
             setFRsFilteredBySubstring([])
             setUCsFilteredBySubstring([])
             setNUCsFilteredBySubstring([])
@@ -75,7 +97,7 @@ const SearchSubstring: React.FC = () => {
         return () => {
             clearTimeout(timeout)
         }
-    }, [searchSubstringInput])
+    }, [searchSubstringInput, filters])
 
     useEffect(() => {
         // rerender component when the context changes
@@ -101,9 +123,11 @@ const SearchSubstring: React.FC = () => {
                     <input type='text' className='w-full h-full rounded-md p-2 w-90' placeholder='Search for a substring'
                     onChange={searchSubstringHandler} value={searchSubstringInput}
                     />
-                    <div className='filters w-[3rem] h-[3rem] bg-blue-200 rounded-md p-2 ml-2'>
-                        <img src='https://img.icons8.com/ios/50/000000/filter--v1.png' alt='filter icon'/>
-                    </div>
+                    <FilterFieldsClickable filters={filters} setFilters={setFilters}>
+                        <div className='filters w-[3rem] h-[3rem] bg-blue-200 rounded-md p-2 ml-2'>
+                            <img src='https://img.icons8.com/ios/50/000000/filter--v1.png' alt='filter icon'/>
+                        </div>
+                    </FilterFieldsClickable>
                 </div>
 
 
