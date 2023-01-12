@@ -118,7 +118,7 @@ export default function FRequirementItem(
                cursor={'pointer'}
                onClick={onOpen}/>
 
-               <FRequirementModal isOpen={isOpen} onClose={onClose} fRequirementId={FRequirementReceived.id} />
+               <FRequirementModal isOpen={isOpen} onClose={onClose} fRequirement={FRequirementReceived} />
             </Flex>
          </Grid>
 

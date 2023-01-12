@@ -87,8 +87,9 @@ export default function FRequirementList() {
             alignItems={'center'}
             width={'100%'}
          >
-            {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.functionalRequirements.map(FR => (
-               <Flex
+            {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.functionalRequirements.map(FR => {
+               console.log(FR)
+               return (<Flex
                   key={FR.id}
                   direction={'row'} alignItems={'center'} 
                   width={'100%'}
@@ -96,7 +97,7 @@ export default function FRequirementList() {
                >
                   <FRequirementItem FRequirementReceived={FR} dragDrop={dragDrop} dragStart={dragStart} dragEnd={dragEnd} dragOver={dragOver} />
                </Flex>
-            ))}
+            )})}
          </Flex>
       </>
    )

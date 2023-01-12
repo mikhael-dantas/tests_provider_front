@@ -41,6 +41,7 @@ const SearchSubstring: React.FC = () => {
             nestedUseCases: true,
         },
         tagIds: [],
+        nestedUseCaseIds: [],
     })
 
     const searchSubstringHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
