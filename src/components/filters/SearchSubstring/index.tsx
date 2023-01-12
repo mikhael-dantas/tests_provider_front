@@ -70,7 +70,6 @@ const SearchSubstring: React.FC = () => {
                     component: GenerateAlertComponent({ status: "error", text: 'error - log for details' }),
                 }
             ])
-            console.log(err)
         })
     }
 
@@ -102,7 +101,6 @@ const SearchSubstring: React.FC = () => {
 
     useEffect(() => {
         // rerender component when the context changes
-        console.log('rerendering SearchSubstring')
         setSearchSubstringInput("")
     }, [ucfrListsFromContext])
     const {isOpen, onOpen, onClose} = useDisclosure()

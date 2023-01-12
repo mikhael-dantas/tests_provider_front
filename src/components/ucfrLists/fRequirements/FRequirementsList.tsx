@@ -88,7 +88,6 @@ export default function FRequirementList() {
             width={'100%'}
          >
             {ucfrListsFromContext.modules.find(m => m.id === currentModuleFromContext.id)?.functionalRequirements.map(FR => {
-               console.log(FR)
                return (<Flex
                   key={FR.id}
                   direction={'row'} alignItems={'center'} 
