@@ -1587,7 +1587,8 @@ export class UcfrListsContextInterfaces {
             functionalRequirementsFiltered.push(...allFunctionalRequirementsFromAllModules)
             functionalRequirementsFiltered = functionalRequirementsFiltered.filter((item: IFunctionalRequirement) => {
                 const substringFilterBoolean = 
-                !!(item.name.toLowerCase().match(substring.toLowerCase()))
+                !!(item.name.toLowerCase().match(substring.toLowerCase())) ||
+                !!(item.id.toLowerCase().match(substring.toLowerCase()))
 
                 const tagFilterBoolean = 
                 tagIds.length === 0 || item.tagIds.some(tagId => tagIds.includes(tagId))
@@ -1625,7 +1626,8 @@ export class UcfrListsContextInterfaces {
             useCasesFiltered.push(...allUseCasesFromAllModules)
             useCasesFiltered = useCasesFiltered.filter((item: IUseCase) => {
                 const substringFilterBoolean =
-                !!(item.name.toLowerCase().match(substring.toLowerCase()))
+                !!(item.name.toLowerCase().match(substring.toLowerCase())) ||
+                !!(item.id.toLowerCase().match(substring.toLowerCase()))
 
                 const tagFilterBoolean = 
                 tagIds.length === 0 || item.tagIds.some(tagId => tagIds.includes(tagId))
@@ -1664,7 +1666,8 @@ export class UcfrListsContextInterfaces {
             nestedUseCasesFiltered.push(...allNestedUseCasesFromAllUseCases)
             nestedUseCasesFiltered = nestedUseCasesFiltered.filter((item: INestedUseCase) => {
                 const substringFilterBoolean =
-                !!(item.name.toLowerCase().match(substring.toLowerCase()))
+                !!(item.name.toLowerCase().match(substring.toLowerCase())) ||
+                !!(item.id.toLowerCase().match(substring.toLowerCase()))
 
                 const tagFilterBoolean =
                 tagIds.length === 0 || item.tagIds.some(tagId => tagIds.includes(tagId))
