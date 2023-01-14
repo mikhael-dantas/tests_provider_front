@@ -1,6 +1,5 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, CheckCircleIcon, CopyIcon, DownloadIcon, RepeatIcon, SearchIcon } from "@chakra-ui/icons";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, useDisclosure } from "@chakra-ui/react";
-import React from "react";
 import FullPopup from "@myComponents/FullPopup";
 import CreateModule from "@myComponents/modules/CreateModule";
 import ListModules from "@myComponents/modules/ListModules";
@@ -15,8 +14,9 @@ import ExportJson from "@myComponents/ucfrListsJson/ExportJson";
 import ImportJson from "@myComponents/ucfrListsJson/ImportJson";
 import LoadFromLs from "@myComponents/ucfrListsJson/LoadFromLs";
 import SaveInLS from "@myComponents/ucfrListsJson/SaveInLS";
-import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../contexts/UcfrsContext";
 import { customTheme } from "@myStyles/GlobalStyles";
+import React from "react";
+import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../contexts/UcfrsContext";
 import SearchSubstring from "@myComponents/filters/SearchSubstring";
 
 
@@ -57,7 +57,47 @@ export default function Index() {
       backgroundColor={customTheme.colors[10]} 
       color={customTheme.colors[10]}
       >
-         <SearchSubstring/>
+         <div className="tools
+         fixed bottom-0 right-0
+         h-[3rem] w-full
+         rounded-t-[1rem]
+         grid grid-cols-5
+         overflow-hidden
+         ">
+            <SearchSubstring className="
+            cursor-pointer
+            h-[100%]
+            bg-green-400 flex items-center justify-center
+            hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
+            border-r border-l
+            " empty={true}>
+               <SearchIcon w={6} h={6} />
+            </SearchSubstring>
+            <CopyToClipboard className="bg-green-400 flex items-center justify-center
+            hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
+            border-r border-l
+            " empty={true}>
+               <CopyIcon w={6} h={6} />
+            </CopyToClipboard>
+            <ExportJson className="bg-green-400 flex items-center justify-center
+            hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
+            border-r border-l
+            " empty={true}>
+               <DownloadIcon w={6} h={6} />
+            </ExportJson>
+            <LoadFromLs className="bg-green-400 flex items-center justify-center
+            hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
+            border-r border-l
+            " empty={true}>
+               <RepeatIcon w={6} h={6} />
+            </LoadFromLs>
+            <SaveInLS className="bg-green-400 flex items-center justify-center
+            hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
+            border-r border-l
+            " empty={true}>
+               <CheckCircleIcon w={6} h={6} />
+            </SaveInLS>
+         </div>
          <Flex className='CurrentModuleNameContainer'
          width={'100%'}
          height={'4rem'}

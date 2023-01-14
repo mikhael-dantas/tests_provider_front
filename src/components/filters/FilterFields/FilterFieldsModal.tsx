@@ -73,7 +73,11 @@ function FilterFieldsModal({
 
     return (
         <FullPopup isOpen={isOpen} onClose={onClose}>
-            <div className='p-3 bg-gray-100'>
+            <div className='p-3 bg-gray-100
+            rounded-lg
+            max-w-95%
+            mx-auto
+            '>
                 <h1>Filter Fields</h1>
                 <h2>Completed</h2>
                 <div className='radioButtons'>

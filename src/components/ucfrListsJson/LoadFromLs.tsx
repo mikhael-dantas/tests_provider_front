@@ -1,7 +1,15 @@
 import { useUpdateUcfrListsContext, IUcfrLists } from '@myContexts/UcfrsContext'
 import React from 'react'
 
-function LoadFromLs() {
+function LoadFromLs({
+    className,
+    children,
+    empty
+}:{
+    className?: string
+    children?: React.ReactNode
+    empty?: boolean
+}) {
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
     const loadFromLS = () => {
         const ucfrListsFromLS = localStorage.getItem('ucfrLists')
@@ -17,7 +25,12 @@ function LoadFromLs() {
     }
 
     return (
-        <button className='button' onClick={loadFromLS}>Load JSON locally</button>
+        <button className={
+            className || 'button'
+        } onClick={loadFromLS}>
+            {empty ? null : "Load JSON locally"}
+            {children && children}
+        </button>
     )
 }
 

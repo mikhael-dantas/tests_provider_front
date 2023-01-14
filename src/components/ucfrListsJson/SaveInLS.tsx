@@ -3,7 +3,15 @@ import ConfirmationModal from '@myComponents/ConfirmationModal'
 import { useUcfrListsContext } from '@myContexts/UcfrsContext'
 import React from 'react'
 
-function SaveInLS() {
+function SaveInLS({
+    className,
+    children,
+    empty
+}:{
+    className?: string
+    children?: React.ReactNode
+    empty?: boolean
+}) {
     const ucfrListsFromContext = useUcfrListsContext()
     const saveInLS = () => {
         localStorage.setItem('ucfrLists', JSON.stringify(ucfrListsFromContext))
@@ -16,11 +24,16 @@ function SaveInLS() {
     } = useDisclosure()
     return (
         <>
-            <button className='button' onClick={
+            <button className={
+                className || 'button'
+            } onClick={
                 () => { 
                     onOpenSaveInLSConfirmation()
                 }
-            }>Save JSON locally</button>
+            }>
+                {empty ? null : "Save JSON locally"}
+                {children && children}
+            </button>
 
             <ConfirmationModal callback={() => {saveInLS();onCloseSaveInLSConfirmation()}} isOpen={isOpenSaveInLSConfirmation} onClose={onCloseSaveInLSConfirmation} />
         </>

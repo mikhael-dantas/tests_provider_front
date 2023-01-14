@@ -11,7 +11,15 @@ import UseCaseClickable from '@myComponents/ucfrLists/useCases/UseCaseClickable'
 import NestedUseCaseClickable from '@myComponents/ucfrLists/nestedUseCases/NestedUseCaseClicklable';
 import FilterFieldsClickable from '../FilterFields/FilterFieldsClickable';
 
-const SearchSubstring: React.FC = () => {
+function SearchSubstring ({
+    className,
+    empty,
+    children
+} : {
+    className?: string
+    empty?: boolean
+    children?: React.ReactNode
+}) {
     // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
     const updateUcfrListsFromContext = useUpdateUcfrListsContext()
@@ -107,10 +115,13 @@ const SearchSubstring: React.FC = () => {
 
     return ( 
         <>
-        <div className='search-toggle-icon
-        absolute top-0 right-0 p-2 cursor-pointer
-        ' onClick={onOpen}>
-            <img src='https://img.icons8.com/ios/50/000000/search--v1.png' alt='search icon'/>
+        <div className={
+            className || ''
+        } onClick={onOpen}>
+            { empty ? null : (
+            <img src='https://img.icons8.com/ios/50/000000/search--v1.png' alt='search icon' className='mx-auto p-1 h-[90%]'/>
+            )}
+            {children}
         </div>
         <FullPopup isOpen={isOpen} onClose={onClose}>
             <div className='search-substring-modal-container 

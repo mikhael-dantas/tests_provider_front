@@ -1,7 +1,15 @@
 import { useUcfrListsContext } from '@myContexts/UcfrsContext'
 import React from 'react'
 
-function ExportJson() {
+function ExportJson({
+    className,
+    children,
+    empty
+}:{
+    className?: string
+    children?: React.ReactNode
+    empty?: boolean
+}) {
     const ucfrListsFromContext = useUcfrListsContext()
 
     const exportJson = () => {
@@ -17,7 +25,11 @@ function ExportJson() {
     }
 
     return (
-        <button className='button' onClick={exportJson}>JSON Export/Download</button>
+        <button className={className || 'button'}
+        onClick={exportJson}>
+            { empty ? null : "JSON Export/Download"}
+            {children && children}
+        </button>
     )
 }
 
