@@ -67,31 +67,31 @@ export default function Index() {
             <SearchSubstring className="
             cursor-pointer
             h-[100%]
-            bg-green-400 flex items-center justify-center
+            bg-green-500 flex items-center justify-center
             hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
             border-r border-l
             " empty={true}>
                <SearchIcon w={6} h={6} />
             </SearchSubstring>
-            <CopyToClipboard className="bg-green-400 flex items-center justify-center
+            <CopyToClipboard className="bg-green-500 flex items-center justify-center
             hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
             border-r border-l
             " empty={true}>
                <CopyIcon w={6} h={6} />
             </CopyToClipboard>
-            <ExportJson className="bg-green-400 flex items-center justify-center
+            <ExportJson className="bg-green-500 flex items-center justify-center
             hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
             border-r border-l
             " empty={true}>
                <DownloadIcon w={6} h={6} />
             </ExportJson>
-            <LoadFromLs className="bg-green-400 flex items-center justify-center
+            <LoadFromLs className="bg-green-500 flex items-center justify-center
             hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
             border-r border-l
             " empty={true}>
                <RepeatIcon w={6} h={6} />
             </LoadFromLs>
-            <SaveInLS className="bg-green-400 flex items-center justify-center
+            <SaveInLS className="bg-green-500 flex items-center justify-center
             hover:shadow-[rgba(50,50,93,0.25)0px_30px_60px_-12px_inset,rgba(0,0,0,0.3)0px_18px_36px_-18px_inset]
             border-r border-l
             " empty={true}>
