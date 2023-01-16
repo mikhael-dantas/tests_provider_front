@@ -1,4 +1,6 @@
-import { useUcfrListsContext } from "@myContexts/UcfrsContext"
+import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "@myContexts/AlertStackContext"
+import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
+import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
 
 
 export default function CopyToClipboard({
@@ -10,11 +12,23 @@ export default function CopyToClipboard({
     children?: React.ReactNode
     empty?: boolean
 }) { 
+    // contextManagement SDK
     const ucfrListsFromContext = useUcfrListsContext()
+    const alertStackComponentFromContext = useAlertStackComponentContext()
+    const updateAlertStackComponentFromContext = useUpdateAlertStackComponentContext()
+
+
     const copyToClipboard = () => {
         navigator.clipboard.writeText(JSON.stringify(ucfrListsFromContext))
+        updateAlertStackComponentFromContext([
+            ...alertStackComponentFromContext,
+            {
+                component: GenerateAlertComponent({status: "success", text: "Copied to clipboard"}),
+            }
+        ])
+            
     }
-    return (
+    return ( 
         <button className={className || 'button'}
         onClick={copyToClipboard}>
             {empty ? null : "Copy to clipboard"}
