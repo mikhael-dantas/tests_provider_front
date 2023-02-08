@@ -119,7 +119,7 @@ export default function NestedUseCaseItem(
                cursor={'pointer'}
                onClick={onOpen}/>
 
-               <NestedUseCaseModal isOpen={isOpen} onClose={onClose} nestedUseCaseId={nestedUseCaseReceived.id} />
+               <NestedUseCaseModal isOpen={isOpen} onClose={onClose} nestedUseCase={nestedUseCaseReceived} />
             </Flex>
          </Grid>
 

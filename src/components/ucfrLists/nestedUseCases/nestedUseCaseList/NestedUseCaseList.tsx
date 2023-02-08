@@ -65,6 +65,8 @@ export default function NestedUseCaseList() {
                isOpen={isOpenSelectUseCaseModal} onClose={onCloseSelectUseCaseModal} 
                setSelectedUseCaseToNestFrom={setSelectedUseCaseToNestFrom} selectedUseCaseToNestFrom={selectedUseCaseToNestFrom} 
             />
+
+
             <Grid className="useCaseSelectedDisplay"
             templateRows={'1fr 3fr'}
             >
