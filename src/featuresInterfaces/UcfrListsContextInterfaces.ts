@@ -1676,10 +1676,15 @@ export class UcfrListsContextInterfaces {
                 functionalRequirementIds.length === 0 || item.neededFrsToWorkIds.some(functionalRequirementId => functionalRequirementIds.includes(functionalRequirementId))
 
                 const useCaseFilterBoolean =
-                useCaseIds.length === 0 || item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId)) ||
+                useCaseIds.length === 0
+                || 
+                item.useCasesPipelineIds.some(useCaseId => useCaseIds.includes(useCaseId)) 
+                ||
                 this.ucfrLists.modules.reduce((acc, module) => {
                     return [...acc, ...module.useCases]
-                }, []).some(useCase => useCaseIds.includes(useCase.id) && useCase.useCasesPipelineIds.includes(item.id))
+                }, []).some(useCase => useCaseIds.includes(useCase.id) && useCase.useCasesPipelineIds.includes(item.id)) 
+                ||
+                useCaseIds.includes(item.parentUseCaseId)
 
                 const moduleFilterBoolean =
                 moduleIds.length === 0 || moduleIds.includes(item.moduleId)
