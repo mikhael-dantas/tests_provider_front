@@ -2,7 +2,7 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import ConfirmationModal from "@myComponents/ConfirmationModal"
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
 import { useUcfrListsContext, useUpdateUcfrListsContext, ITag } from "@myContexts/UcfrsContext"
-import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { UcfrListsContextInterfaces } from "src/lib/featuresInterfaces/UcfrListsContextInterfaces"
 import { ModalInputStyle } from "@myStyles/GlobalStyles"
 import React, { useEffect } from "react"
 
@@ -120,10 +120,10 @@ function TagModal({isOpen, onClose, tagId: receivedTagId}: {isOpen: boolean, onC
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='green' mr={3} onClick={tagEditHandler}>
+                <Button colorScheme={"blue"} mr={3} onClick={tagEditHandler}>
                     Save
                 </Button>
-                <Button colorScheme='red' mr={3} 
+                <Button colorScheme={"blue"} mr={3} 
                 onClick={onOpenDeleteConfirmationModal}
                 >
                     Delete Tag

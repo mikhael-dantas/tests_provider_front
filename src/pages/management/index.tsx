@@ -5,10 +5,6 @@ import CreateModule from "@myComponents/modules/CreateModule";
 import ListModules from "@myComponents/modules/ListModules";
 import CreateTag from "@myComponents/tags/CreateTag";
 import ListTags from "@myComponents/tags/ListTags";
-import FRequirementList from "@myComponents/ucfrLists/fRequirements/FRequirementsList";
-import NestedUseCaseList from "@myComponents/ucfrLists/nestedUseCases/nestedUseCaseList/NestedUseCaseList";
-import CreateUseCase from "@myComponents/ucfrLists/useCases/CreateUseCase";
-import UseCasesList from "@myComponents/ucfrLists/useCases/useCaseList/UseCasesList";
 import CopyToClipboard from "@myComponents/ucfrListsJson/CopyToClipboard";
 import ExportJson from "@myComponents/ucfrListsJson/ExportJson";
 import ImportJson from "@myComponents/ucfrListsJson/ImportJson";
@@ -18,6 +14,8 @@ import { customTheme } from "@myStyles/GlobalStyles";
 import React from "react";
 import { EUcfrListsTypes, UcfrListsTypes, useCurrentModuleContext, useSelectedTabToDisplayContext, useUcfrListsContext, useUpdateCurrentModuleContext, useUpdateSelectedTabToDisplayContext } from "../../contexts/UcfrsContext";
 import SearchSubstring from "@myComponents/filters/SearchSubstring";
+import CreateItemsBar from "@myComponents/ucfrLists/CreateItemsBar";
+import ItemList from "@myComponents/ucfrLists/ItemList";
 
 
 export default function Index() {
@@ -237,18 +235,16 @@ export default function Index() {
             width={'100%'}
             alignItems={'center'}
          >
+            {currentModuleFromContext ? <CreateItemsBar/> : null}
             {currentModuleFromContext ? (
                selectedTabToDisplay === EUcfrListsTypes.useCases ? (
-                  <>
-                     <CreateUseCase/>
-                     <UseCasesList/>
-                  </>
+                  <ItemList itemType="useCase"/>
                ) :
-               selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
-                  <FRequirementList/>
-                  ) :
                selectedTabToDisplay === EUcfrListsTypes.nestedUseCases ? (
-                  <NestedUseCaseList/>
+                  <ItemList itemType="nestedUseCase"/>
+                  ) :
+               selectedTabToDisplay === EUcfrListsTypes.functionalRequirements ? (
+                  <ItemList itemType="functionalRequirement"/>
                ) : null
             ) : (
                <Flex

@@ -2,7 +2,7 @@ import { useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalClo
 import ConfirmationModal from "@myComponents/ConfirmationModal"
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
 import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
-import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { UcfrListsContextInterfaces } from "src/lib/featuresInterfaces/UcfrListsContextInterfaces"
 import { customTheme, ModalInputStyle } from "@myStyles/GlobalStyles"
 import React, { useEffect } from "react"
 
@@ -91,10 +91,10 @@ function ModuleModal({isOpen, onClose, moduleId: receivedModuleId}:
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme='green' mr={3} onClick={moduleEditNameHandler}>
+                    <Button colorScheme={"blue"} mr={3} onClick={moduleEditNameHandler}>
                         Save
                     </Button>
-                    <Button colorScheme='red' mr={3} 
+                    <Button colorScheme={"blue"} mr={3} 
                     onClick={secondOnOpen}
                     >
                         Delete Module

@@ -1,7 +1,7 @@
 import { useDisclosure } from '@chakra-ui/react';
 import React, { Dispatch, SetStateAction } from 'react';
 import FilterFieldsModal from './FilterFieldsModal';
-import { TFilters } from '@myFeaturesInterfaces/UcfrListsContextInterfaces';
+import { TFilters } from 'src/lib/featuresInterfaces/UcfrListsContextInterfaces';
 
 // import { Container } from './styles';
 

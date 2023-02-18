@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react"
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
 import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
-import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { UcfrListsContextInterfaces } from "src/lib/featuresInterfaces/UcfrListsContextInterfaces"
 import { AddFormContainerStyle, AddInputStyle } from "@myStyles/GlobalStyles"
 import React from "react"
 

@@ -1,0 +1,17 @@
+.checkbox {
+    width: 2rem;
+    height: 2rem;
+}
+
+.checkboxAnimation {
+    animation: spin 200ms linear 1;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

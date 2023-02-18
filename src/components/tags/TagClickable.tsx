@@ -1,7 +1,7 @@
 import { useDisclosure, Flex } from "@chakra-ui/react"
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext, GenerateAlertComponent } from "@myContexts/AlertStackContext"
 import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
-import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { UcfrListsContextInterfaces } from "src/lib/featuresInterfaces/UcfrListsContextInterfaces"
 import React, { useEffect } from "react"
 import TagModal from "./TagModal"
 

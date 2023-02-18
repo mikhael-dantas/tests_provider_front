@@ -4,12 +4,10 @@ import React, { useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '@myContexts/AlertStackContext';
 import { IFunctionalRequirement, INestedUseCase, IUseCase, useUcfrListsContext, useUpdateUcfrListsContext } from '@myContexts/UcfrsContext';
-import { TFilters, UcfrListsContextInterfaces } from '@myFeaturesInterfaces/UcfrListsContextInterfaces';
+import { TFilters, UcfrListsContextInterfaces } from 'src/lib/featuresInterfaces/UcfrListsContextInterfaces';
 import FullPopup from '../../FullPopup';
-import FRequirementClickable from '@myComponents/ucfrLists/fRequirements/FRequirementClickable';
-import UseCaseClickable from '@myComponents/ucfrLists/useCases/UseCaseClickable';
-import NestedUseCaseClickable from '@myComponents/ucfrLists/nestedUseCases/NestedUseCaseClicklable';
 import FilterFieldsClickable from '../FilterFields/FilterFieldsClickable';
+import ModalClickable from '@myComponents/ucfrLists/ItemModal/ModalClickable';
 
 function SearchSubstring ({
     className,
@@ -148,14 +146,14 @@ function SearchSubstring ({
                             {FRsFilteredBySubstring.map((FR) => {
                                 return (
                                     <li key={FR.id} className='search-substring-results__functional-requirements__list__item bg-blue-200 mt-3 p-2'>
-                                        <FRequirementClickable fRequirement={FR} key={FR.id}>
+                                        {/* <FRequirementClickable fRequirement={FR} key={FR.id}>
                                             <div className='search-substring-results__functional-requirements__list__item__id text-[.8rem] font-semibold'>
                                                 {FR.id}
                                             </div>
                                             <div className='search-substring-results__functional-requirements__list__item__title text-[.8rem] font-semibold'>
                                                 {FR.name}
                                             </div>
-                                        </FRequirementClickable>
+                                        </FRequirementClickable> */}
                                     </li>
                                 )
                             })}
@@ -170,7 +168,7 @@ function SearchSubstring ({
                             {UCsFilteredBySubstring.map((UC) => {
                                 return (
                                     <li key={UC.id} className='search-substring-results__use-cases__list__item bg-blue-200 mt-3'>
-                                        <UseCaseClickable key={UC.id} useCase={UC}>
+                                        <ModalClickable key={UC.id} item={UC} itemType='useCase'>
                                             <div className='container w-full h-full flex flex-col'>
                                                 <div className='search-substring-results__use-cases__list__item__id'>
                                                     {UC.id}
@@ -179,7 +177,7 @@ function SearchSubstring ({
                                                     {UC.name}
                                                 </div>
                                             </div>
-                                        </UseCaseClickable>
+                                        </ModalClickable>
                                     </li>
                                 )
                             })}
@@ -194,14 +192,14 @@ function SearchSubstring ({
                             {NUCsFilteredBySubstring.map((NUC) => {
                                 return (
                                     <li key={NUC.id} className='search-substring-results__nested-use-cases__list__item bg-blue-200 mt-3'>
-                                        <NestedUseCaseClickable NestedUseCase={NUC}>
+                                        {/* <NestedUseCaseClickable NestedUseCase={NUC}>
                                             <div className='search-substring-results__nested-use-cases__list__item__id'>
                                                 {NUC.id}
                                             </div>
                                             <div className='search-substring-results__nested-use-cases__list__item__description'>
                                                 {NUC.name}
                                             </div>
-                                        </NestedUseCaseClickable>
+                                        </NestedUseCaseClickable> */}
                                     </li>
                                 )
                             })}

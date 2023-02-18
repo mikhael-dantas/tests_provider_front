@@ -1,6 +1,6 @@
 import { GenerateAlertComponent, useAlertStackComponentContext, useUpdateAlertStackComponentContext } from "@myContexts/AlertStackContext"
 import { useUcfrListsContext, useUpdateUcfrListsContext } from "@myContexts/UcfrsContext"
-import { UcfrListsContextInterfaces } from "@myFeaturesInterfaces/UcfrListsContextInterfaces"
+import { UcfrListsContextInterfaces } from "src/lib/featuresInterfaces/UcfrListsContextInterfaces"
 
 
 export default function CopyToClipboard({

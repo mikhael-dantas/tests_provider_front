@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/react';
 import FullPopup from '@myComponents/FullPopup';
 import { useAlertStackComponentContext, useUpdateAlertStackComponentContext } from '@myContexts/AlertStackContext';
 import { useUcfrListsContext, useUpdateUcfrListsContext } from '@myContexts/UcfrsContext';
-import { TFilters, UcfrListsContextInterfaces } from '@myFeaturesInterfaces/UcfrListsContextInterfaces';
+import { TFilters, UcfrListsContextInterfaces } from 'src/lib/featuresInterfaces/UcfrListsContextInterfaces';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import Select from 'react-select'
 
@@ -213,8 +213,8 @@ function FilterFieldsModal({
                 })} />
 
                 <div className='flex justify-around mt-3'>
-                    <Button colorScheme='blue' onClick={HandleClearFilters}>Clear</Button>
-                    <Button colorScheme='green' onClick={HandleApplyFilters}>Apply</Button>
+                    <Button colorScheme={"blue"} onClick={HandleClearFilters}>Clear</Button>
+                    <Button colorScheme={"blue"} onClick={HandleApplyFilters}>Apply</Button>
                 </div>
             </div>
         </FullPopup>

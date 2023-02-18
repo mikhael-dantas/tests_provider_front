@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    // "target": "es5",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -25,8 +26,9 @@
       "@myUtils/*": ["src/utils/*"],
       "@myContexts/*": ["src/contexts/*"],
       "@myStyles/*": ["src/styles/*"],
-      "@myFeaturesInterfaces/*": ["src/featuresInterfaces/*"],
-    }
+      "@myFeaturesInterfaces/*": ["src/lib/featuresInterfaces/*"],
+    },
+    "experimentalDecorators": true
   },
   "include": [
     "next-env.d.ts",

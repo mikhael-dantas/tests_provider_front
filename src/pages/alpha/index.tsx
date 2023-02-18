@@ -13,7 +13,7 @@ import React from 'react';
 
 interface IUcfrItem {
   id: string,
-  done: boolean,
+  completed: boolean,
   name: string,
   dependencies: string[]
 }
@@ -182,7 +182,7 @@ export default function Index() {
                 ...ucfr,
                 list: [...ucfr.list, {
                     id: `${generateUUID()}`,
-                    done: false,
+                    completed: false,
                     name: ucfrs.newItem,
                     dependencies: []
                 }]
@@ -272,7 +272,7 @@ export default function Index() {
                     if (item.id === id) {
                       return {
                           ...item,
-                          done: !item.done
+                          completed: !item.completed
                       }
                     }
                     return item;
@@ -504,7 +504,7 @@ return (
             onDrop={(e) => onDrop(e, item.id)}
             >
               <div className='item-ucfr'>
-                <input className={'input'} type="checkbox" checked={item.done} onChange={() => toggleItem(item.id)} />
+                <input className={'input'} type="checkbox" checked={item.completed} onChange={() => toggleItem(item.id)} />
                 {item.name}
                 <button className={'button'} onClick={() => removeItem(item.id)}>Remove</button>
                 <button className={'button'} onClick={() => editItemViaAlertInput(item.id)}>Edit</button>

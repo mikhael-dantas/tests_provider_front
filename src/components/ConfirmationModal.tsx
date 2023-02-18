@@ -13,7 +13,7 @@ function ConfirmationModal({ isOpen, onClose, callback}) {
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='red' mr={3} onClick={callback}>
+                <Button colorScheme={"blue"} mr={3} onClick={callback}>
                     Yes
                 </Button>
                 <Button variant='ghost' onClick={onClose}>back</Button>

@@ -1078,7 +1078,7 @@ export class UcfrListsContextInterfaces {
             id: GenerateUUID(),
             name: receivedName,
             moduleId: receivedModuleId,
-            done: false,
+            completed: false,
             tagIds: [],
             frDependencies: [],
         }
@@ -1111,7 +1111,7 @@ export class UcfrListsContextInterfaces {
 
         return functionalRequirement
     }
-    async updateFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId, name: receivedName, done: receivedDone}: {functionalRequirementId: string, name: string, done: boolean}) {
+    async updateFunctionalRequirementById({functionalRequirementId: receivedFunctionalRequirementId, name: receivedName, completed: receivedCompleted}: {functionalRequirementId: string, name: string, completed: boolean}) {
         const allFunctionalRequirementsFromAllModules = this.ucfrLists.modules.reduce((acc, module) => {
             return [...acc, ...module.functionalRequirements]
         }, [])
@@ -1145,7 +1145,7 @@ export class UcfrListsContextInterfaces {
                             return {
                             ...scopedFunctionalRequirement,
                             name: receivedName,
-                            done: receivedDone
+                            completed: receivedCompleted
                             }
                         }
                         return scopedFunctionalRequirement
@@ -1600,7 +1600,7 @@ export class UcfrListsContextInterfaces {
                 moduleIds.length === 0 || moduleIds.includes(item.moduleId)
 
                 const completedFilterBoolean =
-                completed === null || item.done === completed
+                completed === null || item.completed === completed
 
                 const nestedUseCaseFilterBoolean =
                 nestedUseCaseIds.length === 0 || this.ucfrLists.modules.reduce((acc, module) => {

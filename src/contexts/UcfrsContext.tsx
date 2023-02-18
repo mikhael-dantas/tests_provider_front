@@ -31,7 +31,7 @@ export interface IFunctionalRequirement {
    moduleId: string
    tagIds: string[]
    name: string
-   done: boolean
+   completed: boolean
    frDependencies: string[]
 }
 export interface IModule {
