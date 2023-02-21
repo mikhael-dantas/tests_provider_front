@@ -486,9 +486,9 @@ export class UcfrListsContextInterfaces {
         if (receivedName.trim().length < 2) {
             throw new Error("Use case name must be at least 2 characters long")
         }
-        // cannot be larger than 250 characters
-        if (receivedName.trim().length > 250) {
-            throw new Error("Use case name cannot be larger than 250 characters")
+        // cannot be larger than 1000 characters
+        if (receivedName.trim().length > 1000) {
+            throw new Error("Use case name cannot be larger than 1000 characters")
         }
 
         const module = this.ucfrLists.modules.find(scopedModule => scopedModule.id === receivedModuleId) as IModule
@@ -553,9 +553,9 @@ export class UcfrListsContextInterfaces {
         if (receivedName.trim().length < 2) {
             throw new Error("Use case name must be at least 2 characters long")
         }
-        // cannot be larger than 250 characters
-        if (receivedName.trim().length > 250) {
-            throw new Error("Use case name cannot be larger than 250 characters")
+        // cannot be larger than 1000 characters
+        if (receivedName.trim().length > 1000) {
+            throw new Error("Use case name cannot be larger than 1000 characters")
         }
 
         this.setUcfrLists({
@@ -881,9 +881,9 @@ export class UcfrListsContextInterfaces {
         if (receivedName.trim().length < 2) {
             throw new Error("Nested use case name must be at least 2 characters long")
         }
-        // cannot be larger than 250 characters
-        if (receivedName.trim().length > 250) {
-            throw new Error("Nested use case name cannot be larger than 250 characters")
+        // cannot be larger than 1000 characters
+        if (receivedName.trim().length > 1000) {
+            throw new Error("Nested use case name cannot be larger than 1000 characters")
         }
 
         // check if parent use case exists
@@ -958,9 +958,9 @@ export class UcfrListsContextInterfaces {
         if (receivedName.trim().length < 2) {
             throw new Error("Nested use case name must be at least 2 characters long")
         }
-        // cannot be larger than 250 characters
-        if (receivedName.trim().length > 250) {
-            throw new Error("Nested use case name cannot be larger than 250 characters")
+        // cannot be larger than 1000 characters
+        if (receivedName.trim().length > 1000) {
+            throw new Error("Nested use case name cannot be larger than 1000 characters")
         }
 
         this.setUcfrLists({
@@ -1063,9 +1063,9 @@ export class UcfrListsContextInterfaces {
         if (receivedName.trim().length < 2) {
             throw new Error("Functional requirement name must be at least 2 characters long")
         }
-        // cannot be larger than 250 characters
-        if (receivedName.trim().length > 250) {
-            throw new Error("Functional requirement name cannot be larger than 250 characters")
+        // cannot be larger than 1000 characters
+        if (receivedName.trim().length > 1000) {
+            throw new Error("Functional requirement name cannot be larger than 1000 characters")
         }
 
         const module = this.ucfrLists.modules.find(scopedModule => scopedModule.id === receivedModuleId) as IModule
@@ -1129,9 +1129,9 @@ export class UcfrListsContextInterfaces {
         if (receivedName.trim().length < 2) {
             throw new Error("Functional requirement name must be at least 2 characters long")
         }
-        // cannot be larger than 250 characters
-        if (receivedName.trim().length > 250) {
-            throw new Error("Functional requirement name cannot be larger than 250 characters")
+        // cannot be larger than 1000 characters
+        if (receivedName.trim().length > 1000) {
+            throw new Error("Functional requirement name cannot be larger than 1000 characters")
         }
 
         this.setUcfrLists({

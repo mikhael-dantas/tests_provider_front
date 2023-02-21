@@ -64,11 +64,15 @@ export default function CreateItemModal({
     };
 
 
-    // Disclosures
-    const { isOpen: isOpenAddTagModal, onOpen: onOpenAddTagModal, onClose: onCloseAddTagModal } = useDisclosure()
+    // // Disclosures
+    // const { isOpen: isOpenAddTagModal, onOpen: onOpenAddTagModal, onClose: onCloseAddTagModal } = useDisclosure()
 
 
     useEffect(() => {
+        if (isOpen) {
+            setItemNameInput("")
+            setNestedUseCaseParent("")
+        }
     }, [isOpen])
 
     if (!isOpen) return null
@@ -103,10 +107,11 @@ export default function CreateItemModal({
             </div>
             )}
 
-            <input className=""
-            type="text" value={itemNameInput} onChange={itemNameInputHandler} placeholder="Item name" />
+            <h1 className="w-[100%] mt-4">Name</h1>
+            <textarea className="w-[100%] p-1"
+            value={itemNameInput} onChange={itemNameInputHandler} placeholder="Item name" />
 
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4"
             onClick={createItemHandler} >Create</button>
         </ModalBody>
     </ModalContent>

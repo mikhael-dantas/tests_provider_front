@@ -291,7 +291,7 @@ function ItemModal({
             <Button colorScheme={"blue"} mr={3} 
             onClick={onConfirmationModalOpen}
             >
-                Delete Use Case
+                Delete {itemType}
             </Button>
             <ConfirmationModal isOpen={isConfirmationModalOpen} onClose={onConfirmationModalClose} callback={deleteItemHandler}/>
         </ModalFooter>
