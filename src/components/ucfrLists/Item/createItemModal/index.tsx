@@ -1,5 +1,5 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react"
-import { IUseCase, useCurrentModuleContext } from "@myContexts/UcfrsContext"
+import { IFunctionalRequirement, IModule, INestedUseCase, IUseCase, useCurrentModuleContext } from "@myContexts/UcfrsContext"
 import { customTheme } from "@myStyles/GlobalStyles"
 import React, { useEffect, useState } from "react"
 import { ManageComponentUcfrActions } from "src/lib/componentActions"
@@ -7,10 +7,12 @@ import { ManageComponentUcfrActions } from "src/lib/componentActions"
 
 export default function CreateItemModal({
     isOpen, onClose, 
-    itemType
+    itemType,
+    addTo
 } : {
     isOpen: boolean, onClose: () => void
     itemType: "useCase" | "nestedUseCase" | "functionalRequirement"
+    addTo?: {type: "useCase" | "nestedUseCase" | "functionalRequirement", id: string}
 } ) {
 
     const ActionsManager = new ManageComponentUcfrActions()
@@ -29,18 +31,17 @@ export default function CreateItemModal({
     const createItemHandler = () => {
         if (itemType === "nestedUseCase" && nestedUseCaseParent === "") return
         if (itemNameInput === "") return
-        switch (itemType) {
-            case "useCase":
-                ActionsManager.ucfrListsInterfaces.createUseCase({name: itemNameInput, moduleId: currentModuleFromContext.id})
-                break;
-            case "nestedUseCase":
-                ActionsManager.ucfrListsInterfaces.createNestedUseCase({name: itemNameInput, moduleId: currentModuleFromContext.id, parentId: nestedUseCaseParent})
-                break;
-            case "functionalRequirement":
-                ActionsManager.ucfrListsInterfaces.createFunctionalRequirement({name: itemNameInput, moduleId: currentModuleFromContext.id})
-                break;
+        try {
+            createItemFunction({itemType, itemNameInput, nestedUseCaseParent, currentModuleFromContext, ActionsManager})
+            .then((res) => {
+                if (addTo) {
+                    addToFunction({itemType, ActionsManager, addTo, itemId: res.id})
+                }
+                onClose()
+            })
+        } catch (error) {
+            ActionsManager.alert('error', error.message)
         }
-        onClose()
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,4 +118,70 @@ export default function CreateItemModal({
     </ModalContent>
     </Modal>
     )
+}
+
+async function createItemFunction({
+    itemType, itemNameInput, nestedUseCaseParent, currentModuleFromContext,
+    ActionsManager
+}:{
+    itemType: "useCase" | "nestedUseCase" | "functionalRequirement", 
+    itemNameInput: string, nestedUseCaseParent: string, currentModuleFromContext: IModule,
+    ActionsManager: ManageComponentUcfrActions
+}): Promise<IUseCase | INestedUseCase | IFunctionalRequirement> {
+    switch (itemType) {
+        case "useCase":
+            return ActionsManager.ucfrListsInterfaces.createUseCase({name: itemNameInput, moduleId: currentModuleFromContext.id})
+        case "nestedUseCase":
+            return ActionsManager.ucfrListsInterfaces.createNestedUseCase({name: itemNameInput, moduleId: currentModuleFromContext.id, parentId: nestedUseCaseParent})
+        case "functionalRequirement":
+            return ActionsManager.ucfrListsInterfaces.createFunctionalRequirement({name: itemNameInput, moduleId: currentModuleFromContext.id})
+    }
+}
+
+async function addToFunction({
+    itemType,
+    ActionsManager, addTo, itemId
+}:{
+    itemType: "useCase" | "nestedUseCase" | "functionalRequirement", 
+    ActionsManager: ManageComponentUcfrActions,
+    addTo: {type: "useCase" | "nestedUseCase" | "functionalRequirement", id: string}
+    itemId: string
+}): Promise<void> {
+    switch (itemType) {
+        case "useCase":
+            switch (addTo.type) {
+                case "useCase":
+                    return ActionsManager.ucfrListsInterfaces.addUseCaseToUseCasePipeline({
+                        useCaseIdToAdd: itemId,
+                        useCasePipelineId: addTo.id
+                    })
+                case "nestedUseCase":
+                    return ActionsManager.ucfrListsInterfaces.addUseCaseToNestedUseCasePipeline({
+                        useCaseIdToAdd: itemId,
+                        nestedUseCasePipelineId: addTo.id
+                    })
+                case "functionalRequirement":
+                    throw new Error("Cannot add use case to functional requirement")
+            }
+        case "nestedUseCase":
+            throw new Error("Cannot add nested use case to anything")
+        case "functionalRequirement":
+            switch (addTo.type) {
+                case "useCase":
+                    return ActionsManager.ucfrListsInterfaces.addFunctionalRequirementToUseCase({
+                        useCaseId: addTo.id,
+                        functionalRequirementId: itemId
+                    })
+                case "nestedUseCase":
+                    return ActionsManager.ucfrListsInterfaces.addFunctionalRequirementToNestedUseCase({
+                        nestedUseCaseId: addTo.id,
+                        functionalRequirementId: itemId
+                    })
+                case "functionalRequirement":
+                    return ActionsManager.ucfrListsInterfaces.addFunctionalRequirementToFunctionalRequirement({
+                        functionalRequirementReceiverId: addTo.id,
+                        functionalRequirementId: itemId
+                    })
+            }
+    }
 }

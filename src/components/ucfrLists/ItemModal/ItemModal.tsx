@@ -61,7 +61,6 @@ function ItemModal({
     }
 
     const removeFRequirementHandler = (fRequirementId: string) => {
-        if("functionalRequirement" === itemType) {return}
         ActionsManager.removeFRequirementFromItemByIdHandler({
             itemId: itemReceived.id,
             itemType: itemType,
@@ -203,7 +202,7 @@ function ItemModal({
         <hr className="border-gray-300 my-5"/>
 
 
-            {"useCase" === itemType || "nestedUseCase" === itemType && (<>
+            {("useCase" === itemType || "nestedUseCase" === itemType) && (<>
             <Box  flex='1' textAlign='left' color='black'>
                     Required PipeLines
             </Box>
@@ -242,36 +241,39 @@ function ItemModal({
 
 
 
-            { "neededFrsToWorkIds" in itemReceived && (<>
             <h2>
                 <Box flex='1' textAlign='left' color='black'>
                     Required functionalities
                 </Box>
             </h2>
-                <button className='addFRToItem inline-block px-6 py-2.5 
-                mt-2
-                bg-blue-400 text-white 
-                font-medium text-xs leading-tight uppercase 
-                rounded shadow-md 
-                hover:bg-blue-500 hover:shadow-lg 
-                focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 
-                active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
-                w-[100%]
-                ' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
-                <AddFRequirementToItemModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} itemId={itemReceived.id} itemType={itemType}/>
 
-                {(ActionsManager.ucfrListsFromContext.modules.reduce((acc, module) => { 
-                    if (itemType === "useCase") {
-                        return [...acc, ...module.useCases] 
-                    }
+            <button className='addFRToItem inline-block px-6 py-2.5 
+            mt-2
+            bg-blue-400 text-white 
+            font-medium text-xs leading-tight uppercase 
+            rounded shadow-md 
+            hover:bg-blue-500 hover:shadow-lg 
+            focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 
+            active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
+            w-[100%]
+            ' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
+            <AddFRequirementToItemModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} itemId={itemReceived.id} itemType={itemType}/>
+
+            {(ActionsManager.ucfrListsFromContext.modules.reduce((acc, module) => { 
+                if (itemType === "useCase") {
+                    return [...acc, ...module.useCases] 
+                }
+                if (itemType === "nestedUseCase") {
                     return [...acc, ...module.nestedUseCases]
-                }, [])
-                    .find((scopedItem) => scopedItem.id === itemReceived.id) as IUseCase | INestedUseCase)
-                    .neededFrsToWorkIds.map((dependencyId) => {
+                }
+                return [...acc, ...module.functionalRequirements]
+            }, [])
+                .find((scopedItem) => scopedItem.id === itemReceived.id) as IUseCase | INestedUseCase | IFunctionalRequirement)[
+                    "neededFrsToWorkIds" in itemReceived ? "neededFrsToWorkIds" : "frDependencies"
+                ].map((dependencyId) => {
                     const fRequirementFound = ActionsManager.ucfrListsFromContext.modules
                     .reduce((acc, module) => { return [...acc, ...module.functionalRequirements] }, [])
                     .find((fr) => fr.id === dependencyId)
-                    
                     return fRequirementFound ? (
                         <ModalClickable key={dependencyId} item={fRequirementFound} itemType={"functionalRequirement"}>
                             <Flex className='FRDependency' >
@@ -282,8 +284,7 @@ function ItemModal({
                             </Flex>
                         </ModalClickable>
                     ) : <>error</>
-                })}
-            </>)}
+            })}
 
         </ModalBody>
 

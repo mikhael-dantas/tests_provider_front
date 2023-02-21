@@ -208,7 +208,7 @@ export class ManageComponentUcfrActions {
     async removeFRequirementFromItemByIdHandler({
         fRequirementId, itemId, itemType
     } : {
-        fRequirementId: string, itemId: string, itemType: 'useCase' | 'nestedUseCase'
+        fRequirementId: string, itemId: string, itemType: 'useCase' | 'nestedUseCase' | 'functionalRequirement'
     }) {
         switch (itemType) {
             case 'useCase':
@@ -219,6 +219,11 @@ export class ManageComponentUcfrActions {
             case 'nestedUseCase':
                 return this.ucfrListsInterfaces.removeFunctionalRequirementFromNestedUseCase({
                     nestedUseCaseId: itemId,
+                    functionalRequirementId: fRequirementId,
+                })
+            case 'functionalRequirement':
+                return this.ucfrListsInterfaces.removeFunctionalRequirementFromFunctionalRequirement({
+                    functionalRequirementReceiverId: itemId,
                     functionalRequirementId: fRequirementId,
                 })
         }
@@ -274,8 +279,8 @@ export class ManageComponentUcfrActions {
                 })
             case 'functionalRequirement':
                 return this.ucfrListsInterfaces.addFunctionalRequirementToFunctionalRequirement({
-                    functionalRequirementId: itemId,
-                    functionalRequirementReceiverId: fRequirementId,
+                    functionalRequirementReceiverId: itemId,
+                    functionalRequirementId: fRequirementId,
                 })
         }
     }
