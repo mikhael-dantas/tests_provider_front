@@ -297,6 +297,36 @@ export class ManageComponentUcfrActions {
                 return this.ucfrListsInterfaces.removeFunctionalRequirementById({functionalRequirementId: itemId})
         }
     }
+
+    @handleAlertsInPromises
+    async createAndLinkFunctionalRequirementHandler({ moduleId, name, itemId, itemType }: { moduleId: string, name: string, itemId: string, itemType: 'useCase' | 'nestedUseCase' | 'functionalRequirement' }) {
+        const { id } = await this.ucfrListsInterfaces.createFunctionalRequirement({ moduleId, name })
+
+        switch (itemType) {
+            case 'useCase':
+                return this.ucfrListsInterfaces.addFunctionalRequirementToUseCase({
+                    useCaseId: itemId,
+                    functionalRequirementId: id,
+                })
+            case 'nestedUseCase':
+                return this.ucfrListsInterfaces.addFunctionalRequirementToNestedUseCase({
+                    nestedUseCaseId: itemId,
+                    functionalRequirementId: id,
+                })
+            case 'functionalRequirement':
+                return this.ucfrListsInterfaces.addFunctionalRequirementToFunctionalRequirement({
+                    functionalRequirementReceiverId: itemId,
+                    functionalRequirementId: id,
+                })
+        }
+    }
+
+    @handleAlertsInPromises
+    async createAndLinkNestedUseCaseHandler({ moduleId, name, itemId, itemType }: { moduleId: string, name: string, itemId: string, itemType: 'useCase' | 'nestedUseCase' | 'functionalRequirement' }) {
+        const nestedCreated = await this.ucfrListsInterfaces.createNestedUseCase({ moduleId, name, parentId: itemId })
+        
+        return nestedCreated
+    }
 }
 
 
