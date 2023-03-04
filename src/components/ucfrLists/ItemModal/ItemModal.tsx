@@ -60,6 +60,15 @@ function ItemModal({
         })
     }
 
+
+    const createAndLinkFRHandler = () => {
+        ActionsManager.createAndLinkFunctionalRequirementHandler({
+            itemId: itemReceived.id,
+            itemType: itemType,
+            name: "New Functional Requirement",
+            moduleId: itemReceived.moduleId
+        })
+    }
     const removeFRequirementHandler = (fRequirementId: string) => {
         ActionsManager.removeFRequirementFromItemByIdHandler({
             itemId: itemReceived.id,
@@ -257,6 +266,16 @@ function ItemModal({
             active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
             w-[100%]
             ' onClick={onOpenAddFRequirementToItModal}>Add Functional Requirement</button>
+            <button className='addFRToItem inline-block px-6 py-2.5 
+            mt-2
+            bg-blue-400 text-white 
+            font-medium text-xs leading-tight uppercase 
+            rounded shadow-md 
+            hover:bg-blue-500 hover:shadow-lg 
+            focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 
+            active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
+            w-[100%]
+            ' onClick={createAndLinkFRHandler}>Create Functional Requirement</button>
             <AddFRequirementToItemModal isOpen={isOpenAddFRequirementToItModal} onClose={onCloseAddFRequirementToItModal} itemId={itemReceived.id} itemType={itemType}/>
 
             {(ActionsManager.ucfrListsFromContext.modules.reduce((acc, module) => { 
