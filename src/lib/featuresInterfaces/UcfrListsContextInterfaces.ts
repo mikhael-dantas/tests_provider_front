@@ -20,6 +20,10 @@ export class UcfrListsContextInterfaces {
         private setUcfrLists: React.Dispatch<React.SetStateAction<IUcfrLists>>,
     ) {}
 
+    private updateUcfrLists(newUcfrLists: IUcfrLists) {
+        this.setUcfrLists(newUcfrLists)
+        this.ucfrLists = newUcfrLists
+    }
     // MODULES
     async createModule({moduleName: receivedModuleName}: {moduleName: string}) {
         if (this.ucfrLists.modules.find(module => module.name === receivedModuleName)) {
@@ -38,7 +42,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Module name cannot be smaller than 2 characters")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: [...this.ucfrLists.modules, {
                 id: GenerateUUID(),
@@ -93,7 +97,7 @@ export class UcfrListsContextInterfaces {
             return module
         })
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: newModules
         })
@@ -114,7 +118,7 @@ export class UcfrListsContextInterfaces {
         }
 
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.filter(module => module.id !== receivedModuleId)
         })
@@ -141,7 +145,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag already exists")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             tags: [...this.ucfrLists.tags, {
                 id: GenerateUUID(),
@@ -199,7 +203,7 @@ export class UcfrListsContextInterfaces {
             return tag
         })
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             tags: newTags
         })
@@ -222,7 +226,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot remove tag that is used in functional requirements")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             tags: this.ucfrLists.tags.filter(tag => tag.id !== receivedTagId)
         })
@@ -243,7 +247,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag already added to use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -279,7 +283,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag not added to use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -316,7 +320,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag already added to nested use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCase.moduleId) {
@@ -352,7 +356,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag not added to nested use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCase.moduleId) {
@@ -389,7 +393,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag already added to functional requirement")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === functionalRequirement.moduleId) {
@@ -425,7 +429,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Tag not added to functional requirement")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === functionalRequirement.moduleId) {
@@ -507,7 +511,7 @@ export class UcfrListsContextInterfaces {
             useCasesPipelineIds: [],
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === receivedModuleId) {
@@ -558,7 +562,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Use case name cannot be larger than 1000 characters")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -603,7 +607,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot delete use case that is in pipeline of another nested use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -634,7 +638,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Use case is already in pipeline")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -672,7 +676,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Use case is not in pipeline")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -715,7 +719,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Use case is already in pipeline")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCasePipeline.moduleId) {
@@ -756,7 +760,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Use case is not in pipeline")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCasePipeline.moduleId) {
@@ -858,7 +862,7 @@ export class UcfrListsContextInterfaces {
         newUseCases.splice(dragUseCaseIndex, 1)
         newUseCases.splice(dropUseCaseIndex, 0, dragUseCase)
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === module.id) {
@@ -912,7 +916,7 @@ export class UcfrListsContextInterfaces {
             useCasesPipelineIds: [],
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === receivedModuleId) {
@@ -963,7 +967,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Nested use case name cannot be larger than 1000 characters")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCase.moduleId) {
@@ -996,7 +1000,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Nested use case not found")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCase.moduleId) {
@@ -1039,7 +1043,7 @@ export class UcfrListsContextInterfaces {
 
         const newNestedUseCasesList = [...nestedUseCasesWithoutSameParentIdList, ...newNestedUseCasesWithSameParentIdList]
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === dragNestedUseCase.moduleId) {
@@ -1083,7 +1087,7 @@ export class UcfrListsContextInterfaces {
             frDependencies: [],
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === receivedModuleId) {
@@ -1134,7 +1138,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Functional requirement name cannot be larger than 1000 characters")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === functionalRequirement.moduleId) {
@@ -1183,7 +1187,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot delete a functional requirement that is a dependency of a nested use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === functionalRequirement.moduleId) {
@@ -1259,7 +1263,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot add a functional requirement that is already a dependency of the use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -1307,7 +1311,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot remove a functional requirement that is not a dependency of the use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === useCase.moduleId) {
@@ -1356,7 +1360,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot add a functional requirement that is already a dependency of the nested use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCase.moduleId) {
@@ -1404,7 +1408,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot remove a functional requirement that is not a dependency of the nested use case")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === nestedUseCase.moduleId) {
@@ -1449,7 +1453,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot add a functional requirement that is already a dependency of the functional requirement receiver")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 return {
@@ -1490,7 +1494,7 @@ export class UcfrListsContextInterfaces {
             throw new Error("Cannot remove a functional requirement that is not a dependency of the functional requirement receiver")
         }
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 return {
@@ -1538,7 +1542,7 @@ export class UcfrListsContextInterfaces {
         newFunctionalRequirements.splice(dragFunctionalRequirementIndex, 1)
         newFunctionalRequirements.splice(dropFunctionalRequirementIndex, 0, dragFunctionalRequirement)
 
-        this.setUcfrLists({
+        this.updateUcfrLists({
             ...this.ucfrLists,
             modules: this.ucfrLists.modules.map(scopedModule => {
                 if (scopedModule.id === foundedModule.id) {
